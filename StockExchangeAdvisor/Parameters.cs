@@ -6,6 +6,7 @@ namespace StockExchangeAdvisor
 {
     class Parameters
     {
-
+        public int CalculatedIndicatorFirstDaysInterval { get; set; }
+        public int CalculatedIndicatorSecondDaysInterval { get; set; }
     }
 }
