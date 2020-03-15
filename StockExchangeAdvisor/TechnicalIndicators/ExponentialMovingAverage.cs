@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace StockExchangeAdvisor.TechnicalIndicators
 {
@@ -9,7 +8,7 @@ namespace StockExchangeAdvisor.TechnicalIndicators
     {
         private const int BUY_SIGNAL = 1;
         private const int SELL_SIGNAL = -1;
-        private const int NOT_ENOUGH_DATA = 0;
+        private const int NEUTRAL_SIGNAL = 0;
 
         public override List<Signal> GetSignals(List<Quote> q, Parameters p)
         {
@@ -23,7 +22,7 @@ namespace StockExchangeAdvisor.TechnicalIndicators
             IndicatorCollectionOfValuesWithDaysInterval calculatedEAMForFirstDaysInterval = new IndicatorCollectionOfValuesWithDaysInterval
             {
                 IndicatorValues = CalculateExponentialMovingAverage(q, p.CalculatedIndicatorFirstDaysInterval),
-                DaysInterval = p.CalculatedIndicatorSecondDaysInterval
+                DaysInterval = p.CalculatedIndicatorFirstDaysInterval
             };
             IndicatorCollectionOfValuesWithDaysInterval calculatedEAMForSecondDaysInterval = new IndicatorCollectionOfValuesWithDaysInterval
             {
@@ -32,12 +31,12 @@ namespace StockExchangeAdvisor.TechnicalIndicators
             };
 
             List<Signal> obtainedSignals = DetermineSignalsFromIntersectionOfAverages(calculatedEAMForFirstDaysInterval, calculatedEAMForSecondDaysInterval);
-            
+
             return obtainedSignals;
         }
 
         private List<Signal> DetermineSignalsFromIntersectionOfAverages(
-                             IndicatorCollectionOfValuesWithDaysInterval firstEAMIndicatorDayInterval, 
+                             IndicatorCollectionOfValuesWithDaysInterval firstEAMIndicatorDayInterval,
                              IndicatorCollectionOfValuesWithDaysInterval secondEAMIndicatorDayInterval)
         {
             IndicatorCollectionOfValuesWithDaysInterval shortEAMDayInterval;
@@ -55,39 +54,39 @@ namespace StockExchangeAdvisor.TechnicalIndicators
                 longEAMDayInterval = firstEAMIndicatorDayInterval;
             }
 
-            int daysDifferentialWithoutIntersection = shortEAMDayInterval.IndicatorValues.Count() - longEAMDayInterval.IndicatorValues.Count() + 1;
+            int daysDifferentialWithoutIntersection = shortEAMDayInterval.IndicatorValues.Count() - longEAMDayInterval.IndicatorValues.Count();
 
-            for (int i = 0; i < daysDifferentialWithoutIntersection; i++)
+            for (int i = 0; i <= daysDifferentialWithoutIntersection; i++)
             {
-                calculatedSignals[i] = new Signal
+                calculatedSignals.Add(new Signal
                 {
                     Date = shortEAMDayInterval.IndicatorValues[i].Date,
-                    Value = NOT_ENOUGH_DATA
-                };
+                    Value = NEUTRAL_SIGNAL
+                });
             };
 
             int longEAMDayIntervalLength = longEAMDayInterval.IndicatorValues.Count;
 
             for (int i = 1; i < longEAMDayIntervalLength; i++)
             {
-                calculatedSignals[daysDifferentialWithoutIntersection + i] = new Signal
+                calculatedSignals.Add(new Signal
                 {
                     Date = longEAMDayInterval.IndicatorValues[i].Date
-                };
+                });
 
-                if (shortEAMDayInterval.IndicatorValues[i-1].Value > longEAMDayInterval.IndicatorValues[i-1].Value
-                    && shortEAMDayInterval.IndicatorValues[i].Value < longEAMDayInterval.IndicatorValues[i].Value)
+                if (shortEAMDayInterval.IndicatorValues[i - 1].IndicatorValue > longEAMDayInterval.IndicatorValues[i - 1].IndicatorValue
+                    && shortEAMDayInterval.IndicatorValues[i].IndicatorValue < longEAMDayInterval.IndicatorValues[i].IndicatorValue)
                 {
                     calculatedSignals[daysDifferentialWithoutIntersection + i].Value = SELL_SIGNAL;
                 }
-                else if (shortEAMDayInterval.IndicatorValues[i - 1].Value < longEAMDayInterval.IndicatorValues[i - 1].Value
-                    && shortEAMDayInterval.IndicatorValues[i].Value > longEAMDayInterval.IndicatorValues[i].Value)
+                else if (shortEAMDayInterval.IndicatorValues[i - 1].IndicatorValue < longEAMDayInterval.IndicatorValues[i - 1].IndicatorValue
+                    && shortEAMDayInterval.IndicatorValues[i].IndicatorValue > longEAMDayInterval.IndicatorValues[i].IndicatorValue)
                 {
                     calculatedSignals[daysDifferentialWithoutIntersection + i].Value = BUY_SIGNAL;
                 }
                 else
                 {
-                    calculatedSignals[daysDifferentialWithoutIntersection + i].Value = NOT_ENOUGH_DATA;
+                    calculatedSignals[daysDifferentialWithoutIntersection + i].Value = NEUTRAL_SIGNAL;
                 }
             }
 
@@ -96,34 +95,36 @@ namespace StockExchangeAdvisor.TechnicalIndicators
 
         private double ExponentialMovingAverageFormula(double currentQuoteClosePrice, double previousEMA, int daysInterval)
         {
-            double multiplier = (2 / (daysInterval + 1));
+            double multiplier = (2d / (daysInterval + 1d));
             double currentEMA = (currentQuoteClosePrice - previousEMA) * multiplier + previousEMA;
 
             return currentEMA;
         }
 
-        private List<IndicatorValueWithDaysIntervalAndDate> CalculateExponentialMovingAverage(List<Quote> analyzedQuotes, int daysInterval)
+        private List<IndicatorValueWithDate> CalculateExponentialMovingAverage(List<Quote> analyzedQuotes, int daysInterval)
         {
             if (analyzedQuotes.Count >= daysInterval)
             {
                 double previousEMA = 0;
-                double currentEMA = 0;
-                List<IndicatorValueWithDaysIntervalAndDate> calculatedEMAs = new List<IndicatorValueWithDaysIntervalAndDate>();
+                double currentEMA;
+                List<IndicatorValueWithDate> calculatedEMAs = new List<IndicatorValueWithDate>();
 
-                for (int i = 0; i < daysInterval; i++)
+                for (int i = 0; i < analyzedQuotes.Count; i++)
                 {
                     if (i == 0)
                     {
-                        previousEMA = SimpleMovingAverageFormula(analyzedQuotes.Take(daysInterval).ToList());
-                        i = daysInterval-1;
-                        continue;
+                        currentEMA = SimpleMovingAverageFormula(analyzedQuotes.Take(daysInterval).ToList());
+                        i = daysInterval - 1;
                     }
-                    currentEMA = ExponentialMovingAverageFormula(analyzedQuotes[i].Close, previousEMA, daysInterval);
+                    else
+                    {
+                        currentEMA = ExponentialMovingAverageFormula(analyzedQuotes[i].Close, previousEMA, daysInterval);
+                    }
                     previousEMA = currentEMA;
 
-                    calculatedEMAs.Add(new IndicatorValueWithDaysIntervalAndDate
+                    calculatedEMAs.Add(new IndicatorValueWithDate
                     {
-                        Value = currentEMA,
+                        IndicatorValue = currentEMA,
                         Date = analyzedQuotes[i].Date
                     });
                 }
@@ -131,25 +132,27 @@ namespace StockExchangeAdvisor.TechnicalIndicators
                 return calculatedEMAs;
             }
             else
-                throw new FormatException("List of Quotes has less elements than entered DaysInterval argument.");
+            {
+                throw new FormatException("List of Quotes has less elements than entered DaysInterval attribute.");
+            }
         }
 
         private double SimpleMovingAverageFormula(List<Quote> analyzedQuotes)
         {
-            double calculatedSMA = analyzedQuotes.Average(z=> z.Close);
+            double calculatedSMA = analyzedQuotes.Average(z => z.Close);
             return calculatedSMA;
         }
     }
 
-    class IndicatorValueWithDaysIntervalAndDate
+    class IndicatorValueWithDate
     {
+        public double IndicatorValue;
         public string Date;
-        public double Value;
     }
 
     class IndicatorCollectionOfValuesWithDaysInterval
     {
-        public List<IndicatorValueWithDaysIntervalAndDate> IndicatorValues;
+        public List<IndicatorValueWithDate> IndicatorValues;
         public int DaysInterval;
     }
 }
