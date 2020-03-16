@@ -29,6 +29,16 @@ namespace StockExchangeAdvisor
 
             var EAMSignal = EAM.GetSignals(zywiecQuotes, parameters);
 
+            //Console.WriteLine(-1);
+            //for (int i = 0; i < EAMSignal.Count; i++)
+            //{
+            //    if (EAMSignal[i].Value == -1)
+            //    {
+            //        Console.WriteLine(EAMSignal[i].Date);
+            //    }
+            //}
+
+
             Console.ReadLine();
         }
     }
