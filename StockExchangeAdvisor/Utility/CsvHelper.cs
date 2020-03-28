@@ -5,7 +5,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 
-namespace StockExchangeAdvisor.Utility
+namespace Signals
 {
     class CsvHelper
     {

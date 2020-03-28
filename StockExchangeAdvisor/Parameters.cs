@@ -1,12 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace StockExchangeAdvisor
+﻿namespace Signals
 {
     class Parameters
     {
         public int CalculatedIndicatorFirstDaysInterval { get; set; }
         public int CalculatedIndicatorSecondDaysInterval { get; set; }
+
+        public double BuyTrigger;
+        public double SellTrigger;
+        public int NQuotesBackwards;
+        public int Period;
     }
 }

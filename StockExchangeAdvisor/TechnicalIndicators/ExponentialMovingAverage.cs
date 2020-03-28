@@ -4,13 +4,25 @@ using System.Linq;
 
 //Autor: Łukasz Czepielik 051392
 
-namespace StockExchangeAdvisor.TechnicalIndicators
+namespace Signals
 {
     class ExponentialMovingAverage : TechnicalIndicator
     {
         private const int BUY_SIGNAL = -1;
         private const int SELL_SIGNAL = 1;
         private const int NEUTRAL_SIGNAL = 0;
+
+        class IndicatorValueWithDate
+        {
+            public double IndicatorValue;
+            public string Date;
+        }
+
+        class IndicatorCollectionOfValuesWithDaysInterval
+        {
+            public List<IndicatorValueWithDate> IndicatorValues;
+            public int DaysInterval;
+        }
 
         public override List<Signal> GetSignals(List<Quote> q, Parameters p)
         {
@@ -154,18 +166,6 @@ namespace StockExchangeAdvisor.TechnicalIndicators
             double calculatedSMA = analyzedQuotes.Average(z => z.Close);
             return calculatedSMA;
         }
-    }
-
-    class IndicatorValueWithDate
-    {
-        public double IndicatorValue;
-        public string Date;
-    }
-
-    class IndicatorCollectionOfValuesWithDaysInterval
-    {
-        public List<IndicatorValueWithDate> IndicatorValues;
-        public int DaysInterval;
     }
 }
 

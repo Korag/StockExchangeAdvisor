@@ -1,21 +1,17 @@
-﻿using StockExchangeAdvisor.TechnicalIndicators;
-using StockExchangeAdvisor.Utility;
-using System;
-using System.IO;
-using System.Reflection;
+﻿using System;
 
-namespace StockExchangeAdvisor
+namespace Signals
 {
     class Program
     {
-        public const string QUOTES_SAVE_PATH = @"C:\Users\user\Documents\Visual Studio 2019\Projects\StockExchangeAdvisor\StockExchangeAdvisor\DownloadedQuotes\UnpackedQuotes\";
-        public const string QUOTES_ZIP_PATH = @"C:\Users\user\Documents\Visual Studio 2019\Projects\StockExchangeAdvisor\StockExchangeAdvisor\DownloadedQuotes\mstall.zip";
+        public const string QUOTES_SAVE_PATH = @"E:\Projects\Visual Studio 2019\StockExchangeAdvisor\StockExchangeAdvisor\DownloadedQuotes\UnpackedQuotes\";
+        public const string QUOTES_ZIP_PATH = @"E:\Projects\Visual Studio 2019\StockExchangeAdvisor\StockExchangeAdvisor\DownloadedQuotes\mstall.zip";
         public const string QUOTES_FILENAME= "mstall.zip";
 
         static void Main(string[] args)
         {
-            Utility.CsvHelper csvH = new Utility.CsvHelper();
-            Utility.ZipHelper zipH = new Utility.ZipHelper();
+            CsvHelper csvH = new CsvHelper();
+            ZipHelper zipH = new ZipHelper();
 
             //zipH.ExtractZipDirectory(QUOTES_ZIP_PATH, QUOTES_SAVE_PATH);
             var zywiecQuotes = csvH.ReadSingleCsvFileWithQuotes(QUOTES_SAVE_PATH + "zywiec.csv");
@@ -24,10 +20,16 @@ namespace StockExchangeAdvisor
             var parameters = new Parameters
             {
                 CalculatedIndicatorFirstDaysInterval = 10,
-                CalculatedIndicatorSecondDaysInterval = 5
+                CalculatedIndicatorSecondDaysInterval = 5,
+
+                Period = 10
             };
 
+            var EMA2 = new TechnicalIndicatorEMA();
+
             var EAMSignal = EAM.GetSignals(zywiecQuotes, parameters);
+            var EMA2Signal = EMA2.GetSignals(zywiecQuotes, parameters);
+
 
             //Console.WriteLine(-1);
             //for (int i = 0; i < EAMSignal.Count; i++)

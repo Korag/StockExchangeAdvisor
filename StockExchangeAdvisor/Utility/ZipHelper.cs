@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO.Compression;
 
-namespace StockExchangeAdvisor.Utility
+namespace Signals
 {
     class ZipHelper
     {
