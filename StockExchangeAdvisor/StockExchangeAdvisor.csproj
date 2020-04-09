@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -6,7 +6,18 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="CsvHelper" Version="15.0.1" />
+    <ProjectReference Include="..\Models\Models.csproj" />
+    <ProjectReference Include="..\TechnicalIndicators\TechnicalIndicators.csproj" />
+    <ProjectReference Include="..\Utility\Utility.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Builder\" />
+    <Folder Include="Decorator\" />
+    <Folder Include="Chain of responsibility\" />
+    <Folder Include="Facade\" />
+    <Folder Include="Adapter\" />
+    <Folder Include="Observer\" />
   </ItemGroup>
 
 </Project>

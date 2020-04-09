@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Models;
+using System;
+using TechnicalIndicators;
 
 namespace Signals
 {
@@ -10,11 +12,8 @@ namespace Signals
 
         static void Main(string[] args)
         {
-            CsvHelper csvH = new CsvHelper();
-            ZipHelper zipH = new ZipHelper();
-
-            //zipH.ExtractZipDirectory(QUOTES_ZIP_PATH, QUOTES_SAVE_PATH);
-            var zywiecQuotes = csvH.ReadSingleCsvFileWithQuotes(QUOTES_SAVE_PATH + "zywiec.csv");
+            //Utility.ZipHelper.ExtractZipDirectory(QUOTES_ZIP_PATH, QUOTES_SAVE_PATH);
+            var zywiecQuotes = Utility.CsvHelper.ReadSingleCsvFileWithQuotes(QUOTES_SAVE_PATH + "zywiec.csv");
 
             var EAM = new ExponentialMovingAverage();
             var parameters = new Parameters
