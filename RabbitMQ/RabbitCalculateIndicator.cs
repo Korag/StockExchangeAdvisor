@@ -2,6 +2,7 @@
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System;
+using System.Collections.Generic;
 using TechnicalIndicators;
 using Utility;
 
@@ -11,7 +12,7 @@ namespace RabbitMQ
     {
         private TechnicalIndicator _indicator;
 
-        public RabbitCalculateIndicator(string queueReceiveFrom, string queueSendTo, TechnicalIndicator indicator) : base(queueReceiveFrom, queueSendTo)
+        public RabbitCalculateIndicator(string exchange, string queueReceiveFrom, string queueSendTo, TechnicalIndicator indicator) : base(exchange, queueReceiveFrom, queueSendTo)
         {
             _indicator = indicator;
         }
@@ -45,14 +46,28 @@ namespace RabbitMQ
             }
         }
 
+        public override void GenerateAndPublishMessage(IModel channel, List<Signal> obtainedSignals)
+        {
+            //serializujemy oraz przekształcamy w tablicę bajtów
+            var body = EncryptionHelper.StringToUtf8(JsonSerializer.CollectionOfSignalsToJsonString(obtainedSignals));
+            channel.BasicPublish(exchange: _exchange,
+                routingKey: _queueSendTo,
+                basicProperties: null,
+                body: body);
+            //oczekujemy na potwierdzenie, że przesyłka dotarła do exchange
+            channel.WaitForConfirmsOrDie();
+            Console.WriteLine($"Przesłałem obliczone sygnały do exchanga");
+        }
+
         public override void HandleReceivedEvent(BasicDeliverEventArgs ea, IModel channel)
         {
             var indicatorElements = JsonSerializer.JsonStringToCollectionOfQuotesWithParameters(EncryptionHelper.ByteArrayToUTF8String(ea.Body));
 
-            _indicator.GetSignals(indicatorElements.Quotes, indicatorElements.Parameters);
+            List<Signal> obtainedSignals = _indicator.GetSignals(indicatorElements.Quotes, indicatorElements.Parameters);
             Console.WriteLine("Obliczyłem wskaźnik"); 
 
             channel.BasicAck(ea.DeliveryTag, false);
+            GenerateAndPublishMessage(channel, obtainedSignals);
         }
     }
 }
