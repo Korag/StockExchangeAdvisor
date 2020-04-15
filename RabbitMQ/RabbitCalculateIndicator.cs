@@ -7,24 +7,16 @@ using Utility;
 
 namespace RabbitMQ
 {
-    public class RabbitCalculateIndicator
+    public class RabbitCalculateIndicator : IRabbitCalculateIndicator
     {
-        private string _queueReceiveFrom;
-        private string _queueSendTo;
-        private int _interval = 1000;
-
         private TechnicalIndicator _indicator;
 
-        public RabbitCalculateIndicator(string queueReceiveFromName, string queueSendToName, int intervalTime, TechnicalIndicator indicator)
+        public RabbitCalculateIndicator(string queueReceiveFrom, string queueSendTo, TechnicalIndicator indicator) : base(queueReceiveFrom, queueSendTo)
         {
-            _queueReceiveFrom = queueReceiveFromName;
-            _queueSendTo = queueSendToName;
-            _interval = intervalTime;
-
             _indicator = indicator;
         }
 
-        public virtual void ConsumeData()
+        public override void ConsumeData()
         {
             try
             {
@@ -53,12 +45,12 @@ namespace RabbitMQ
             }
         }
 
-        public void HandleReceivedEvent(BasicDeliverEventArgs ea, IModel channel)
+        public override void HandleReceivedEvent(BasicDeliverEventArgs ea, IModel channel)
         {
-            var quotes = JsonSerializer.JsonStringToCollectionOfQuotes(EncryptionHelper.ByteArrayToUTF8String(ea.Body));
-            Parameters p = new Parameters();
+            var indicatorElements = JsonSerializer.JsonStringToCollectionOfQuotesWithParameters(EncryptionHelper.ByteArrayToUTF8String(ea.Body));
 
-            _indicator.GetSignals(quotes, p);
+            _indicator.GetSignals(indicatorElements.Quotes, indicatorElements.Parameters);
+            Console.WriteLine("Obliczyłem wskaźnik"); 
 
             channel.BasicAck(ea.DeliveryTag, false);
         }
