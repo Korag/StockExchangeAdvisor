@@ -1,10 +1,11 @@
-﻿using System;
+﻿using Models;
 using System.Collections.Generic;
-using System.Text;
 
 namespace AdapterDesignPattern
 {
     public interface IRabbitMQSendQuotesAdapter
     {
+        void SendQuotesToCalculationInConsumer(List<Quote> quotes, Parameters parameters,
+                                                     string exchange, string queueSendTo);
     }
 }

@@ -26,14 +26,14 @@ namespace Utility
             return JsonConvert.DeserializeObject<List<Signal>>(jsonString);
         }
 
-        //public static string MessageToJsonString(Message message)
-        //{
-        //    return JsonConvert.SerializeObject(message);
-        //}
+        public static string CollectionOfQuotesWithParametersToJsonString(IndicatorCalculationElements indicatorElements)
+        {
+            return JsonConvert.SerializeObject(indicatorElements);
+        }
 
-        //public static Message JsonStringToMessage(string jsonString)
-        //{
-        //    return JsonConvert.DeserializeObject<Message>(jsonString);
-        //}
+        public static IndicatorCalculationElements JsonStringToCollectionOfQuotesWithParameters(string jsonString)
+        {
+            return JsonConvert.DeserializeObject<IndicatorCalculationElements>(jsonString);
+        }
     }
 }

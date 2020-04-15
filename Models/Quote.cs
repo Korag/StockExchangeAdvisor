@@ -1,6 +1,4 @@
-﻿//using CsvHelper.Configuration;
-
-namespace Models
+﻿namespace Models
 {
     public class Quote
     {
