@@ -6,6 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\AdapterDesignPattern\AdapterDesignPattern.csproj" />
     <ProjectReference Include="..\Models\Models.csproj" />
     <ProjectReference Include="..\TechnicalIndicators\TechnicalIndicators.csproj" />
     <ProjectReference Include="..\Utility\Utility.csproj" />
@@ -16,7 +17,6 @@
     <Folder Include="Decorator\" />
     <Folder Include="Chain of responsibility\" />
     <Folder Include="Facade\" />
-    <Folder Include="Adapter\" />
     <Folder Include="Observer\" />
   </ItemGroup>
 

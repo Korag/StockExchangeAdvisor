@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using TechnicalIndicators;
 
 namespace Signals
 {
@@ -30,10 +31,9 @@ namespace Signals
             _strategy = strategy;
         }
 
-        public void CalculateSingleIndicator(List<Quote> quotes, Parameters parameters, Type indicatorType)
+        public void CalculateSingleIndicator(List<Quote> quotes, Parameters parameters, TechnicalIndicator indicator)
         {
-            /*_strategy.SendData();*/
-            _strategy.ReceiveData();
+            _strategy.SendData(quotes, parameters, indicator);
         }
     }
 }

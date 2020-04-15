@@ -24,10 +24,13 @@ namespace Signals
                 Period = 10
             };
 
-            var EMA2 = new TechnicalIndicatorEMA();
+            //var EMA2 = new TechnicalIndicatorEMA();
 
-            var EAMSignal = EAM.GetSignals(zywiecQuotes, parameters);
-            var EMA2Signal = EMA2.GetSignals(zywiecQuotes, parameters);
+            //var EAMSignal = EAM.GetSignals(zywiecQuotes, parameters);
+            //var EMA2Signal = EMA2.GetSignals(zywiecQuotes, parameters);
+
+            CalculateTechnicalIndicatorContext calculateIndicator = CalculateTechnicalIndicatorContext.GetInstance(new RabbitMQStrategy());
+            calculateIndicator.CalculateSingleIndicator(zywiecQuotes, parameters, new TechnicalIndicatorEMA());
 
 
             //Console.WriteLine(-1);

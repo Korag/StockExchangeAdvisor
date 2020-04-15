@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using TechnicalIndicators;
 
 namespace Signals
 {
@@ -12,7 +13,7 @@ namespace Signals
             throw new NotImplementedException();
         }
 
-        public void SendData(Quote quotes, Parameters parameters)
+        public void SendData(List<Quote> quotes, Parameters parameters, TechnicalIndicator indicator)
         {
             throw new NotImplementedException();
         }

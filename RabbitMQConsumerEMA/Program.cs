@@ -5,14 +5,20 @@ namespace RabbitMQConsumerEMA
 {
     public class RabbitConsumerCalculateEMA
     {
-        private const string _queueReceiveFrom = "ema_tobecalculated";
-        private const string _queueSendTo = "ema_signals";
-        private const int _interval = 1000;
+        private const string _queueSendTo = "Signals";
+        private static string _queueReceiveFrom;
  
+        static void InititalizeParameters(string queueReceiverFrom)
+        {
+            _queueReceiveFrom = queueReceiverFrom;
+        }
+
         static void Main()
         {
             TechnicalIndicator _indicator = new TechnicalIndicatorEMA();
-            RabbitCalculateIndicator rabbitEMA = new RabbitCalculateIndicator(_queueReceiveFrom, _queueSendTo, _interval, _indicator);
+            InititalizeParameters(_indicator.GetType().ToString());
+
+            RabbitCalculateIndicator rabbitEMA = new RabbitCalculateIndicator(_queueReceiveFrom, _queueSendTo, _indicator);
             rabbitEMA.ConsumeData();
         }
     }
