@@ -1,5 +1,6 @@
 ﻿using Models;
 using System;
+using System.Collections.Generic;
 using TechnicalIndicators;
 
 namespace Signals
@@ -30,8 +31,14 @@ namespace Signals
             //var EMA2Signal = EMA2.GetSignals(zywiecQuotes, parameters);
 
             CalculateTechnicalIndicatorContext calculateIndicator = CalculateTechnicalIndicatorContext.GetInstance(new RabbitMQStrategy());
-            calculateIndicator.CalculateSingleIndicator(zywiecQuotes, parameters, new TechnicalIndicatorEMA());
+            //calculateIndicator.CalculateSingleIndicator(zywiecQuotes, parameters, new TechnicalIndicatorEMA());
+            List<Signal> obtainedSignals = calculateIndicator.ReceiveSignalsFromSingleCalculatedIndicator();
 
+            Console.WriteLine("SIGNALS");
+            foreach (var signal in obtainedSignals)
+            {
+                Console.WriteLine(signal.Date + "/t" + signal.Value);
+            }
 
             //Console.WriteLine(-1);
             //for (int i = 0; i < EAMSignal.Count; i++)

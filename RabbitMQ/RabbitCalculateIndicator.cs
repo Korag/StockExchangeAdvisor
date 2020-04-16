@@ -55,8 +55,8 @@ namespace RabbitMQ
                 basicProperties: null,
                 body: body);
             //oczekujemy na potwierdzenie, że przesyłka dotarła do exchange
-            channel.WaitForConfirmsOrDie();
             Console.WriteLine($"Przesłałem obliczone sygnały do exchanga");
+            channel.WaitForConfirmsOrDie();
         }
 
         public override void HandleReceivedEvent(BasicDeliverEventArgs ea, IModel channel)

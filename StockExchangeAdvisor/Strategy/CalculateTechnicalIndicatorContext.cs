@@ -35,5 +35,10 @@ namespace Signals
         {
             _strategy.SendData(quotes, parameters, indicator);
         }
+
+        public List<Signal> ReceiveSignalsFromSingleCalculatedIndicator()
+        {
+            return _strategy.ReceiveData();
+        }
     }
 }

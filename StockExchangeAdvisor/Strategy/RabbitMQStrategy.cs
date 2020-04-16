@@ -1,8 +1,7 @@
 ﻿using AdapterDesignPattern;
 using Models;
-using System;
+using RabbitMQ;
 using System.Collections.Generic;
-using System.Text;
 using TechnicalIndicators;
 
 namespace Signals
@@ -10,7 +9,8 @@ namespace Signals
     class RabbitMQStrategy : ICalculateTechnicalIndicatorStrategy
     {
         private const string _exchange = "SignalsExchange";
-       
+        private const string _queueReceiveFrom = "ObtainedSignals";
+
         public RabbitMQStrategy()
         {
 
@@ -18,16 +18,15 @@ namespace Signals
 
         public List<Signal> ReceiveData()
         {
-            throw new NotImplementedException();
+            IRabbitMQReceiveObtainedSignals signalConsumer = new RabbitMQReceiveObtainedSignals(_exchange, _queueReceiveFrom);
+            return signalConsumer.ReceiveObtainedSignals();
         }
-                                                                  // do wykorzystania później
+                                                                  
         public void SendData(List<Quote> quotes, Parameters parameters, TechnicalIndicator indicator)
         {
             RabbitMQSendQuotesAdapter adapter = new RabbitMQSendQuotesAdapter();
 
             adapter.SendQuotesToCalculationInConsumer(quotes, parameters, _exchange, indicator.GetType().ToString());
         }
-
-        
     }
 }
