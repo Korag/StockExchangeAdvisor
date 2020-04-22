@@ -12,12 +12,4 @@
     <ProjectReference Include="..\Utility\Utility.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Builder\" />
-    <Folder Include="Decorator\" />
-    <Folder Include="Chain of responsibility\" />
-    <Folder Include="Facade\" />
-    <Folder Include="Observer\" />
-  </ItemGroup>
-
 </Project>

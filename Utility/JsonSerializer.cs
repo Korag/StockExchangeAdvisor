@@ -1,5 +1,6 @@
 ﻿using Models;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 
 namespace Utility
@@ -34,6 +35,16 @@ namespace Utility
         public static IndicatorCalculationElements JsonStringToCollectionOfQuotesWithParameters(string jsonString)
         {
             return JsonConvert.DeserializeObject<IndicatorCalculationElements>(jsonString);
+        }
+
+        public static string DateTimeToJsonString(DateTime dateTime)
+        {
+            return JsonConvert.SerializeObject(dateTime);
+        }
+
+        public static DateTime JsonStringToDateTime(string jsonString)
+        {
+            return JsonConvert.DeserializeObject<DateTime>(jsonString);
         }
     }
 }
