@@ -1,20 +1,18 @@
 ﻿using Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using TechnicalIndicators;
 
 namespace Signals
 {
     class Program
     {
-        public const string QUOTES_SAVE_PATH = @"E:\Projects\Visual Studio 2019\StockExchangeAdvisor\StockExchangeAdvisor\DownloadedQuotes\UnpackedQuotes\";
-        public const string QUOTES_ZIP_PATH = @"E:\Projects\Visual Studio 2019\StockExchangeAdvisor\StockExchangeAdvisor\DownloadedQuotes\mstall.zip";
-        public const string QUOTES_FILENAME= "mstall.zip";
+        public static string QUOTES_SAVE_PATH = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..\\..\\..\\..\\QuotesDownloader\\DownloadedQuotes\\"));
 
         static void Main(string[] args)
         {
-            //Utility.ZipHelper.ExtractZipDirectory(QUOTES_ZIP_PATH, QUOTES_SAVE_PATH);
-            var zywiecQuotes = Utility.CsvHelper.ReadSingleCsvFileWithQuotes(QUOTES_SAVE_PATH + "zywiec.csv");
+            var zywiecQuotes = Utility.CsvHelper.ReadSingleCsvFileWithQuotes(QUOTES_SAVE_PATH + "zywiec.mst");
 
             var EAM = new ExponentialMovingAverage();
             var parameters = new Parameters

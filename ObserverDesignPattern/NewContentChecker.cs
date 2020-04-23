@@ -1,7 +1,6 @@
 ﻿using HtmlAgilityPack;
 using System;
 using System.IO;
-using System.Linq;
 using Utility;
 
 namespace ObserverDesignPattern
@@ -55,7 +54,7 @@ namespace ObserverDesignPattern
             HtmlNode htmlStructure = htmlWeb.Load(WebsiteURL).DocumentNode;
 
             int index = htmlStructure.InnerText.IndexOf(NameOfSearchedInnerTextInDocumentNode);
-            DateTime dateOfQuotesUpdateOnRemote = DateTime.Parse(htmlStructure.InnerText.Substring(index-24, 16));
+            DateTime dateOfQuotesUpdateOnRemote = DateTime.Parse(htmlStructure.InnerText.Substring(index - 24, 16));
 
             if (dateOfQuotesUpdateOnRemote > LastDownloadDateTime)
             {
