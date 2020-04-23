@@ -1,12 +1,11 @@
 ﻿using Models;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using TechnicalIndicators;
 
-namespace Signals
+namespace StrategyDesignPattern
 {
-    class ActorModelStrategy : ICalculateTechnicalIndicatorStrategy
+    public class ActorModelStrategy : ICalculateTechnicalIndicatorStrategy
     {
         public List<Signal> ReceiveData()
         {

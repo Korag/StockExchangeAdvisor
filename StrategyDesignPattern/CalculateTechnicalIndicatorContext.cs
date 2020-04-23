@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using TechnicalIndicators;
 
-namespace Signals
+namespace StrategyDesignPattern
 {
-    sealed class CalculateTechnicalIndicatorContext
+    public sealed class CalculateTechnicalIndicatorContext
     {
         private ICalculateTechnicalIndicatorStrategy _strategy = null;
         private static CalculateTechnicalIndicatorContext instance = null;

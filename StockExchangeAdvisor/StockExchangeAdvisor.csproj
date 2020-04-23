@@ -3,11 +3,12 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\AdapterDesignPattern\AdapterDesignPattern.csproj" />
     <ProjectReference Include="..\Models\Models.csproj" />
+    <ProjectReference Include="..\StrategyDesignPattern\StrategyDesignPattern.csproj" />
     <ProjectReference Include="..\TechnicalIndicators\TechnicalIndicators.csproj" />
     <ProjectReference Include="..\Utility\Utility.csproj" />
   </ItemGroup>

@@ -4,9 +4,9 @@ using RabbitMQ;
 using System.Collections.Generic;
 using TechnicalIndicators;
 
-namespace Signals
+namespace StrategyDesignPattern
 {
-    class RabbitMQStrategy : ICalculateTechnicalIndicatorStrategy
+    public class RabbitMQStrategy : ICalculateTechnicalIndicatorStrategy
     {
         private const string _exchange = "SignalsExchange";
         private const string _queueReceiveFrom = "ObtainedSignals";

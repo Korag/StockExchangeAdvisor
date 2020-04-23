@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using TechnicalIndicators;
+using StrategyDesignPattern;
 
 namespace Signals
 {

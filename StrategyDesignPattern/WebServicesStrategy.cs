@@ -3,9 +3,9 @@ using System;
 using System.Collections.Generic;
 using TechnicalIndicators;
 
-namespace Signals
+namespace StrategyDesignPattern
 {
-    class WebServicesStrategy : ICalculateTechnicalIndicatorStrategy
+    public class WebServicesStrategy : ICalculateTechnicalIndicatorStrategy
     {
         public List<Signal> ReceiveData()
         {
