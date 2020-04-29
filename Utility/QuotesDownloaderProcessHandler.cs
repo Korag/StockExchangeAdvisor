@@ -12,7 +12,10 @@ namespace Utility
 
         public static void RunQuotesDownloaderProcess()
         {
-            Process.Start(_urlToQuotesDownloaderProject);
+            if (Process.GetProcessesByName(_processName).Count() == 0)
+            {
+                Process.Start(_urlToQuotesDownloaderProject);
+            }
         }
 
         public static void KillQuotesDownloaderProcess()

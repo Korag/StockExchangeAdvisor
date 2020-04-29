@@ -7,10 +7,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\FacadeDesignPattern\FacadeDesignPattern.csproj" />
     <ProjectReference Include="..\Models\Models.csproj" />
     <ProjectReference Include="..\StrategyDesignPattern\StrategyDesignPattern.csproj" />
     <ProjectReference Include="..\TechnicalIndicators\TechnicalIndicators.csproj" />
     <ProjectReference Include="..\Utility\Utility.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="GeneratedSignals\" />
   </ItemGroup>
 
 </Project>
