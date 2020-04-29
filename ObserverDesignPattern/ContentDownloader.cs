@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.IO.Compression;
 using System.Net.Http;
-using System.Text;
 using Utility;
 
 namespace ObserverDesignPattern

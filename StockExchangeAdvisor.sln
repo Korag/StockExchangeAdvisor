@@ -23,23 +23,23 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdapterDesignPattern", "Ada
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RabbitMQ", "RabbitMQ\RabbitMQ.csproj", "{1FE9F597-4F9B-4808-9B90-8C0019F75AE9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ObserverDesignPattern", "ObserverDesignPattern\ObserverDesignPattern.csproj", "{DAE2953F-0FA4-4107-9338-BF1FDBDB5145}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ObserverDesignPattern", "ObserverDesignPattern\ObserverDesignPattern.csproj", "{DAE2953F-0FA4-4107-9338-BF1FDBDB5145}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuotesDownloader", "QuotesDownloader\QuotesDownloader.csproj", "{127E9396-5233-4590-BCB7-AA632CE0895C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuotesDownloader", "QuotesDownloader\QuotesDownloader.csproj", "{127E9396-5233-4590-BCB7-AA632CE0895C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FacadeDesignPattern", "FacadeDesignPattern\FacadeDesignPattern.csproj", "{604B14D0-FF3F-4758-BBC8-F15B37452228}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FacadeDesignPattern", "FacadeDesignPattern\FacadeDesignPattern.csproj", "{604B14D0-FF3F-4758-BBC8-F15B37452228}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuilderDesignPattern", "BuilderDesignPattern\BuilderDesignPattern.csproj", "{0C680CE3-453A-40AD-8C3E-31C7209840D4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BuilderDesignPattern", "BuilderDesignPattern\BuilderDesignPattern.csproj", "{0C680CE3-453A-40AD-8C3E-31C7209840D4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StateDesignPattern", "StateDesignPattern\StateDesignPattern.csproj", "{55F143C0-7F22-478F-9861-CD39DA07A838}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StateDesignPattern", "StateDesignPattern\StateDesignPattern.csproj", "{55F143C0-7F22-478F-9861-CD39DA07A838}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChainOfResponsibilityDesignPattern", "ChainOfResponsibilityDesignPattern\ChainOfResponsibilityDesignPattern.csproj", "{5870DD3E-9B98-4DD6-9BB0-740FC7977C12}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChainOfResponsibilityDesignPattern", "ChainOfResponsibilityDesignPattern\ChainOfResponsibilityDesignPattern.csproj", "{5870DD3E-9B98-4DD6-9BB0-740FC7977C12}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DecoratorDesignPattern", "DecoratorDesignPattern\DecoratorDesignPattern.csproj", "{67ADFB35-D874-4361-BA17-269E2BEDE124}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DecoratorDesignPattern", "DecoratorDesignPattern\DecoratorDesignPattern.csproj", "{67ADFB35-D874-4361-BA17-269E2BEDE124}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrototypDesignPattern", "PrototypDesignPattern\PrototypDesignPattern.csproj", "{BB651A72-66A3-4A8E-B35E-FAFF6AE8A6A9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PrototypeDesignPattern", "PrototypDesignPattern\PrototypeDesignPattern.csproj", "{BB651A72-66A3-4A8E-B35E-FAFF6AE8A6A9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StrategyDesignPattern", "StrategyDesignPattern\StrategyDesignPattern.csproj", "{62F8C3F7-43BA-46D1-9923-80A27CB7698B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StrategyDesignPattern", "StrategyDesignPattern\StrategyDesignPattern.csproj", "{62F8C3F7-43BA-46D1-9923-80A27CB7698B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

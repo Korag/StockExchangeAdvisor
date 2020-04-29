@@ -8,12 +8,17 @@ namespace StrategyDesignPattern
 {
     public class RabbitMQStrategy : ICalculateTechnicalIndicatorStrategy
     {
-        private const string _exchange = "SignalsExchange";
-        private const string _queueReceiveFrom = "ObtainedSignals";
+        private string _exchange = "SignalsExchange";
+        private string _queueReceiveFrom = "ObtainedSignals";
 
         public RabbitMQStrategy()
         {
+        }
 
+        public RabbitMQStrategy(string exchange, string queueReceiveFrom)
+        {
+            _exchange = exchange;
+            _queueReceiveFrom = queueReceiveFrom;
         }
 
         public List<Signal> ReceiveData()

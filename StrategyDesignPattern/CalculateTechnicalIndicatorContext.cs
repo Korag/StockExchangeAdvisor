@@ -6,7 +6,7 @@ namespace StrategyDesignPattern
 {
     public sealed class CalculateTechnicalIndicatorContext
     {
-        private ICalculateTechnicalIndicatorStrategy _strategy = null;
+        private static ICalculateTechnicalIndicatorStrategy _strategy = null;
         private static CalculateTechnicalIndicatorContext instance = null;
 
         private CalculateTechnicalIndicatorContext(ICalculateTechnicalIndicatorStrategy strategy)
