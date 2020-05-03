@@ -2,12 +2,16 @@
 using System.IO;
 using TechnicalIndicators;
 using FacadeDesignPattern;
+using BuilderDesignPattern.AlgorithmBuilder;
 
 namespace Signals
 {
     class Program
     {
         //public static string QUOTES_SAVE_PATH = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..\\..\\..\\..\\QuotesDownloader\\DownloadedQuotes\\"));
+        public static IAlgorithmBuilder builder = new RabbitMQBuilder();
+        //public static IAlgorithmBuilder builder = new WebServicesBuilder();
+        //public static IAlgorithmBuilder builder = new ActorModelBuilder();
 
         static void Main(string[] args)
         {
@@ -28,7 +32,7 @@ namespace Signals
             //List<Signal> obtainedSignals = calculateIndicator.ReceiveSignalsFromSingleCalculatedIndicator();
             #endregion
 
-            RabbitMQFacade facade = new RabbitMQFacade();
+            RabbitMQFacade facade = new RabbitMQFacade(builder);
             facade.CountSingleIndicatorForSingleCompanyQuotes(new TechnicalIndicatorEMA(), "zywiec");
 
             Console.ReadLine();

@@ -1,10 +1,10 @@
 ﻿namespace StateDesignPattern
 {
-    public abstract class SignalState
+    public abstract class ASignalState
     {
-        private SignalStateContext _context;
+        private SignalModelContext _context;
 
-        public SignalStateContext Context
+        public SignalModelContext Context
         {
             get { return _context; }
             set { _context = value; }
@@ -16,6 +16,13 @@
         {
             get { return _signalValue; }
             set { _signalValue = value; }
+        }
+
+        private string _factor;
+
+        public virtual string Factor
+        {
+            get { return _factor; }
         }
 
         public abstract void SetSignalValue(int signalValue);

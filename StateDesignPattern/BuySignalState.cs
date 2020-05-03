@@ -2,14 +2,19 @@
 
 namespace StateDesignPattern
 {
-    public class BuySignalState : SignalState
+    public class BuySignalState : ASignalState
     {
-        public BuySignalState(SignalState state) : this(state.SignalValue, state.Context)
+        public override string Factor
+        {
+            get { return "proponowana akcja kupna"; }
+        }
+
+        public BuySignalState(ASignalState state) : this(state.SignalValue, state.Context)
         {
 
         }
 
-        public BuySignalState(int signalValue, SignalStateContext context)
+        public BuySignalState(int signalValue, SignalModelContext context)
         {
             this.Context = context;
             this.SignalValue = signalValue;
@@ -17,7 +22,7 @@ namespace StateDesignPattern
 
         public override void SaveSignalToFile(string fileURL)
         {
-            //write to fileURL with proper state
+            //write to fileURL with proper state only one line
 
             throw new NotImplementedException();
         }
