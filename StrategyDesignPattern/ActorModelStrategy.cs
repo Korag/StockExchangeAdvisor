@@ -7,7 +7,7 @@ namespace StrategyDesignPattern
 {
     public class ActorModelStrategy : ICalculateTechnicalIndicatorStrategy
     {
-        public List<Signal> ReceiveData()
+        public List<List<Signal>> ReceiveData(int countedTechnicalIndicatorsNumber)
         {
             throw new NotImplementedException();
         }

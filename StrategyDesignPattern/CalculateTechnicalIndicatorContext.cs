@@ -36,7 +36,13 @@ namespace StrategyDesignPattern
 
         public List<Signal> ReceiveSignalsFromSingleCalculatedIndicator()
         {
-            return _strategy.ReceiveData();
+            List<List<Signal>> generatedSignals = _strategy.ReceiveData(1);
+            return generatedSignals[0];
+        }
+
+        public List<List<Signal>> ReceiveSignalsFromCalculatedIndicators(int countedTechnicalIndicatorsNumber)
+        {
+            return _strategy.ReceiveData(countedTechnicalIndicatorsNumber);
         }
     }
 }

@@ -44,5 +44,20 @@ namespace FacadeDesignPattern
             Utility.CsvHelper.SaveCompanySignalsToCsvFile(obtainedSignalsWithQuotes, nameOfCompany);
             QuotesDownloaderProcessHandler.KillQuotesDownloaderProcess();
         }
+
+        public void CountSingleIndicatorForAllCompaniesQuotes(TechnicalIndicator technicalIndicator)
+        {
+
+        }
+
+        public void CountIndicatorsSetForSingleCompanyQuotes(string nameOfCompany)
+        {
+
+        }
+
+        public void CountIndicatorsSetForAllCompaniesQuotes()
+        {
+
+        }
     }
 }

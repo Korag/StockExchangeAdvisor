@@ -21,10 +21,10 @@ namespace StrategyDesignPattern
             _queueReceiveFrom = queueReceiveFrom;
         }
 
-        public List<Signal> ReceiveData()
+        public List<List<Signal>> ReceiveData(int countedTechnicalIndicatorsNumber)
         {
             IRabbitMQReceiveObtainedSignals signalConsumer = new RabbitMQReceiveObtainedSignals(_exchange, _queueReceiveFrom);
-            return signalConsumer.ReceiveObtainedSignals();
+            return signalConsumer.ReceiveObtainedSignals(countedTechnicalIndicatorsNumber);
         }
                                                                   
         public void SendData(List<Quote> quotes, Parameters parameters, TechnicalIndicator indicator)

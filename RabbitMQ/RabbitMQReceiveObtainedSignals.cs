@@ -11,19 +11,21 @@ namespace RabbitMQ
 {
     public class RabbitMQReceiveObtainedSignals : IRabbitMQReceiveObtainedSignals
     {
-        private List<Signal> _obtainedSignals = new List<Signal>();
+        //private List<Signal> _obtainedSignals = new List<Signal>();
+
+        private List<List<Signal>> _obtainedSignals = new List<List<Signal>>();
 
         public RabbitMQReceiveObtainedSignals(string exchange, string queueReceiveFrom) : base(exchange, queueReceiveFrom)
         {
         }
 
-        public override List<Signal> ReceiveObtainedSignals()
+        public override List<List<Signal>> ReceiveObtainedSignals(int countedTechnicalIndicatorsNumber)
         {
-            GetObtainedSignalsFromQueue();
+            GetObtainedSignalsFromQueue(countedTechnicalIndicatorsNumber);
             return _obtainedSignals;
         }
 
-        private void GetObtainedSignalsFromQueue()
+        private void GetObtainedSignalsFromQueue(int countedTechnicalIndicatorsNumber)
         {
             try
             {
@@ -42,11 +44,16 @@ namespace RabbitMQ
                         ////podłączenie konsumenta do kolejki
                         //channel.BasicConsume(queue: _queueReceiveFrom,
                         //   consumer: consumer);
+                        for (int i = 0; i < countedTechnicalIndicatorsNumber; i++)
+                        {
+                            var data = channel.BasicGet(_queueReceiveFrom, false);
+                           
+                            List<Signal> currentReceivedSignals = JsonSerializer.JsonStringToCollectionOfSignals(EncryptionHelper.ByteArrayToUTF8String(data.Body));
+                            _obtainedSignals[i].AddRange(currentReceivedSignals);
 
-                        var data = channel.BasicGet(_queueReceiveFrom, false);
-                        _obtainedSignals = JsonSerializer.JsonStringToCollectionOfSignals(EncryptionHelper.ByteArrayToUTF8String(data.Body));
-                        Console.WriteLine("Odebrałem otrzymane sygnały z kolejki");
-                        channel.BasicAck(data.DeliveryTag, false);
+                            Console.WriteLine("Odebrałem otrzymane sygnały z kolejki");
+                            channel.BasicAck(data.DeliveryTag, false);
+                        } 
                     }
                 }
             }
@@ -57,17 +64,17 @@ namespace RabbitMQ
             }
         }
 
-        public override void HandleReceivedEvent(BasicDeliverEventArgs ea, IModel channel, IConnection connection)
-        {
-            _obtainedSignals = JsonSerializer.JsonStringToCollectionOfSignals(EncryptionHelper.ByteArrayToUTF8String(ea.Body));
-            Console.WriteLine("Odebrałem otrzymane sygnały z kolejki");
+        //public override void HandleReceivedEvent(BasicDeliverEventArgs ea, IModel channel, IConnection connection)
+        //{
+        //    _obtainedSignals = JsonSerializer.JsonStringToCollectionOfSignals(EncryptionHelper.ByteArrayToUTF8String(ea.Body));
+        //    Console.WriteLine("Odebrałem otrzymane sygnały z kolejki");
 
-            if (_obtainedSignals.Count != 0)
-            {
-                channel.BasicCancel(ea.ConsumerTag);
-            }
+        //    if (_obtainedSignals.Count != 0)
+        //    {
+        //        channel.BasicCancel(ea.ConsumerTag);
+        //    }
 
-            channel.BasicAck(ea.DeliveryTag, false);
-        }
+        //    channel.BasicAck(ea.DeliveryTag, false);
+        //}
     }
 }

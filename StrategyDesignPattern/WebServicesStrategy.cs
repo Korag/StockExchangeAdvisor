@@ -7,7 +7,7 @@ namespace StrategyDesignPattern
 {
     public class WebServicesStrategy : ICalculateTechnicalIndicatorStrategy
     {
-        public List<Signal> ReceiveData()
+        public List<List<Signal>> ReceiveData(int countedTechnicalIndicatorsNumber)
         {
             throw new NotImplementedException();
         }

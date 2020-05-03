@@ -7,6 +7,6 @@ namespace StrategyDesignPattern
     public interface ICalculateTechnicalIndicatorStrategy
     {
         void SendData(List<Quote> quotes, Parameters parameters, TechnicalIndicator indicator);
-        List<Signal> ReceiveData();
+        List<List<Signal>> ReceiveData(int countedTechnicalIndicatorsNumber);
     }
 }

@@ -16,7 +16,7 @@ namespace RabbitMQ
             _queueReceiveFrom = queueReceiveFrom;
         }
 
-        public abstract List<Signal> ReceiveObtainedSignals();
-        public abstract void HandleReceivedEvent(BasicDeliverEventArgs ea, IModel channel, IConnection connection);
+        public abstract List<List<Signal>> ReceiveObtainedSignals(int countedTechnicalIndicatorsNumber);
+        //public abstract void HandleReceivedEvent(BasicDeliverEventArgs ea, IModel channel, IConnection connection);
     }
 }
