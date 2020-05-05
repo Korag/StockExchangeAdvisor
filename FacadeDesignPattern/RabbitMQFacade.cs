@@ -1,8 +1,10 @@
 ﻿using BuilderDesignPattern.AlgorithmBuilder;
 using Models;
+using StateDesignPattern;
 using StrategyDesignPattern;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using TechnicalIndicators;
 using Utility;
@@ -18,9 +20,32 @@ namespace FacadeDesignPattern
         private Parameters _parameters { get; set; }
         private List<TechnicalIndicator> _indicators { get; set; }
 
+        public string PathToUnpackedQuotesDirectory { get; set; }
+
         public RabbitMQFacade()
         {
             _algorithmBuilder = new RabbitMQBuilder();
+            _algorithmManufacter = new AlgorithmManufacturer();
+
+            _algorithmManufacter.Construct(_algorithmBuilder);
+            _calculateContext = _algorithmBuilder.StrategyContext;
+
+            PathToUnpackedQuotesDirectory = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..\\..\\..\\..\\QuotesDownloader\\DownloadedQuotes\\"));
+
+            _parameters = new Parameters
+            {
+                CalculatedIndicatorFirstDaysInterval = 10,
+                CalculatedIndicatorSecondDaysInterval = 5,
+                Period = 10
+            };
+
+            InitializeIndicatorsList();
+            AutoMapperHelper.GetInstance();
+        }
+
+        public RabbitMQFacade(IAlgorithmBuilder algorithmBuilder)
+        {
+            _algorithmBuilder = algorithmBuilder;
             _algorithmManufacter = new AlgorithmManufacturer();
 
             _algorithmManufacter.Construct(_algorithmBuilder);
@@ -37,24 +62,7 @@ namespace FacadeDesignPattern
             AutoMapperHelper.GetInstance();
         }
 
-        public RabbitMQFacade(IAlgorithmBuilder algorithmBuilder)
-        {
-            _algorithmBuilder = algorithmBuilder;
-            _algorithmManufacter.Construct(_algorithmBuilder);
-            _calculateContext = _algorithmBuilder.StrategyContext;
-
-            _parameters = new Parameters
-            {
-                CalculatedIndicatorFirstDaysInterval = 10,
-                CalculatedIndicatorSecondDaysInterval = 5,
-                Period = 10
-            };
-
-            InitializeIndicatorsList();
-
-            AutoMapperHelper.GetInstance();
-        }
-
+        // sypie sie
         private void InitializeIndicatorsList()
         {
             var abstractClass = typeof(TechnicalIndicator);
@@ -69,7 +77,7 @@ namespace FacadeDesignPattern
 
             foreach (var type in derivedClass)
             {
-                TechnicalIndicator indicator = (TechnicalIndicatorEMA)Activator.CreateInstance(type);
+                TechnicalIndicator indicator = (TechnicalIndicator)Activator.CreateInstance(type);
                 _indicators.Add(indicator);
             }
         }
@@ -82,32 +90,26 @@ namespace FacadeDesignPattern
 
             _calculateContext.CalculateSingleIndicator(companyQuotes, _parameters, technicalIndicator);
             List<Signal> obtainedSignals = _calculateContext.ReceiveSignalsFromSingleCalculatedIndicator();
+            List<SignalModelContext> obtainedSignalsWithQuotes = AutoMapperHelper.MapQuotesAndSignalsToSignalModelContext(companyQuotes, obtainedSignals);
 
             //TODO:
-            //1. decorators
-            //2. consolidation of Signals to SignalModelContext
+            //1. decorators !!!
+            //chain of responsibility
             //3. deep clone and save to json
             //4. save to file
             //5. save to divided files by state
 
-            //Skipped:
-            //1. chain of responsibility
+            //List<QuoteWithSignal> obtainedSignalsWithQuotes = AutoMapperHelper.MapQuoteListToQuoteWithSignalList(companyQuotes);
+            //obtainedSignalsWithQuotes = AutoMapperHelper.MapSignalListToQuoteWithSignalList(obtainedSignals, obtainedSignalsWithQuotes);
+            //Utility.CsvHelper.SaveCompanySignalsToCsvFile(obtainedSignalsWithQuotes, nameOfCompany);
 
-            List<QuoteWithSignal> obtainedSignalsWithQuotes = AutoMapperHelper.MapQuoteListToQuoteWithSignalList(companyQuotes);
-            obtainedSignalsWithQuotes = AutoMapperHelper.MapSignalListToQuoteWithSignalList(obtainedSignals, obtainedSignalsWithQuotes);
-            Utility.CsvHelper.SaveCompanySignalsToCsvFile(obtainedSignalsWithQuotes, nameOfCompany);
-      
             QuotesDownloaderProcessHandler.KillQuotesDownloaderProcess();
         }
 
         public void CountSingleIndicatorForAllCompaniesQuotes(TechnicalIndicator technicalIndicator)
         {
             QuotesDownloaderProcessHandler.RunQuotesDownloaderProcess();
-
-            //TODO:
-            //1. get all company names from folder with downloaded quotes
-
-            List<string> namesOfCompanies = new List<string>();
+            List<string> namesOfCompanies = FileHelper.GetFileNames(PathToUnpackedQuotesDirectory);
 
             foreach (var companyName in namesOfCompanies)
             {
@@ -115,17 +117,15 @@ namespace FacadeDesignPattern
                 
                 _calculateContext.CalculateSingleIndicator(companyQuotes, _parameters, technicalIndicator);
                 List<Signal> obtainedSignals = _calculateContext.ReceiveSignalsFromSingleCalculatedIndicator();
-
-                //TODO:
-                //1. decorators
-                //2. consolidation of Signals to SignalModelContext
+                List<SignalModelContext> obtainedSignalsWithQuotes = AutoMapperHelper.MapQuotesAndSignalsToSignalModelContext(companyQuotes, obtainedSignals);
+                
+                //decorators
+                //chain of responsibility
                 //3. deep clone and save to json
                 //4. save to file
                 //5. save to divided files by state
 
-                List<QuoteWithSignal> obtainedSignalsWithQuotes = AutoMapperHelper.MapQuoteListToQuoteWithSignalList(companyQuotes);
-                obtainedSignalsWithQuotes = AutoMapperHelper.MapSignalListToQuoteWithSignalList(obtainedSignals, obtainedSignalsWithQuotes);
-                Utility.CsvHelper.SaveCompanySignalsToCsvFile(obtainedSignalsWithQuotes, companyName);
+                //Utility.CsvHelper.SaveCompanySignalsToCsvFile(obtainedSignalsWithQuotes, companyName);
             }
 
             QuotesDownloaderProcessHandler.KillQuotesDownloaderProcess();
@@ -143,10 +143,10 @@ namespace FacadeDesignPattern
             }
 
             List<List<Signal>> obtainedSignals = _calculateContext.ReceiveSignalsFromCalculatedIndicators(_indicators.Count());
-
+            List<SignalModelContext> obtainedSignalsWithQuotes = AutoMapperHelper.MapQuotesAndSignalsToSignalModelContext(companyQuotes, obtainedSignals);
+           
             //TODO:
             //1. decorators
-            //2. consolidation of Signals to SignalModelContext
             //3. deep clone and save to json
             //4. chain of responsibility and count FinalSignal
             //4. save to file
@@ -159,11 +159,7 @@ namespace FacadeDesignPattern
         public void CountIndicatorsSetForAllCompaniesQuotes()
         {
             QuotesDownloaderProcessHandler.RunQuotesDownloaderProcess();
-
-            //TODO:
-            //1. get all company names from folder with downloaded quotes
-
-            List<string> namesOfCompanies = new List<string>();
+            List<string> namesOfCompanies = FileHelper.GetFileNames(PathToUnpackedQuotesDirectory);
 
             foreach (var companyName in namesOfCompanies)
             {
@@ -175,10 +171,10 @@ namespace FacadeDesignPattern
                 }
 
                 List<List<Signal>> obtainedSignals = _calculateContext.ReceiveSignalsFromCalculatedIndicators(_indicators.Count());
+                List<SignalModelContext> obtainedSignalsWithQuotes = AutoMapperHelper.MapQuotesAndSignalsToSignalModelContext(companyQuotes, obtainedSignals);
 
                 //TODO:
                 //1. decorators
-                //2. consolidation of Signals to SignalModelContext
                 //3. deep clone and save to json
                 //4. chain of responsibility and count FinalSignal
                 //4. save to file

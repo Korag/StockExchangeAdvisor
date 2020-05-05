@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Models\Models.csproj" />
+    <ProjectReference Include="..\StateDesignPattern\StateDesignPattern.csproj" />
   </ItemGroup>
 
 </Project>

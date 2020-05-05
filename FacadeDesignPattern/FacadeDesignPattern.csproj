@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BuilderDesignPattern\BuilderDesignPattern.csproj" />
+    <ProjectReference Include="..\StateDesignPattern\StateDesignPattern.csproj" />
   </ItemGroup>
 
 </Project>

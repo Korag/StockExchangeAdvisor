@@ -14,7 +14,7 @@ namespace StateDesignPattern
         public double Close;
         public int Volume;
 
-        public List<int> PartialSignals;
+        public List<double> PartialSignals;
         public ASignalState currentState = null;
 
         //Przeniesione do określonych stanów
@@ -30,6 +30,7 @@ namespace StateDesignPattern
         public SignalModelContext()
         {
             currentState = new UnknownSignalState(0, this);
+            PartialSignals = new List<double>();
         }
 
         public void SetSignalValue(int signalValue)
