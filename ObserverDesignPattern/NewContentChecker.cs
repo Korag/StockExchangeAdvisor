@@ -11,13 +11,16 @@ namespace ObserverDesignPattern
         public const string WebsiteURL = "https://info.bossa.pl/pub/metastock/mstock/";
         public const string NameOfFileWithLastDownloadedDateTime = "LDDateTime.json";
         public const string NameOfSearchedInnerTextInDocumentNode = "baza w formacie txt";
+        public string PathToUnpackedQuotesDirectory { get; set; }
 
         public string LastDownloadDateTimeFileURL { get; set; }
         public DateTime LastDownloadDateTime { get; set; }
 
         public NewContentChecker()
         {
-            LastDownloadDateTimeFileURL = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, $"..\\..\\..\\JsonFile\\{NameOfFileWithLastDownloadedDateTime}"));
+            LastDownloadDateTimeFileURL = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, $"..\\..\\..\\..\\QuotesDownloader\\JsonFile\\{NameOfFileWithLastDownloadedDateTime}"));
+            PathToUnpackedQuotesDirectory = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..\\..\\..\\..\\QuotesDownloader\\DownloadedQuotes\\"));
+
             GetLastDownloadDateTime();
         }
 
@@ -56,7 +59,7 @@ namespace ObserverDesignPattern
             int index = htmlStructure.InnerText.IndexOf(NameOfSearchedInnerTextInDocumentNode);
             DateTime dateOfQuotesUpdateOnRemote = DateTime.Parse(htmlStructure.InnerText.Substring(index - 24, 16));
 
-            if (dateOfQuotesUpdateOnRemote > LastDownloadDateTime)
+            if (dateOfQuotesUpdateOnRemote > LastDownloadDateTime || FileHelper.IsDirectoryEmpty(PathToUnpackedQuotesDirectory))
             {
                 RequestDownloadNewContent();
             }

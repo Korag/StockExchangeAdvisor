@@ -15,8 +15,8 @@ namespace ObserverDesignPattern
 
         public ContentDownloader()
         {
-            PathToQuotesDirectoryInZipFileFormat = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..\\..\\..\\ZIP\\mstall.zip"));
-            PathToUnpackedQuotesDirectory = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..\\..\\..\\DownloadedQuotes\\"));
+            PathToQuotesDirectoryInZipFileFormat = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..\\..\\..\\..\\QuotesDownloader\\ZIP\\mstall.zip"));
+            PathToUnpackedQuotesDirectory = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..\\..\\..\\..\\QuotesDownloader\\DownloadedQuotes\\"));
         }
 
         public void DownloadNewQuotes()
