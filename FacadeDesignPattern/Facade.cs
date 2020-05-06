@@ -96,20 +96,29 @@ namespace FacadeDesignPattern
             //chain of responsibility z ustawianiem State -> SignalValue
 
             //To AutoMapper:
+
+            obtainedSignalsWithQuotes[0].CurrentState.SignalValue = 1;
+
             DecoratorComponent abc = new DecoratorConcreteComponent
             {
-                Close = obtainedSignalsWithQuotes[0].Close
+                Close = obtainedSignalsWithQuotes[0].Close,
+                CurrentState = obtainedSignalsWithQuotes[0].CurrentState,
             };
 
-            var aaaa = abc.CalculateConst();
+            var costStart = abc.CalculateCost();
             abc = new CommissionDecorator(abc);
-            var aaa = abc.CalculateConst();
+            var cost1 = abc.CalculateCost();
+            var fee1 = abc.CalculateAdditionalFee();
 
             abc = new CommissionDecorator(abc);
-            abc.CalculateConst();
+            var cost2 = abc.CalculateCost();
+            var fee2 = abc.CalculateAdditionalFee();
 
-            obtainedSignalsWithQuotes[0].FinalPrice = abc.CalculateConst();
+            var finalFee = abc.GetAdditionalFee();
+            var finalPrice = abc.GetFinalPrice();
 
+            obtainedSignalsWithQuotes[0].FinalPrice = abc.CalculateCost();
+            
             //TODO:
             //decorators, które mają wspólny interfejs (lub abstract)
 

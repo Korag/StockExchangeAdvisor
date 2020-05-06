@@ -8,21 +8,26 @@
            
         }
 
-        public override double CalculateConst()
+        public override double CalculateAdditionalFee()
         {
-            double taxFee = _baseComponent.CalculateConst() * 0.18;
+            throw new System.NotImplementedException();
+        }
+
+        public override double CalculateCost()
+        {
+            double taxFee = _baseComponent.CalculateCost() * 0.18;
 
             switch (_baseComponent.GetState().SignalValue)
             {
                 case 1:
-                    return _baseComponent.CalculateConst() - taxFee;
+                    return _baseComponent.CalculateCost() - taxFee;
 
                 case -1:
-                    return _baseComponent.CalculateConst() + taxFee;
+                    return _baseComponent.CalculateCost() + taxFee;
 
                 default:
                 case 0:
-                    return _baseComponent.CalculateConst();
+                    return _baseComponent.CalculateCost();
             }
 
             //return _baseComponent.CalculateConst() + 1000;

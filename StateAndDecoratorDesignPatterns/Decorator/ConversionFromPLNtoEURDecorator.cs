@@ -8,21 +8,21 @@
             
         }
 
-        public override double CalculateConst()
+        public override double CalculateCost()
         {
-            double conversionFee = _baseComponent.CalculateConst() * 0.03;
+            double conversionFee = _baseComponent.CalculateCost() * 0.03;
 
             switch (_baseComponent.GetState().SignalValue)
             {
                 case 1:
-                    return _baseComponent.CalculateConst() - conversionFee;
+                    return _baseComponent.CalculateCost() - conversionFee;
 
                 case -1:
-                    return _baseComponent.CalculateConst() + conversionFee;
+                    return _baseComponent.CalculateCost() + conversionFee;
 
                 default:
                 case 0:
-                    return _baseComponent.CalculateConst();
+                    return _baseComponent.CalculateCost();
             }
 
             //return _baseComponent.CalculateConst() + 1000;

@@ -7,14 +7,42 @@ namespace DecoratorDesignPattern
         public double Close;
         public ASignalState CurrentState = null;
 
-        public override double CalculateConst()
+        public double FinalPrice;
+        public double AdditionalFee;
+
+        public override double CalculateCost()
         {
-            return Close;
+            return FinalPrice;
+        }
+
+        public override double CalculateAdditionalFee()
+        {
+            return AdditionalFee;
         }
 
         public override ASignalState GetState()
         {
             return CurrentState;
+        }
+
+        public override void SetFinalPrice(double value)
+        {
+            this.FinalPrice = value;
+        }
+
+        public override void SetAdditionalFee(double value)
+        {
+            this.AdditionalFee += value;
+        }
+
+        public override double GetFinalPrice()
+        {
+            return FinalPrice;
+        }
+
+        public override double GetAdditionalFee()
+        {
+            return AdditionalFee;
         }
     }
 }
