@@ -2,6 +2,7 @@
 
 namespace StateDesignPattern
 {
+    //Concrete state
     public class SellSignalState : ASignalState
     {
         public override string Factor

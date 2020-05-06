@@ -1,5 +1,6 @@
 ﻿namespace StateDesignPattern
 {
+    //Abstract state class
     public abstract class ASignalState
     {
         private SignalModelContext _context;

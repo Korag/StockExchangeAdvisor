@@ -2,6 +2,7 @@
 
 namespace StateDesignPattern
 {
+    //Concrete state
     public class UnknownSignalState : ASignalState
     {
         public override string Factor
