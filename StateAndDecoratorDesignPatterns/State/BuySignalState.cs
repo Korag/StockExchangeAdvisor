@@ -1,4 +1,4 @@
-﻿using DecoratorAndStateDesignPatterns;
+﻿using StateAndDecoratorDesignPattern;
 using System;
 
 namespace StateDesignPattern
@@ -27,13 +27,13 @@ namespace StateDesignPattern
             switch (signalValue)
             {
                 case 0:
-                    Context.currentState.SignalValue = signalValue;
-                    Context.currentState = new UnknownSignalState(this);
+                    Context.CurrentState.SignalValue = signalValue;
+                    Context.CurrentState = new UnknownSignalState(this);
                     break;
 
                 case 1:
-                    Context.currentState.SignalValue = signalValue;
-                    Context.currentState = new SellSignalState(this);
+                    Context.CurrentState.SignalValue = signalValue;
+                    Context.CurrentState = new SellSignalState(this);
                     break;
 
                 default:

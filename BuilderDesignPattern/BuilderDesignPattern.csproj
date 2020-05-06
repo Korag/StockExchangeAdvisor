@@ -8,8 +8,4 @@
     <ProjectReference Include="..\StrategyDesignPattern\StrategyDesignPattern.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="DownloadedQuotesFormatBuilder\" />
-  </ItemGroup>
-
 </Project>

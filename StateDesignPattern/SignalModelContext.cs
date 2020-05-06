@@ -1,15 +1,10 @@
-﻿using DecoratorDesignPattern;
-using System.Collections.Generic;
+﻿//using System.Collections.Generic;
 
 //namespace StateDesignPattern
 //{
 //    //State context class
-//    //Decorator concrete component
-//    public class SignalModelContext : AFinalPriceComponent
+//    public class SignalModelContext
 //    {
-//        //TODO: url
-//        public string fileURL = "";
-
 //        public string Date;
 //        public double Open;
 //        public double High;
@@ -18,7 +13,10 @@ using System.Collections.Generic;
 //        public int Volume;
 
 //        public List<double> PartialSignals;
-//        public ASignalState currentState = null;
+//        public ASignalState CurrentState = null;
+
+//        //Wykorzystanie decoratora
+//        public double FinalPrice;
 
 //        //Przeniesione do określonych stanów
 //        //public string Factor;
@@ -26,34 +24,13 @@ using System.Collections.Generic;
 
 //        public SignalModelContext()
 //        {
-//            currentState = new UnknownSignalState(0, this);
+//            CurrentState = new UnknownSignalState(0, this);
 //            PartialSignals = new List<double>();
 //        }
 
-//        //public void SetSignalValue(int signalValue)
-//        //{
-//        //    currentState.SetSignalValue(signalValue);
-//        //}
-
-//        //TODO:
-//        //decorator prowizja
-//        //decorator podatek
-//        //decorator przewalutowanieUSD
-//        //decorator przewalutowanieEUR
-
-//        //Decorator
-//        private double? _price;
-
-//        public override double GetFinalPrice()
+//        public void SetSignalValue(int signalValue)
 //        {
-//            if (_price != null)
-//            {
-//                return (double)_price;
-//            }
-//            else
-//            {
-//                return Close;
-//            }
+//            CurrentState.SetSignalValue(signalValue);
 //        }
 //    }
 //}

@@ -1,28 +1,33 @@
-﻿
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace DecoratorDesignPattern
+﻿namespace DecoratorDesignPattern
 {
     //Decorator class
-    public abstract class Decorator : AFinalPriceComponent
+    public abstract class Decorator : DecoratorComponent
     {
-        SignalModelContext _signalContext = null;
-        protected double _price = 0.0;
+        protected DecoratorComponent _baseComponent = null;
 
-        protected Decorator(SignalModelContext signalContext)
+        protected Decorator(DecoratorComponent baseComponent)
         {
-           _signalContext = signalContext;
+            _baseComponent = baseComponent;
         }
 
-        #region SignalModelContext Members
-
-        double GetFinalPrice()
+        public override double CalculateConst()
         {
-            return _price + _signalContext.GetFinalPrice();
-        }
+            //switch (_baseComponent.currentState.SignalValue)
+            //{
+            //    case 1:
+            //        return _baseComponent.GetFinalPrice() - _price;
 
-        #endregion
+            //    case -1:
+            //        return _baseComponent.GetFinalPrice() + _price;
+
+            //    default:
+            //    case 0:
+            //        return _baseComponent.GetFinalPrice();
+            //}
+
+            //return _baseComponent.GetFinalPrice() + 100;
+
+             return _baseComponent.CalculateConst();
+        }
     }
 }

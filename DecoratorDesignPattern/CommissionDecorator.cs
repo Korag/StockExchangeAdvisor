@@ -1,15 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace DecoratorDesignPattern
+﻿namespace DecoratorDesignPattern
 {
     public class CommissionDecorator : Decorator
     {
-        public CommissionDecorator(SignalModelContext signalModelContext)
-       : base(signalModelContext)
+        public CommissionDecorator(DecoratorComponent baseComponent)
+       : base(baseComponent)
         {
-            this._price = 0;
+        }
+
+        public override double CalculateConst()
+        {
+            return _baseComponent.CalculateConst() + 1000;
         }
     }
 }

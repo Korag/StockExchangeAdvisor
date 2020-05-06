@@ -1,4 +1,4 @@
-﻿using DecoratorAndStateDesignPatterns;
+﻿using StateAndDecoratorDesignPattern;
 
 namespace StateDesignPattern
 {

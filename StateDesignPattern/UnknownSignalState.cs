@@ -1,11 +1,9 @@
-﻿using System;
-
-namespace StateDesignPattern
+﻿namespace StateDesignPattern
 {
     //Concrete state
     public class UnknownSignalState : ASignalState
     {
-        public override string Factor
+        public string Factor
         {
             get { return "brak proponowanej akcji"; }
         }
@@ -21,25 +19,18 @@ namespace StateDesignPattern
             this.SignalValue = signalValue;
         }
 
-        public override void SaveSignalToFile(string fileURL)
-        {
-            //write to fileURL with proper state only one line
-
-            throw new NotImplementedException();
-        }
-
         public override void SetSignalValue(int signalValue)
         {
             switch (signalValue)
             {
                 case 1:
-                    Context.currentState.SignalValue = signalValue;
-                    Context.currentState = new SellSignalState(this);
+                    Context.CurrentState.SignalValue = signalValue;
+                    Context.CurrentState = new SellSignalState(this);
                     break;
 
                 case -1:
-                    Context.currentState.SignalValue = -signalValue;
-                    Context.currentState = new BuySignalState(this);
+                    Context.CurrentState.SignalValue = -signalValue;
+                    Context.CurrentState = new BuySignalState(this);
                     break;
 
                 default:

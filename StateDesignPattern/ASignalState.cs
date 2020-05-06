@@ -19,14 +19,6 @@
             set { _signalValue = value; }
         }
 
-        private string _factor;
-
-        public virtual string Factor
-        {
-            get { return _factor; }
-        }
-
         public abstract void SetSignalValue(int signalValue);
-        public abstract void SaveSignalToFile(string fileURL);
     }
 }

@@ -1,11 +1,12 @@
-﻿using System;
+﻿using DecoratorAndStateDesignPatterns;
+using System;
 
 namespace StateDesignPattern
 {
     //Concrete state
     public class SellSignalState : ASignalState
     {
-        public override string Factor
+        public string Factor
         {
             get { return "proponowana akcja sprzedaży"; }
         }
@@ -21,25 +22,18 @@ namespace StateDesignPattern
             this.SignalValue = signalValue;
         }
 
-        public override void SaveSignalToFile(string fileURL)
-        {
-            //write to fileURL with proper state only one line
-
-            throw new NotImplementedException();
-        }
-
         public override void SetSignalValue(int signalValue)
         {
             switch (signalValue)
             {
                 case 0:
-                    Context.currentState.SignalValue = signalValue;
-                    Context.currentState = new UnknownSignalState(this);
+                    Context.CurrentState.SignalValue = signalValue;
+                    Context.CurrentState = new UnknownSignalState(this);
                     break;
 
                 case -1:
-                    Context.currentState.SignalValue = signalValue;
-                    Context.currentState = new BuySignalState(this);
+                    Context.CurrentState.SignalValue = signalValue;
+                    Context.CurrentState = new BuySignalState(this);
                     break;
 
                 default:
