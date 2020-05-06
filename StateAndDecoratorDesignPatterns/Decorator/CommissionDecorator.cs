@@ -2,9 +2,9 @@
 {
     public class CommissionDecorator : Decorator
     {
-        public CommissionDecorator(DecoratorComponent baseComponent)
-       : base(baseComponent)
+        public CommissionDecorator(DecoratorComponent baseComponent) : base(baseComponent)
         {
+
         }
 
         public override double CalculateCost()
@@ -29,6 +29,8 @@
 
                 default:
                 case 0:
+                    finalPrice = _baseComponent.CalculateCost();
+                    SetFinalPrice(finalPrice);
                     return GetFinalPrice();          
             }
         }

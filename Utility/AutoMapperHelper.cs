@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
+using DecoratorDesignPattern;
 using Models;
 using StateAndDecoratorDesignPattern;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -157,6 +159,11 @@ namespace Utility
 
             return signalsContext;
         }
+
+        public static DecoratorConcreteComponent MapQuotesAndSignalsToDecoratorObject(SignalModelContext quoteWSignals)
+        {
+            return _mapper.Map<DecoratorConcreteComponent>(quoteWSignals);
+        }
     }
 
     public class MappingProfile : Profile
@@ -177,6 +184,7 @@ namespace Utility
 
             CreateMap<Quote, SignalModelContext>();
             CreateMap<List<Quote>, List<SignalModelContext>>();
+            CreateMap<SignalModelContext, DecoratorConcreteComponent>();
         }
     }
 }

@@ -93,44 +93,70 @@ namespace FacadeDesignPattern
             List<SignalModelContext> obtainedSignalsWithQuotes = AutoMapperHelper.MapQuotesAndSignalsToSignalModelContext(companyQuotes, obtainedSignals);
 
             //TODO:
-            //chain of responsibility z ustawianiem State -> SignalValue
+            //chain of responsibility z ustawianiem State -> SignalValue na podstawie PartialSignals
 
-            //To AutoMapper:
+            #region DecoratorTests
 
-            obtainedSignalsWithQuotes[0].CurrentState.SignalValue = 1;
+            //obtainedSignalsWithQuotes[0].CurrentState.SignalValue = 1;
 
-            DecoratorComponent abc = new DecoratorConcreteComponent
+            //DecoratorComponent abc = new DecoratorConcreteComponent
+            //{
+            //    Close = obtainedSignalsWithQuotes[0].Close,
+            //    CurrentState = obtainedSignalsWithQuotes[0].CurrentState,
+            //};
+
+            //var costStart = abc.CalculateCost();
+            //abc = new CommissionDecorator(abc);
+            //var cost1 = abc.CalculateCost();
+            //var fee1 = abc.CalculateAdditionalFee();
+
+            //abc = new CommissionDecorator(abc);
+            //var cost2 = abc.CalculateCost();
+            //var fee2 = abc.CalculateAdditionalFee();
+
+            //obtainedSignalsWithQuotes[0].FinalPrice = abc.CalculateCost();
+
+            #endregion
+
+            foreach (var quoteWSignals in obtainedSignalsWithQuotes)
             {
-                Close = obtainedSignalsWithQuotes[0].Close,
-                CurrentState = obtainedSignalsWithQuotes[0].CurrentState,
-            };
+                double fee = 0;
+                double finalPrice = 0;
 
-            var costStart = abc.CalculateCost();
-            abc = new CommissionDecorator(abc);
-            var cost1 = abc.CalculateCost();
-            var fee1 = abc.CalculateAdditionalFee();
+                DecoratorComponent decorator = new DecoratorConcreteComponent();
+                decorator = AutoMapperHelper.MapQuotesAndSignalsToDecoratorObject(quoteWSignals);
 
-            abc = new CommissionDecorator(abc);
-            var cost2 = abc.CalculateCost();
-            var fee2 = abc.CalculateAdditionalFee();
+                finalPrice = decorator.CalculateCost();
 
-            var finalFee = abc.GetAdditionalFee();
-            var finalPrice = abc.GetFinalPrice();
+                //Dekorator prowizji
+                decorator = new CommissionDecorator(decorator);
+                finalPrice = decorator.CalculateCost();
+                fee += decorator.CalculateAdditionalFee();
 
-            obtainedSignalsWithQuotes[0].FinalPrice = abc.CalculateCost();
-            
-            //TODO:
-            //decorators, które mają wspólny interfejs (lub abstract)
+                //Dekorator podatku
+                decorator = new TaxDecorator(decorator);
+                finalPrice = decorator.CalculateCost();
+                fee += decorator.CalculateAdditionalFee();
+
+                //Dekorator konwersji PLN to USD
+                //decorator = new ConversionFromPLNtoUSDDecorator(decorator);
+                //finalPrice = decorator.CalculateCost();
+                //fee += decorator.CalculateAdditionalFee();
+
+                //Dekorator konwersji PLN to EUR
+                //decorator = new ConversionFromPLNtoEURDecorator(decorator);
+                //finalPrice = decorator.CalculateCost();
+                //fee += decorator.CalculateAdditionalFee();
+
+                quoteWSignals.AdditionalFee = fee;
+                quoteWSignals.FinalPrice = finalPrice;
+            }
 
             //TODO:
             //3. deep clone and save to json obiektu SignalModelContext lub któregoś z decoratora
 
             //TODO:
             //4. save to file
-
-            //List<QuoteWithSignal> obtainedSignalsWithQuotes = AutoMapperHelper.MapQuoteListToQuoteWithSignalList(companyQuotes);
-            //obtainedSignalsWithQuotes = AutoMapperHelper.MapSignalListToQuoteWithSignalList(obtainedSignals, obtainedSignalsWithQuotes);
-            //Utility.CsvHelper.SaveCompanySignalsToCsvFile(obtainedSignalsWithQuotes, nameOfCompany);
 
             QuotesDownloaderProcessHandler.KillQuotesDownloaderProcess();
         }

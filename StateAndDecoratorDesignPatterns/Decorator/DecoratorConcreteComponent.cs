@@ -12,7 +12,7 @@ namespace DecoratorDesignPattern
 
         public override double CalculateCost()
         {
-            return FinalPrice;
+            return Close;
         }
 
         public override double CalculateAdditionalFee()
@@ -32,7 +32,7 @@ namespace DecoratorDesignPattern
 
         public override void SetAdditionalFee(double value)
         {
-            this.AdditionalFee += value;
+            this.AdditionalFee = value;
         }
 
         public override double GetFinalPrice()

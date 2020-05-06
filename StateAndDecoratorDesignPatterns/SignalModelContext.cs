@@ -16,8 +16,9 @@ namespace StateAndDecoratorDesignPattern
         public List<double> PartialSignals;
         public ASignalState CurrentState = null;
 
-        //Wykorzystanie decoratora
+        //Wykorzystanie decoratora do obliczenia
         public double FinalPrice;
+        public double AdditionalFee;
 
         //Przeniesione do określonych stanów
         //public string Factor;
