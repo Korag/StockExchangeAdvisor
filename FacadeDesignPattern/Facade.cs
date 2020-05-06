@@ -1,6 +1,6 @@
 ﻿using BuilderDesignPattern.AlgorithmBuilder;
 using Models;
-using StateDesignPattern;
+using DecoratorAndStateDesignPatterns;
 using StrategyDesignPattern;
 using System;
 using System.Collections.Generic;
@@ -8,10 +8,11 @@ using System.IO;
 using System.Linq;
 using TechnicalIndicators;
 using Utility;
+using DecoratorDesignPattern;
 
 namespace FacadeDesignPattern
 {
-    public class RabbitMQFacade
+    public class Facade
     {
         private AlgorithmManufacturer _algorithmManufacter { get; set; }
         private IAlgorithmBuilder _algorithmBuilder { get; set; }
@@ -22,28 +23,28 @@ namespace FacadeDesignPattern
 
         public string PathToUnpackedQuotesDirectory { get; set; }
 
-        public RabbitMQFacade()
-        {
-            _algorithmBuilder = new RabbitMQBuilder();
-            _algorithmManufacter = new AlgorithmManufacturer();
+        //public RabbitMQFacade()
+        //{
+        //    _algorithmBuilder = new RabbitMQBuilder();
+        //    _algorithmManufacter = new AlgorithmManufacturer();
 
-            _algorithmManufacter.Construct(_algorithmBuilder);
-            _calculateContext = _algorithmBuilder.StrategyContext;
+        //    _algorithmManufacter.Construct(_algorithmBuilder);
+        //    _calculateContext = _algorithmBuilder.StrategyContext;
 
-            PathToUnpackedQuotesDirectory = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..\\..\\..\\..\\QuotesDownloader\\DownloadedQuotes\\"));
+        //    PathToUnpackedQuotesDirectory = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..\\..\\..\\..\\QuotesDownloader\\DownloadedQuotes\\"));
 
-            _parameters = new Parameters
-            {
-                CalculatedIndicatorFirstDaysInterval = 10,
-                CalculatedIndicatorSecondDaysInterval = 5,
-                Period = 10
-            };
+        //    _parameters = new Parameters
+        //    {
+        //        CalculatedIndicatorFirstDaysInterval = 10,
+        //        CalculatedIndicatorSecondDaysInterval = 5,
+        //        Period = 10
+        //    };
 
-            InitializeIndicatorsList();
-            AutoMapperHelper.GetInstance();
-        }
+        //    InitializeIndicatorsList();
+        //    AutoMapperHelper.GetInstance();
+        //}
 
-        public RabbitMQFacade(IAlgorithmBuilder algorithmBuilder)
+        public Facade(IAlgorithmBuilder algorithmBuilder)
         {
             _algorithmBuilder = algorithmBuilder;
             _algorithmManufacter = new AlgorithmManufacturer();
@@ -62,7 +63,6 @@ namespace FacadeDesignPattern
             AutoMapperHelper.GetInstance();
         }
 
-        // sypie sie
         private void InitializeIndicatorsList()
         {
             var abstractClass = typeof(TechnicalIndicator);
@@ -93,11 +93,10 @@ namespace FacadeDesignPattern
             List<SignalModelContext> obtainedSignalsWithQuotes = AutoMapperHelper.MapQuotesAndSignalsToSignalModelContext(companyQuotes, obtainedSignals);
 
             //TODO:
-            //1. decorators !!!
-            //chain of responsibility
-            //3. deep clone and save to json
+            //chain of responsibility z ustawianiem State -> SignalValue
+            //decorators, które mają wspólny interfejs (lub abstract)
+            //3. deep clone and save to json obiektu SignalModelContext lub któregoś z decoratora
             //4. save to file
-            //5. save to divided files by state
 
             //List<QuoteWithSignal> obtainedSignalsWithQuotes = AutoMapperHelper.MapQuoteListToQuoteWithSignalList(companyQuotes);
             //obtainedSignalsWithQuotes = AutoMapperHelper.MapSignalListToQuoteWithSignalList(obtainedSignals, obtainedSignalsWithQuotes);

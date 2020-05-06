@@ -4,8 +4,8 @@
     {
         public void Construct(IAlgorithmBuilder algorithmBuilder)
         {
-            algorithmBuilder.BuildStrategyPattern();
             algorithmBuilder.BuildAdditionalStrategyPatternParameters();
+            algorithmBuilder.BuildStrategyPattern();
         }
     }
 }

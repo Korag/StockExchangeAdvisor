@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Models;
-using StateDesignPattern;
+using DecoratorAndStateDesignPatterns;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -126,7 +126,7 @@ namespace Utility
         public static List<SignalModelContext> MapQuotesAndSignalsToSignalModelContext(List<Quote> quotes, List<List<Signal>> signals)
         {
             List<SignalModelContext> signalsContext = new List<SignalModelContext>();
-
+            
             for (int i = 0; i < signals.Count(); i++)
             {
                 for (int j = 0; j < signals[i].Count(); j++)
@@ -145,6 +145,15 @@ namespace Utility
                         signalsContext.Where(z => z.Date == matchingQuote.Date).FirstOrDefault().PartialSignals.Add(signals[i][j].Value);
                     }
                 }
+            }
+
+            List<string> signalsDates = signalsContext.Select(z => z.Date).ToList();
+            List<Quote> quotesWithoutAnyGeneratedSignal = quotes.Where(z => !signalsDates.Contains(z.Date)).ToList();
+
+            foreach (var quote in quotesWithoutAnyGeneratedSignal)
+            {
+                SignalModelContext signalContext = _mapper.Map<SignalModelContext>(quote);
+                signalsContext.Add(signalContext);
             }
 
             return signalsContext;

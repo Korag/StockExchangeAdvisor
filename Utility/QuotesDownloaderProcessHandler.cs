@@ -8,7 +8,7 @@ namespace Utility
     public static class QuotesDownloaderProcessHandler
     {
         private static string _processName = "QuotesDownloader";
-        private static string _urlToQuotesDownloaderProject = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, $"..\\..\\..\\bin\\Release\\netcoreapp3.1\\{_processName}.exe"));
+        private static string _urlToQuotesDownloaderProject = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, $"..\\..\\..\\..\\QuotesDownloader\\bin\\Release\\netcoreapp3.1\\{_processName}.exe"));
 
         public static void RunQuotesDownloaderProcess()
         {

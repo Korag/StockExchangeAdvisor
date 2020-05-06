@@ -3,6 +3,9 @@ using System.IO;
 using TechnicalIndicators;
 using FacadeDesignPattern;
 using BuilderDesignPattern.AlgorithmBuilder;
+using Models;
+using StrategyDesignPattern;
+using System.Collections.Generic;
 
 namespace Signals
 {
@@ -16,7 +19,7 @@ namespace Signals
         static void Main(string[] args)
         {
             #region LegacyCode
-            //var zywiecQuotes = Utility.CsvHelper.ReadSingleCsvFileWithQuotes(QUOTES_SAVE_PATH + "zywiec.mst");
+            //var zywiecQuotes = Utility.CsvHelper.ReadSingleCsvFileWithQuotes("zywiec");
 
             //var EAM = new ExponentialMovingAverage();
             //var parameters = new Parameters
@@ -32,7 +35,7 @@ namespace Signals
             //List<Signal> obtainedSignals = calculateIndicator.ReceiveSignalsFromSingleCalculatedIndicator();
             #endregion
 
-            RabbitMQFacade facade = new RabbitMQFacade(builder);
+            Facade facade = new Facade(builder);
             facade.CountSingleIndicatorForSingleCompanyQuotes(new TechnicalIndicatorEMA(), "zywiec");
 
             Console.ReadLine();

@@ -47,13 +47,16 @@ namespace RabbitMQ
                         for (int i = 0; i < countedTechnicalIndicatorsNumber; i++)
                         {
                             var data = channel.BasicGet(_queueReceiveFrom, false);
-                           
-                            List<Signal> currentReceivedSignals = JsonSerializer.JsonStringToCollectionOfSignals(EncryptionHelper.ByteArrayToUTF8String(data.Body));
-                            _obtainedSignals[i].AddRange(currentReceivedSignals);
 
-                            Console.WriteLine("Odebrałem otrzymane sygnały z kolejki");
-                            channel.BasicAck(data.DeliveryTag, false);
-                        } 
+                            if (data != null)
+                            {
+                                List<Signal> currentReceivedSignals = JsonSerializer.JsonStringToCollectionOfSignals(EncryptionHelper.ByteArrayToUTF8String(data.Body));
+                                _obtainedSignals.Add(currentReceivedSignals);
+
+                                Console.WriteLine("Odebrałem otrzymane sygnały z kolejki");
+                                channel.BasicAck(data.DeliveryTag, false);
+                            }
+                        }
                     }
                 }
             }

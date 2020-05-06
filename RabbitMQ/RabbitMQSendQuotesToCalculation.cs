@@ -19,15 +19,11 @@ namespace RabbitMQ
                 {
                     using (var channel = connection.CreateModel())
                     {
-                        while (true)
-                        {
                         //umożliwia potwierdzanie, że przesyłkę dostarczono do Exchange
                         channel.ConfirmSelect();
 
                         //generujemy nowe konto
                         GenerateAndPublishMessage(channel, elements);
-
-                        }
                     }
                 }
             }
