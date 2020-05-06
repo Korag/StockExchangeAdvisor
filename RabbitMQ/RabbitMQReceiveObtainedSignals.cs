@@ -46,16 +46,19 @@ namespace RabbitMQ
                         //   consumer: consumer);
                         for (int i = 0; i < countedTechnicalIndicatorsNumber; i++)
                         {
-                            var data = channel.BasicGet(_queueReceiveFrom, false);
+                            BasicGetResult data;
 
-                            if (data != null)
+                            do
                             {
-                                List<Signal> currentReceivedSignals = JsonSerializer.JsonStringToCollectionOfSignals(EncryptionHelper.ByteArrayToUTF8String(data.Body));
-                                _obtainedSignals.Add(currentReceivedSignals);
+                                data = channel.BasicGet(_queueReceiveFrom, false);
 
-                                Console.WriteLine("Odebrałem otrzymane sygnały z kolejki");
-                                channel.BasicAck(data.DeliveryTag, false);
-                            }
+                            } while (data == null);
+
+                            List<Signal> currentReceivedSignals = JsonSerializer.JsonStringToCollectionOfSignals(EncryptionHelper.ByteArrayToUTF8String(data.Body));
+                            _obtainedSignals.Add(currentReceivedSignals);
+
+                            Console.WriteLine("Odebrałem otrzymane sygnały z kolejki");
+                            channel.BasicAck(data.DeliveryTag, false);
                         }
                     }
                 }

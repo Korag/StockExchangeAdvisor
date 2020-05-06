@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Models;
-using DecoratorAndStateDesignPatterns;
-using System;
+using StateAndDecoratorDesignPattern;
 using System.Collections.Generic;
 using System.Linq;
 

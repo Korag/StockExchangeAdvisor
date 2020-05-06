@@ -15,8 +15,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DecoratorAndStateDesignPatterns\DecoratorAndStateDesignPatterns.csproj" />
     <ProjectReference Include="..\Models\Models.csproj" />
+    <ProjectReference Include="..\StateAndDecoratorDesignPatterns\StateAndDecoratorDesignPatterns.csproj" />
   </ItemGroup>
 
 </Project>

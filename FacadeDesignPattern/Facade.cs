@@ -1,6 +1,7 @@
 ﻿using BuilderDesignPattern.AlgorithmBuilder;
+using DecoratorDesignPattern;
 using Models;
-using DecoratorAndStateDesignPatterns;
+using StateAndDecoratorDesignPattern;
 using StrategyDesignPattern;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,6 @@ using System.IO;
 using System.Linq;
 using TechnicalIndicators;
 using Utility;
-using DecoratorDesignPattern;
 
 namespace FacadeDesignPattern
 {
@@ -94,8 +94,29 @@ namespace FacadeDesignPattern
 
             //TODO:
             //chain of responsibility z ustawianiem State -> SignalValue
+
+            //To AutoMapper:
+            DecoratorComponent abc = new DecoratorConcreteComponent
+            {
+                Close = obtainedSignalsWithQuotes[0].Close
+            };
+
+            var aaaa = abc.CalculateConst();
+            abc = new CommissionDecorator(abc);
+            var aaa = abc.CalculateConst();
+
+            abc = new CommissionDecorator(abc);
+            abc.CalculateConst();
+
+            obtainedSignalsWithQuotes[0].FinalPrice = abc.CalculateConst();
+
+            //TODO:
             //decorators, które mają wspólny interfejs (lub abstract)
+
+            //TODO:
             //3. deep clone and save to json obiektu SignalModelContext lub któregoś z decoratora
+
+            //TODO:
             //4. save to file
 
             //List<QuoteWithSignal> obtainedSignalsWithQuotes = AutoMapperHelper.MapQuoteListToQuoteWithSignalList(companyQuotes);
