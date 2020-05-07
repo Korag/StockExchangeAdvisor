@@ -4,6 +4,7 @@ using System;
 namespace StateDesignPattern
 {
     //Concrete state
+    [Serializable]
     public class SellSignalState : ASignalState
     {
         public string Factor

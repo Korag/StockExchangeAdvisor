@@ -1,8 +1,10 @@
 ﻿using StateAndDecoratorDesignPattern;
+using System;
 
 namespace StateDesignPattern
 {
     //Abstract state class
+    [Serializable]
     public abstract class ASignalState
     {
         private SignalModelContext _context;

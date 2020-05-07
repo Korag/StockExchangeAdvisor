@@ -4,6 +4,7 @@ using System;
 namespace StateDesignPattern
 {
     //Concrete state
+    [Serializable]
     public class UnknownSignalState : ASignalState
     {
         public string Factor

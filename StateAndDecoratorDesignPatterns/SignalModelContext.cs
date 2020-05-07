@@ -1,10 +1,15 @@
-﻿using StateDesignPattern;
+﻿using Newtonsoft.Json;
+using StateDesignPattern;
+using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace StateAndDecoratorDesignPattern
 {
     //State context class
-    public class SignalModelContext
+    [Serializable]
+    public class SignalModelContext : ICloneable
     {
         public string Date;
         public double Open;
@@ -27,7 +32,37 @@ namespace StateAndDecoratorDesignPattern
         public SignalModelContext()
         {
             CurrentState = new UnknownSignalState(0, this);
+
+            JsonSerialization = true;
             PartialSignals = new List<double>();
+        }
+
+        public bool JsonSerialization { get; set; }
+
+        public object Clone()
+        {
+            if (!JsonSerialization)
+            {
+                using (MemoryStream stream = new MemoryStream())
+                {
+                    if (this.GetType().IsSerializable)
+                    {
+                        BinaryFormatter formatter = new BinaryFormatter();
+
+                        formatter.Serialize(stream, this);
+                        stream.Position = 0;
+
+                        return formatter.Deserialize(stream);
+                    }
+
+                    return null;
+                }
+            }
+            else
+            {
+                string jsonString = JsonConvert.SerializeObject(this);
+                return JsonConvert.DeserializeObject(jsonString);
+            }
         }
 
         public void SetSignalValue(int signalValue)

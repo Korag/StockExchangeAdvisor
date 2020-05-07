@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -33,6 +34,18 @@ namespace Utility
             pathsToFiles.ForEach(z => filesShortNames.Add(Path.GetFileNameWithoutExtension(z)));
 
             return filesShortNames;
+        }
+
+        public static void SaveJsonFile(string path, string jsonString)
+        {
+            try
+            {
+                File.WriteAllText(path, jsonString);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("There was an error creating a file");
+            } 
         }
     }
 }

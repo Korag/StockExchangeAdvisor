@@ -1,5 +1,6 @@
 ﻿using Models;
 using Newtonsoft.Json;
+using StateAndDecoratorDesignPattern;
 using System;
 using System.Collections.Generic;
 
@@ -45,6 +46,26 @@ namespace Utility
         public static DateTime JsonStringToDateTime(string jsonString)
         {
             return JsonConvert.DeserializeObject<DateTime>(jsonString);
+        }
+
+        public static string SignalModelContextToJsonString(SignalModelContext signalContext)
+        {
+            return JsonConvert.SerializeObject(signalContext);
+        }
+
+        public static SignalModelContext JsonStringToSignalModelContext(string jsonString)
+        {
+            return JsonConvert.DeserializeObject<SignalModelContext>(jsonString);
+        }
+
+        public static string SignalModelContextListToJsonString(List<SignalModelContext> signalContext)
+        {
+            return JsonConvert.SerializeObject(signalContext);
+        }
+
+        public static List<SignalModelContext> JsonStringToSignalModelContextList(string jsonString)
+        {
+            return JsonConvert.DeserializeObject<List<SignalModelContext>>(jsonString);
         }
     }
 }

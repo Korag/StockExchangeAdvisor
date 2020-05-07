@@ -1,6 +1,7 @@
 ﻿using BuilderDesignPattern.AlgorithmBuilder;
 using DecoratorDesignPattern;
 using Models;
+using PrototypeDesignPattern;
 using StateAndDecoratorDesignPattern;
 using StrategyDesignPattern;
 using System;
@@ -16,7 +17,7 @@ namespace FacadeDesignPattern
     {
         private AlgorithmManufacturer _algorithmManufacter { get; set; }
         private IAlgorithmBuilder _algorithmBuilder { get; set; }
-        private CalculateTechnicalIndicatorContext _calculateContext {get; set;}
+        private CalculateTechnicalIndicatorContext _calculateContext { get; set; }
 
         private Parameters _parameters { get; set; }
         private List<TechnicalIndicator> _indicators { get; set; }
@@ -158,11 +159,44 @@ namespace FacadeDesignPattern
                 quoteWSignals.FinalPrice = finalPrice;
             }
 
-            //TODO:
-            //2. deep clone and save to json obiektu SignalModelContext lub któregoś z decoratora
+            //Deep Clone using JsonSerialization
+            List<SignalModelContext> clonedSignalContextByJsonSerializer = new List<SignalModelContext>();
+
+            foreach (var signal in obtainedSignalsWithQuotes)
+            {
+                SignalModelContext singleClonedSignalContext = signal.Clone() as SignalModelContext;
+                clonedSignalContextByJsonSerializer.Add(singleClonedSignalContext);
+            }
+
+            //Deep Clone using BinarySerialization
+            obtainedSignalsWithQuotes.ForEach(z => z.JsonSerialization = false);
+
+            List<SignalModelContext> clonedSignalContextByBinarySerializer = new List<SignalModelContext>();
+
+            foreach (var signal in obtainedSignalsWithQuotes)
+            {
+                SignalModelContext singleClonedSignalContext = signal.Clone() as SignalModelContext;
+                clonedSignalContextByBinarySerializer.Add(singleClonedSignalContext);
+            }
+
+            //Deep Clone using Reflection
+            List<SignalModelContext> clonedSignalContextByReflection = new List<SignalModelContext>();
+
+            foreach (var signal in obtainedSignalsWithQuotes)
+            {
+                SignalModelContext singleClonedSignalContext = ReflectionDeepCopy.CloneObject(signal) as SignalModelContext;
+                clonedSignalContextByReflection.Add(singleClonedSignalContext);
+            }
+
+            //Saving JsonFile to PrototypeObjects directory
+            string jsonString = JsonSerializer.SignalModelContextListToJsonString(obtainedSignalsWithQuotes);
+            string fileName = DateTime.Now.ToShortDateString() + "-" + DateTime.Now.ToShortTimeString() + "_" +
+                                Convert.ToString((int)DateTime.Now.Subtract(new DateTime(1970, 1, 1)).TotalSeconds) + "_prototypeObject";
+            
+            FileHelper.SaveJsonFile(Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, $"..\\..\\..\\..\\StockExchangeAdvisor\\PrototypObjects\\{fileName}.exe")), jsonString);
 
             //TODO:
-            //3. save to file   
+            //3. save to csv file with all proper properties and factor from state pattern 
         }
 
         public void CountSingleIndicatorForAllCompaniesQuotes(TechnicalIndicator technicalIndicator)
@@ -172,7 +206,7 @@ namespace FacadeDesignPattern
             foreach (var companyName in namesOfCompanies)
             {
                 var companyQuotes = Utility.CsvHelper.ReadSingleCsvFileWithQuotes(companyName);
-                
+
                 _calculateContext.CalculateSingleIndicator(companyQuotes, _parameters, technicalIndicator);
                 List<Signal> obtainedSignals = _calculateContext.ReceiveSignalsFromSingleCalculatedIndicator();
                 List<SignalModelContext> obtainedSignalsWithQuotes = AutoMapperHelper.MapQuotesAndSignalsToSignalModelContext(companyQuotes, obtainedSignals);
@@ -224,7 +258,7 @@ namespace FacadeDesignPattern
 
             foreach (var indicator in _indicators)
             {
-              _calculateContext.CalculateSingleIndicator(companyQuotes, _parameters, indicator);
+                _calculateContext.CalculateSingleIndicator(companyQuotes, _parameters, indicator);
             }
 
             List<List<Signal>> obtainedSignals = _calculateContext.ReceiveSignalsFromCalculatedIndicators(_indicators.Count());
