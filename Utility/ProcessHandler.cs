@@ -11,9 +11,9 @@ namespace Utility
         private static string _urlToQuotesDownloaderProject = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, $"..\\..\\..\\..\\QuotesDownloader\\bin\\Release\\netcoreapp3.1\\{_quotesDownloaderProcessName}.exe"));
 
         private static string _rabbitMQConsumerEMAProcessName = "RabbitMQConsumerEMA";
-        private static string _urlToRabbitMQConsumerEMAProject = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, $"..\\..\\..\\..\\QuotesDownloader\\bin\\Release\\netcoreapp3.1\\{_rabbitMQConsumerEMAProcessName}.exe"));
+        private static string _urlToRabbitMQConsumerEMAProject = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, $"..\\..\\..\\..\\RabbitMQConsumerEMA\\bin\\Release\\netcoreapp3.1\\{_rabbitMQConsumerEMAProcessName}.exe"));
         private static string _rabbitMQConsumerROCProcessName = "RabbitMQConsumerROC";
-        private static string _urlToRabbitMQConsumerROCProject = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, $"..\\..\\..\\..\\QuotesDownloader\\bin\\Release\\netcoreapp3.1\\{_rabbitMQConsumerROCProcessName}.exe"));
+        private static string _urlToRabbitMQConsumerROCProject = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, $"..\\..\\..\\..\\RabbitMQConsumerROC\\bin\\Release\\netcoreapp3.1\\{_rabbitMQConsumerROCProcessName}.exe"));
 
         public static void RunProcess(string processName, string exeUrl)
         {
