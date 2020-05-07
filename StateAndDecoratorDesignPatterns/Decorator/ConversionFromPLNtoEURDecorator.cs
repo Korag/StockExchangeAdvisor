@@ -17,7 +17,6 @@
             switch (_baseComponent.GetState().SignalValue)
             {
                 case 1:
-
                     finalPrice = _baseComponent.CalculateCost() - conversionFee;
                     SetFinalPrice(finalPrice);
                     return GetFinalPrice();

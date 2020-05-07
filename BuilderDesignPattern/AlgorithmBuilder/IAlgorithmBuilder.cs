@@ -4,8 +4,8 @@ namespace BuilderDesignPattern.AlgorithmBuilder
 {
     public interface IAlgorithmBuilder
     {
+        void BuildStrategyPatternParameters();
         void BuildStrategyPattern();
-        void BuildAdditionalStrategyPatternParameters();
 
         CalculateTechnicalIndicatorContext StrategyContext { get; }
     }

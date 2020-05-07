@@ -37,6 +37,7 @@ namespace Signals
 
             Facade facade = new Facade(builder);
             facade.CountSingleIndicatorForSingleCompanyQuotes(new TechnicalIndicatorEMA(), "zywiec");
+            facade.Dispose();
 
             Console.ReadLine();
 

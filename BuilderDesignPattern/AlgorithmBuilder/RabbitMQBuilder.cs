@@ -1,5 +1,6 @@
 ﻿using StrategyDesignPattern;
 using System;
+using Utility;
 
 namespace BuilderDesignPattern.AlgorithmBuilder
 {
@@ -11,8 +12,9 @@ namespace BuilderDesignPattern.AlgorithmBuilder
         private string _exchange = "SignalsExchange";
         private string _queueReceiveFrom = "ObtainedSignals";
 
-        public void BuildAdditionalStrategyPatternParameters()
+        public void BuildStrategyPatternParameters()
         {
+            ProcessHandler.RunRabbitMQConsumersProcesses();
             _strategy = new RabbitMQStrategy(_exchange, _queueReceiveFrom);
         }
 

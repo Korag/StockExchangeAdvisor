@@ -8,7 +8,7 @@ namespace BuilderDesignPattern.AlgorithmBuilder
         private CalculateTechnicalIndicatorContext _strategyContext { get; set; }
         private ICalculateTechnicalIndicatorStrategy _strategy { get; set; }
 
-        public void BuildAdditionalStrategyPatternParameters()
+        public void BuildStrategyPatternParameters()
         {
             _strategy = new ActorModelStrategy();
         }

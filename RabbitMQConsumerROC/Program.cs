@@ -17,6 +17,8 @@ namespace RabbitMQConsumerROC
         static void Main()
         {
             TechnicalIndicator _indicator = new TechnicalIndicatorROC();
+            InititalizeParameters(_indicator.GetType().ToString());
+
             RabbitCalculateIndicator rabbitROC = new RabbitCalculateIndicator(_exchange, _queueReceiveFrom, _queueSendTo, _indicator);
             rabbitROC.ConsumeData();
         }

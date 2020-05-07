@@ -59,8 +59,16 @@ namespace FacadeDesignPattern
                 Period = 10
             };
 
+            ProcessHandler.RunQuotesDownloaderProcess();
+
             InitializeIndicatorsList();
             AutoMapperHelper.GetInstance();
+        }
+
+        public void Dispose()
+        {
+            ProcessHandler.KillQuotesDownloaderProcess();
+            ProcessHandler.KillRabbitMQConsumersProcesses();
         }
 
         private void InitializeIndicatorsList()
@@ -84,8 +92,6 @@ namespace FacadeDesignPattern
 
         public void CountSingleIndicatorForSingleCompanyQuotes(TechnicalIndicator technicalIndicator, string nameOfCompany)
         {
-            QuotesDownloaderProcessHandler.RunQuotesDownloaderProcess();
-
             var companyQuotes = Utility.CsvHelper.ReadSingleCsvFileWithQuotes(nameOfCompany);
 
             _calculateContext.CalculateSingleIndicator(companyQuotes, _parameters, technicalIndicator);
@@ -93,7 +99,7 @@ namespace FacadeDesignPattern
             List<SignalModelContext> obtainedSignalsWithQuotes = AutoMapperHelper.MapQuotesAndSignalsToSignalModelContext(companyQuotes, obtainedSignals);
 
             //TODO:
-            //chain of responsibility z ustawianiem State -> SignalValue na podstawie PartialSignals
+            //1. chain of responsibility z ustawianiem State -> SignalValue na podstawie PartialSignals
 
             #region DecoratorTests
 
@@ -153,17 +159,14 @@ namespace FacadeDesignPattern
             }
 
             //TODO:
-            //3. deep clone and save to json obiektu SignalModelContext lub któregoś z decoratora
+            //2. deep clone and save to json obiektu SignalModelContext lub któregoś z decoratora
 
             //TODO:
-            //4. save to file
-
-            QuotesDownloaderProcessHandler.KillQuotesDownloaderProcess();
+            //3. save to file   
         }
 
         public void CountSingleIndicatorForAllCompaniesQuotes(TechnicalIndicator technicalIndicator)
         {
-            QuotesDownloaderProcessHandler.RunQuotesDownloaderProcess();
             List<string> namesOfCompanies = FileHelper.GetFileNames(PathToUnpackedQuotesDirectory);
 
             foreach (var companyName in namesOfCompanies)
@@ -173,23 +176,50 @@ namespace FacadeDesignPattern
                 _calculateContext.CalculateSingleIndicator(companyQuotes, _parameters, technicalIndicator);
                 List<Signal> obtainedSignals = _calculateContext.ReceiveSignalsFromSingleCalculatedIndicator();
                 List<SignalModelContext> obtainedSignalsWithQuotes = AutoMapperHelper.MapQuotesAndSignalsToSignalModelContext(companyQuotes, obtainedSignals);
-                
-                //decorators
-                //chain of responsibility
-                //3. deep clone and save to json
-                //4. save to file
-                //5. save to divided files by state
 
-                //Utility.CsvHelper.SaveCompanySignalsToCsvFile(obtainedSignalsWithQuotes, companyName);
+                //1. chain of responsibility
+
+                foreach (var quoteWSignals in obtainedSignalsWithQuotes)
+                {
+                    double fee = 0;
+                    double finalPrice = 0;
+
+                    DecoratorComponent decorator = new DecoratorConcreteComponent();
+                    decorator = AutoMapperHelper.MapQuotesAndSignalsToDecoratorObject(quoteWSignals);
+
+                    finalPrice = decorator.CalculateCost();
+
+                    //Dekorator prowizji
+                    decorator = new CommissionDecorator(decorator);
+                    finalPrice = decorator.CalculateCost();
+                    fee += decorator.CalculateAdditionalFee();
+
+                    //Dekorator podatku
+                    decorator = new TaxDecorator(decorator);
+                    finalPrice = decorator.CalculateCost();
+                    fee += decorator.CalculateAdditionalFee();
+
+                    //Dekorator konwersji PLN to USD
+                    //decorator = new ConversionFromPLNtoUSDDecorator(decorator);
+                    //finalPrice = decorator.CalculateCost();
+                    //fee += decorator.CalculateAdditionalFee();
+
+                    //Dekorator konwersji PLN to EUR
+                    //decorator = new ConversionFromPLNtoEURDecorator(decorator);
+                    //finalPrice = decorator.CalculateCost();
+                    //fee += decorator.CalculateAdditionalFee();
+
+                    quoteWSignals.AdditionalFee = fee;
+                    quoteWSignals.FinalPrice = finalPrice;
+                }
+
+                //2. deep clone and save to json
+                //3. save to file
             }
-
-            QuotesDownloaderProcessHandler.KillQuotesDownloaderProcess();
         }
 
         public void CountIndicatorsSetForSingleCompanyQuotes(string nameOfCompany)
         {
-            QuotesDownloaderProcessHandler.RunQuotesDownloaderProcess();
-
             var companyQuotes = Utility.CsvHelper.ReadSingleCsvFileWithQuotes(nameOfCompany);
 
             foreach (var indicator in _indicators)
@@ -199,21 +229,49 @@ namespace FacadeDesignPattern
 
             List<List<Signal>> obtainedSignals = _calculateContext.ReceiveSignalsFromCalculatedIndicators(_indicators.Count());
             List<SignalModelContext> obtainedSignalsWithQuotes = AutoMapperHelper.MapQuotesAndSignalsToSignalModelContext(companyQuotes, obtainedSignals);
-           
-            //TODO:
-            //1. decorators
-            //3. deep clone and save to json
-            //4. chain of responsibility and count FinalSignal
-            //4. save to file
-            //5. save to divided files by state
-            //6. deep clone and save to json
 
-            QuotesDownloaderProcessHandler.KillQuotesDownloaderProcess();
+            //1. chain of responsibility and count FinalSignal
+
+            foreach (var quoteWSignals in obtainedSignalsWithQuotes)
+            {
+                double fee = 0;
+                double finalPrice = 0;
+
+                DecoratorComponent decorator = new DecoratorConcreteComponent();
+                decorator = AutoMapperHelper.MapQuotesAndSignalsToDecoratorObject(quoteWSignals);
+
+                finalPrice = decorator.CalculateCost();
+
+                //Dekorator prowizji
+                decorator = new CommissionDecorator(decorator);
+                finalPrice = decorator.CalculateCost();
+                fee += decorator.CalculateAdditionalFee();
+
+                //Dekorator podatku
+                decorator = new TaxDecorator(decorator);
+                finalPrice = decorator.CalculateCost();
+                fee += decorator.CalculateAdditionalFee();
+
+                //Dekorator konwersji PLN to USD
+                //decorator = new ConversionFromPLNtoUSDDecorator(decorator);
+                //finalPrice = decorator.CalculateCost();
+                //fee += decorator.CalculateAdditionalFee();
+
+                //Dekorator konwersji PLN to EUR
+                //decorator = new ConversionFromPLNtoEURDecorator(decorator);
+                //finalPrice = decorator.CalculateCost();
+                //fee += decorator.CalculateAdditionalFee();
+
+                quoteWSignals.AdditionalFee = fee;
+                quoteWSignals.FinalPrice = finalPrice;
+            }
+
+            //2. deep clone and save to json
+            //3. save to file
         }
 
         public void CountIndicatorsSetForAllCompaniesQuotes()
         {
-            QuotesDownloaderProcessHandler.RunQuotesDownloaderProcess();
             List<string> namesOfCompanies = FileHelper.GetFileNames(PathToUnpackedQuotesDirectory);
 
             foreach (var companyName in namesOfCompanies)
@@ -228,16 +286,46 @@ namespace FacadeDesignPattern
                 List<List<Signal>> obtainedSignals = _calculateContext.ReceiveSignalsFromCalculatedIndicators(_indicators.Count());
                 List<SignalModelContext> obtainedSignalsWithQuotes = AutoMapperHelper.MapQuotesAndSignalsToSignalModelContext(companyQuotes, obtainedSignals);
 
-                //TODO:
-                //1. decorators
-                //3. deep clone and save to json
-                //4. chain of responsibility and count FinalSignal
-                //4. save to file
-                //5. save to divided files by state
-                //6. deep clone and save to json
-            }
+                //1. chain of responsibility and count FinalSignal
 
-            QuotesDownloaderProcessHandler.KillQuotesDownloaderProcess();
+                foreach (var quoteWSignals in obtainedSignalsWithQuotes)
+                {
+                    double fee = 0;
+                    double finalPrice = 0;
+
+                    DecoratorComponent decorator = new DecoratorConcreteComponent();
+                    decorator = AutoMapperHelper.MapQuotesAndSignalsToDecoratorObject(quoteWSignals);
+
+                    finalPrice = decorator.CalculateCost();
+
+                    //Dekorator prowizji
+                    decorator = new CommissionDecorator(decorator);
+                    finalPrice = decorator.CalculateCost();
+                    fee += decorator.CalculateAdditionalFee();
+
+                    //Dekorator podatku
+                    decorator = new TaxDecorator(decorator);
+                    finalPrice = decorator.CalculateCost();
+                    fee += decorator.CalculateAdditionalFee();
+
+                    //Dekorator konwersji PLN to USD
+                    //decorator = new ConversionFromPLNtoUSDDecorator(decorator);
+                    //finalPrice = decorator.CalculateCost();
+                    //fee += decorator.CalculateAdditionalFee();
+
+                    //Dekorator konwersji PLN to EUR
+                    //decorator = new ConversionFromPLNtoEURDecorator(decorator);
+                    //finalPrice = decorator.CalculateCost();
+                    //fee += decorator.CalculateAdditionalFee();
+
+                    quoteWSignals.AdditionalFee = fee;
+                    quoteWSignals.FinalPrice = finalPrice;
+                }
+
+                //2. deep clone and save to json
+
+                //3. save to file
+            }
         }
     }
 }
