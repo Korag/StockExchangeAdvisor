@@ -12,6 +12,11 @@ namespace StateDesignPattern
             get { return "brak proponowanej akcji"; }
         }
 
+        public UnknownSignalState()
+        {
+
+        }
+
         public UnknownSignalState(ASignalState state) : this(state.SignalValue, state.Context)
         {
 

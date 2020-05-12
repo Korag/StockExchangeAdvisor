@@ -40,12 +40,15 @@ namespace Utility
         {
             try
             {
-                File.WriteAllText(path, jsonString);
+                using (StreamWriter writer = new StreamWriter(path))
+                {
+                    writer.Write(jsonString);
+                }
             }
             catch (Exception e)
             {
                 Console.WriteLine("There was an error creating a file");
-            } 
+            }
         }
     }
 }

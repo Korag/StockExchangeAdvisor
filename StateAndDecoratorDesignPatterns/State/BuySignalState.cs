@@ -12,6 +12,11 @@ namespace StateDesignPattern
             get { return "proponowana akcja kupna"; }
         }
 
+        public BuySignalState()
+        {
+
+        }
+
         public BuySignalState(ASignalState state) : this(state.SignalValue, state.Context)
         {
 

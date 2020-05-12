@@ -60,7 +60,11 @@ namespace Utility
 
         public static string SignalModelContextListToJsonString(List<SignalModelContext> signalContext)
         {
-            return JsonConvert.SerializeObject(signalContext);
+            return JsonConvert.SerializeObject(signalContext, Formatting.Indented,
+                                              new JsonSerializerSettings
+                                              {
+                                                  ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                                              });
         }
 
         public static List<SignalModelContext> JsonStringToSignalModelContextList(string jsonString)

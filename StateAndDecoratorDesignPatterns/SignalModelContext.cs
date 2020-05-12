@@ -18,7 +18,8 @@ namespace StateAndDecoratorDesignPattern
         public double Close;
         public int Volume;
 
-        public List<double> PartialSignals;
+        //public List<double> PartialSignals;
+        public List<double> PartialSignals { get; set; }
         public ASignalState CurrentState = null;
 
         //Wykorzystanie decoratora do obliczenia
@@ -60,8 +61,13 @@ namespace StateAndDecoratorDesignPattern
             }
             else
             {
-                string jsonString = JsonConvert.SerializeObject(this);
-                return JsonConvert.DeserializeObject(jsonString);
+                string jsonString = JsonConvert.SerializeObject(this, Formatting.Indented,
+                                    new JsonSerializerSettings
+                                    {
+                                        ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                                    });
+
+                return JsonConvert.DeserializeObject<SignalModelContext>(jsonString);
             }
         }
 

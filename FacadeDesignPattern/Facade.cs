@@ -190,10 +190,12 @@ namespace FacadeDesignPattern
 
             //Saving JsonFile to PrototypeObjects directory
             string jsonString = JsonSerializer.SignalModelContextListToJsonString(obtainedSignalsWithQuotes);
-            string fileName = DateTime.Now.ToShortDateString() + "-" + DateTime.Now.ToShortTimeString() + "_" +
-                                Convert.ToString((int)DateTime.Now.Subtract(new DateTime(1970, 1, 1)).TotalSeconds) + "_prototypeObject";
+            DateTime currentDateTime = DateTime.Now;
+            string dateTimeFormat = "ddMMyyyy-HHmm";
+            string fileName = nameOfCompany + "_" + currentDateTime.ToString(dateTimeFormat) + "-" +
+                                Convert.ToString((int)currentDateTime.Subtract(new DateTime(1970, 1, 1)).TotalSeconds) + "_prototypeObject";
             
-            FileHelper.SaveJsonFile(Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, $"..\\..\\..\\..\\StockExchangeAdvisor\\PrototypObjects\\{fileName}.exe")), jsonString);
+            FileHelper.SaveJsonFile(Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, $"..\\..\\..\\..\\StockExchangeAdvisor\\PrototypeObjects\\{fileName}.json")), jsonString);
 
             //TODO:
             //3. save to csv file with all proper properties and factor from state pattern 

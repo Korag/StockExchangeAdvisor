@@ -12,6 +12,11 @@ namespace StateDesignPattern
             get { return "proponowana akcja sprzedaży"; }
         }
 
+        public SellSignalState()
+        {
+
+        }
+
         public SellSignalState(ASignalState state) : this(state.SignalValue, state.Context)
         {
 
