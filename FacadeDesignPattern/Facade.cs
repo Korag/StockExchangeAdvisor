@@ -100,10 +100,12 @@ namespace FacadeDesignPattern
             List<Signal> obtainedSignals = _calculateContext.ReceiveSignalsFromSingleCalculatedIndicator();
             List<SignalModelContext> obtainedSignalsWithQuotes = AutoMapperHelper.MapQuotesAndSignalsToSignalModelContext(companyQuotes, obtainedSignals);
 
-            foreach (var partialSignals in obtainedSignalsWithQuotes)
+            foreach (var singleQuotePartialSignals in obtainedSignalsWithQuotes)
             {
                 ConcreteChainHandlerElement chain = new ConcreteChainHandlerElement();
-                partialSignals.SetSignalValue(chain.DetermineFinalSignal());
+
+                ComputeFinalSignalModel finalSignalModel = new ComputeFinalSignalModel(singleQuotePartialSignals.PartialSignals);
+                singleQuotePartialSignals.SetSignalValue(chain.DetermineFinalSignal(finalSignalModel));
             }
 
             #region DecoratorTests

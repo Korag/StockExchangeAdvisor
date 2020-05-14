@@ -8,7 +8,7 @@ namespace ChainOfResponsibilityDesignPattern
     {
         protected AChainHandlerElement descendantHandlerElement;
 
-        public delegate int OnDetermineOfFinalSignal(AChainHandlerElement handler/*, Leave l*/, int number);
+        public delegate double OnDetermineOfFinalSignal(AChainHandlerElement handler, ComputeFinalSignalModel model);
         public event OnDetermineOfFinalSignal onDetermination = null;
 
         public AChainHandlerElement DescendantHandlerElement
@@ -23,21 +23,19 @@ namespace ChainOfResponsibilityDesignPattern
             }
         }
 
-        public int DetermineOfFinalSignal(AChainHandlerElement handler/*, Leave leave*/, int number)
+        public double DetermineOfFinalSignal(AChainHandlerElement handler, ComputeFinalSignalModel model)
         {
             if (onDetermination != null)
             {
-                onDetermination(this/*, leave*/, number);
+                onDetermination(this, model);
             }
 
-            return number;
+            return model.FinalSignal;
         }
 
-        public int DetermineFinalSignal(/*Leave l*/)
+        public double DetermineFinalSignal(ComputeFinalSignalModel model)
         {
-             return DetermineOfFinalSignal(this/*, l*/, 0);
+             return DetermineOfFinalSignal(this, model);
         }
-
-        public abstract int ReturnDeterminedFinalSignal(int finalSignal);
     }
 }
