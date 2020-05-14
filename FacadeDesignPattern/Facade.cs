@@ -1,4 +1,5 @@
 ﻿using BuilderDesignPattern.AlgorithmBuilder;
+using ChainOfResponsibilityDesignPattern;
 using DecoratorDesignPattern;
 using Models;
 using PrototypeDesignPattern;
@@ -99,8 +100,11 @@ namespace FacadeDesignPattern
             List<Signal> obtainedSignals = _calculateContext.ReceiveSignalsFromSingleCalculatedIndicator();
             List<SignalModelContext> obtainedSignalsWithQuotes = AutoMapperHelper.MapQuotesAndSignalsToSignalModelContext(companyQuotes, obtainedSignals);
 
-            //TODO:
-            //1. chain of responsibility z ustawianiem State -> SignalValue na podstawie PartialSignals
+            foreach (var partialSignals in obtainedSignalsWithQuotes)
+            {
+                ConcreteChainHandlerElement chain = new ConcreteChainHandlerElement();
+                partialSignals.SetSignalValue(chain.DetermineFinalSignal());
+            }
 
             #region DecoratorTests
 
