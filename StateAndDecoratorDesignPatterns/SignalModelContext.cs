@@ -71,7 +71,7 @@ namespace StateAndDecoratorDesignPattern
             }
         }
 
-        public void SetSignalValue(int signalValue)
+        public void SetSignalValue(double signalValue)
         {
             CurrentState.SetSignalValue(signalValue);
         }

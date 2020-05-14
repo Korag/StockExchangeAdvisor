@@ -22,23 +22,23 @@ namespace StateDesignPattern
 
         }
 
-        public BuySignalState(int signalValue, SignalModelContext context)
+        public BuySignalState(double signalValue, SignalModelContext context)
         {
             this.Context = context;
             this.SignalValue = signalValue;
         }
 
-        public override void SetSignalValue(int signalValue)
+        public override void SetSignalValue(double signalValue)
         {
+            Context.CurrentState.SignalValue = signalValue;
+
             switch (signalValue)
             {
                 case 0:
-                    Context.CurrentState.SignalValue = signalValue;
                     Context.CurrentState = new UnknownSignalState(this);
                     break;
 
                 case 1:
-                    Context.CurrentState.SignalValue = signalValue;
                     Context.CurrentState = new SellSignalState(this);
                     break;
 

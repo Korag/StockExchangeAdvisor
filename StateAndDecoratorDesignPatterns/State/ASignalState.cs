@@ -15,14 +15,14 @@ namespace StateDesignPattern
             set { _context = value; }
         }
 
-        private int _signalValue = 0;
+        private double _signalValue = 0;
 
-        public int SignalValue
+        public double SignalValue
         {
             get { return _signalValue; }
             set { _signalValue = value; }
         }
 
-        public abstract void SetSignalValue(int signalValue);
+        public abstract void SetSignalValue(double signalValue);
     }
 }
