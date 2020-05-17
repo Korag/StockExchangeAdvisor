@@ -26,6 +26,11 @@ namespace Utility
             return !Directory.EnumerateFileSystemEntries(path).Any();
         }
 
+        public static int CountFilesInDirectory(string path)
+        {
+            return Directory.GetFiles(path).Count();
+        }
+
         public static List<string> GetFileNames(string path)
         {
             List<string> pathsToFiles = Directory.GetFiles(path, "*.mst").ToList();
