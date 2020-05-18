@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\RabbitMQ\RabbitMQ.csproj" />
+    <ProjectReference Include="..\WebService\WebService.csproj" />
   </ItemGroup>
 
 </Project>
