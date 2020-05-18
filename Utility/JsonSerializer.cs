@@ -28,6 +28,11 @@ namespace Utility
             return JsonConvert.DeserializeObject<List<Signal>>(jsonString);
         }
 
+        public static string CollectionOfIndicatorCalculationElementsWIndicatorTypeToJsonString(IndicatorCalculationElementsWIndicatorType indicatorElements)
+        {
+            return JsonConvert.SerializeObject(indicatorElements);
+        }
+
         public static string CollectionOfQuotesWithParametersToJsonString(IndicatorCalculationElements indicatorElements)
         {
             return JsonConvert.SerializeObject(indicatorElements);
@@ -41,6 +46,16 @@ namespace Utility
         public static string DateTimeToJsonString(DateTime dateTime)
         {
             return JsonConvert.SerializeObject(dateTime);
+        }
+
+        public static List<Signal> JsonStringToCollectionOfIndicatorCalculationElementsWIndicatorType(string jsonString)
+        {
+            return JsonConvert.DeserializeObject<List<Signal>>(jsonString);
+        }
+
+        public static int JsonStringToInt(string jsonString)
+        {
+            return JsonConvert.DeserializeObject<int>(jsonString);
         }
 
         public static DateTime JsonStringToDateTime(string jsonString)
