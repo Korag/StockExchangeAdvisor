@@ -13,6 +13,7 @@ namespace StrategyDesignPattern
 
         public RabbitMQStrategy()
         {
+
         }
 
         public RabbitMQStrategy(string exchange, string queueReceiveFrom)

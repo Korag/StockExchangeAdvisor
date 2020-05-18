@@ -1,5 +1,5 @@
-﻿using Models;
-using System;
+﻿using AdapterDesignPattern;
+using Models;
 using System.Collections.Generic;
 using TechnicalIndicators;
 
@@ -7,14 +7,21 @@ namespace StrategyDesignPattern
 {
     public class WebServicesStrategy : ICalculateTechnicalIndicatorStrategy
     {
+        private WebServiceAdapter _adapter { get; set; }
+
+        public WebServicesStrategy()
+        {
+            _adapter = new WebServiceAdapter();
+        }
+
         public List<List<Signal>> ReceiveData(int countedTechnicalIndicatorsNumber)
         {
-            throw new NotImplementedException();
+            return _adapter.ReceiveObtainedSignalsFromWebService(countedTechnicalIndicatorsNumber);
         }
 
         public void SendData(List<Quote> quotes, Parameters parameters, TechnicalIndicator indicator)
         {
-            throw new NotImplementedException();
+            _adapter.SendQuotesToCalculationOnWebService(quotes, parameters, indicator);
         }
     }
 }

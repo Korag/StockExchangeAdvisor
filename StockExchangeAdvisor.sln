@@ -45,6 +45,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UtilityAzure", "UtilityAzur
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StateAndDecoratorDesignPatterns", "StateAndDecoratorDesignPatterns\StateAndDecoratorDesignPatterns.csproj", "{BD73FDA3-56A2-47DB-9538-EA3D52B4E4B5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebService", "WebService\WebService.csproj", "{F613B366-55C2-44AE-8D03-FA5A720BF8BA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -123,6 +125,10 @@ Global
 		{BD73FDA3-56A2-47DB-9538-EA3D52B4E4B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BD73FDA3-56A2-47DB-9538-EA3D52B4E4B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BD73FDA3-56A2-47DB-9538-EA3D52B4E4B5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F613B366-55C2-44AE-8D03-FA5A720BF8BA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F613B366-55C2-44AE-8D03-FA5A720BF8BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F613B366-55C2-44AE-8D03-FA5A720BF8BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F613B366-55C2-44AE-8D03-FA5A720BF8BA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -140,6 +146,7 @@ Global
 		{62F8C3F7-43BA-46D1-9923-80A27CB7698B} = {C8B4BA2C-E217-47C4-B637-B12E077728E6}
 		{D8E13492-0486-4AD9-9933-6E2DBB3CA17B} = {2976D29E-67BD-40E2-BC46-427F373AA32E}
 		{BD73FDA3-56A2-47DB-9538-EA3D52B4E4B5} = {C8B4BA2C-E217-47C4-B637-B12E077728E6}
+		{F613B366-55C2-44AE-8D03-FA5A720BF8BA} = {2976D29E-67BD-40E2-BC46-427F373AA32E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {75059A56-B063-444A-B538-3CAD069C92A9}

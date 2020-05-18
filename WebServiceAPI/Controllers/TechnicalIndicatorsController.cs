@@ -34,7 +34,7 @@ namespace WebServiceAPI.Controllers
 
         [Route("api/CalculateTechnicalIndicator")]
         [HttpPost]
-        public IActionResult CalculateTechnicalIndicator(IndicatorCalculationElementsWIndicatorType data)
+        public IActionResult CalculateTechnicalIndicator(Utility.IndicatorCalculationElementsWIndicatorType data)
         {
             try
             {
@@ -56,7 +56,7 @@ namespace WebServiceAPI.Controllers
 
         [Route("api/GetObtainedSignals/{id}")]
         [HttpGet]
-        public IActionResult GetObtainedSignals(string id)
+        public IActionResult GetObtainedSignals(int id)
         {
             try
             {
