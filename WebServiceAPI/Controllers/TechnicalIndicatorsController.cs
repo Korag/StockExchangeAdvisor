@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using Utility;
-using WebServiceAPI.Models;
+using WebServicesModels;
 
 namespace WebServiceAPI.Controllers
 {
@@ -34,7 +34,7 @@ namespace WebServiceAPI.Controllers
 
         [Route("api/CalculateTechnicalIndicator")]
         [HttpPost]
-        public IActionResult CalculateTechnicalIndicator(Utility.IndicatorCalculationElementsWIndicatorType data)
+        public IActionResult CalculateTechnicalIndicator(IndicatorCalculationElementsWIndicatorType data)
         {
             try
             {

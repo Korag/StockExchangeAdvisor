@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using TechnicalIndicators;
 
-namespace WebServiceAPI.Models
+namespace WebServicesModels
 {
     public class IndicatorCalculationElementsWIndicatorType
     {

@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using StateAndDecoratorDesignPattern;
 using System;
 using System.Collections.Generic;
+using WebServicesModels;
 
 namespace Utility
 {

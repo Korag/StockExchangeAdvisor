@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net.Http;
 using Utility;
+using WebServicesModels;
 
 namespace WebService
 {
@@ -18,7 +19,7 @@ namespace WebService
               System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
         }
 
-        public int CalculateTechnicalIndicator(Utility.IndicatorCalculationElementsWIndicatorType data)
+        public int CalculateTechnicalIndicator(IndicatorCalculationElementsWIndicatorType data)
         {
             string jsonString = JsonSerializer.CollectionOfIndicatorCalculationElementsWIndicatorTypeToJsonString(data);
             int idOfCalculation = 0;

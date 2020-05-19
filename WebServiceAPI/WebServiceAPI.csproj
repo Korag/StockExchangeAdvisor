@@ -12,8 +12,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Models\Models.csproj" />
-    <ProjectReference Include="..\TechnicalIndicators\TechnicalIndicators.csproj" />
     <ProjectReference Include="..\Utility\Utility.csproj" />
+    <ProjectReference Include="..\WebServicesModels\WebServicesModels.csproj" />
   </ItemGroup>
 
   <ItemGroup>

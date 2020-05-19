@@ -18,6 +18,7 @@
     <ProjectReference Include="..\Models\Models.csproj" />
     <ProjectReference Include="..\StateAndDecoratorDesignPatterns\StateAndDecoratorDesignPatterns.csproj" />
     <ProjectReference Include="..\TechnicalIndicators\TechnicalIndicators.csproj" />
+    <ProjectReference Include="..\WebServicesModels\WebServicesModels.csproj" />
   </ItemGroup>
 
 </Project>

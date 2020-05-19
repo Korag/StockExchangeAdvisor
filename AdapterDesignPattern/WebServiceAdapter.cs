@@ -5,6 +5,7 @@ using System.Linq;
 using TechnicalIndicators;
 using Utility;
 using WebService;
+using WebServicesModels;
 
 namespace AdapterDesignPattern
 {
@@ -21,7 +22,7 @@ namespace AdapterDesignPattern
 
         public void SendQuotesToCalculationOnWebService(List<Quote> quotes, Parameters parameters, TechnicalIndicator indicator)
         {
-            Utility.IndicatorCalculationElementsWIndicatorType data = new Utility.IndicatorCalculationElementsWIndicatorType
+            IndicatorCalculationElementsWIndicatorType data = new IndicatorCalculationElementsWIndicatorType
             {
                 Quotes = quotes,
                 Parameters = parameters,
