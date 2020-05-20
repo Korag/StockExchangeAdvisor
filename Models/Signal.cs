@@ -2,7 +2,7 @@
 {
     public class Signal
     {
-        public string Date;
-        public double Value; // (-1,1)
+        public string Date { get; set; }
+        public double Value { get; set; } // (-1,1)
     }
 }

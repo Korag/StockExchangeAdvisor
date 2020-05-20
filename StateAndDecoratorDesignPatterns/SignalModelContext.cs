@@ -11,20 +11,20 @@ namespace StateAndDecoratorDesignPattern
     [Serializable]
     public class SignalModelContext : ICloneable
     {
-        public string Date;
-        public double Open;
-        public double High;
-        public double Low;
-        public double Close;
-        public int Volume;
+        public string Date { get; set; }
+        public double Open { get; set; }
+        public double High { get; set; }
+        public double Low { get; set; }
+        public double Close { get; set; }
+        public int Volume { get; set; }
 
         //public List<double> PartialSignals;
         public List<double> PartialSignals { get; set; }
         public ASignalState CurrentState = null;
 
         //Wykorzystanie decoratora do obliczenia
-        public double FinalPrice;
-        public double AdditionalFee;
+        public double FinalPrice { get; set; }
+        public double AdditionalFee { get; set; }
 
         //Przeniesione do określonych stanów
         //public string Factor;
