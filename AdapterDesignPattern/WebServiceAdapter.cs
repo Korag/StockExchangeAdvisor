@@ -45,7 +45,7 @@ namespace AdapterDesignPattern
             {
                 string jsonString = _webService.GetObtainedSignals(id);
                 //deserialization problem
-                List<Signal> partialSignal = JsonSerializer.JsonStringToCollectionOfTypes<Signal>(jsonString);
+                List<Signal> partialSignal = JsonSerializer.JsonStringToCollectionOfObjectsTypes<Signal>(jsonString);
                 obtainedSignals.Add(partialSignal);
             }
 

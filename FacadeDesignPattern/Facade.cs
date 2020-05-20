@@ -195,7 +195,7 @@ namespace FacadeDesignPattern
             }
 
             //Saving JsonFile to PrototypeObjects directory
-            string jsonString = JsonSerializer.SignalModelContextListToJsonString(obtainedSignalsWithQuotes);
+            string jsonString = JsonSerializer.ConvertCollectionOfObjectsToJsonString<SignalModelContext>(obtainedSignalsWithQuotes);
             DateTime currentDateTime = DateTime.Now;
             string dateTimeFormat = "ddMMyyyy-HHmm";
             string fileName = nameOfCompany + "_" + currentDateTime.ToString(dateTimeFormat) + "-" +

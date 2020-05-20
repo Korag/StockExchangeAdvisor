@@ -25,14 +25,14 @@ namespace WebService
 
         public int CalculateTechnicalIndicator(IndicatorCalculationElementsWIndicatorType data)
         {
-            //string jsonString = JsonSerializer.CollectionOfIndicatorCalculationElementsWIndicatorTypeToJsonString(data);
-            string jsonString = JsonConvert.SerializeObject(data, new JsonSerializerSettings
-            {
-                PreserveReferencesHandling = PreserveReferencesHandling.None,
-                ContractResolver = new CamelCasePropertyNamesContractResolver(),
-                Formatting = Formatting.Indented,
-                TypeNameHandling = TypeNameHandling.Auto
-            });
+            string jsonString = Utility.JsonSerializer.ConvertObjectToJsonString<IndicatorCalculationElementsWIndicatorType>(data);
+            //string jsonString = JsonConvert.SerializeObject(data, new JsonSerializerSettings
+            //{
+            //    PreserveReferencesHandling = PreserveReferencesHandling.None,
+            //    ContractResolver = new CamelCasePropertyNamesContractResolver(),
+            //    Formatting = Formatting.Indented,
+            //    TypeNameHandling = TypeNameHandling.Auto
+            //});
 
             //problem z apką na serwerze
             //reszta OK
@@ -46,7 +46,7 @@ namespace WebService
 
                 if (response.StatusCode == System.Net.HttpStatusCode.Created)
                 {
-                    idOfCalculation = Utility.JsonSerializer.JsonStringToInt(response.Content.ReadAsStringAsync().Result);
+                    idOfCalculation = Utility.JsonSerializer.JsonStringToObjectType<int>(response.Content.ReadAsStringAsync().Result);
                 }
                 else
                 {
@@ -74,7 +74,7 @@ namespace WebService
                 if (response.StatusCode == System.Net.HttpStatusCode.OK)
                 {
                     responseString = response.Content.ReadAsStringAsync().Result;
-                    filesCount = Utility.JsonSerializer.JsonStringToInt(responseString);
+                    filesCount = Utility.JsonSerializer.JsonStringToObjectType<int>(responseString);
                 }
                 else
                 {

@@ -54,7 +54,7 @@ namespace RabbitMQ
 
                             } while (data == null);
 
-                            List<Signal> currentReceivedSignals = JsonSerializer.JsonStringToCollectionOfSignals(EncryptionHelper.ByteArrayToUTF8String(data.Body));
+                            List<Signal> currentReceivedSignals = JsonSerializer.JsonStringToCollectionOfObjectsTypes<Signal>(EncryptionHelper.ByteArrayToUTF8String(data.Body));
                             _obtainedSignals.Add(currentReceivedSignals);
 
                             Console.WriteLine("Odebrałem otrzymane sygnały z kolejki");

@@ -31,7 +31,7 @@ namespace ObserverDesignPattern
                 using (StreamReader reader = new StreamReader(LastDownloadDateTimeFileURL))
                 {
                     string json = reader.ReadToEnd();
-                    LastDownloadDateTime = JsonSerializer.JsonStringToDateTime(json);
+                    LastDownloadDateTime = JsonSerializer.JsonStringToObjectType<DateTime>(json);
                 }
             }
             catch (Exception)
@@ -46,7 +46,7 @@ namespace ObserverDesignPattern
 
             using (StreamWriter writer = new StreamWriter(LastDownloadDateTimeFileURL))
             {
-                string json = JsonSerializer.DateTimeToJsonString(LastDownloadDateTime);
+                string json = JsonSerializer.ConvertObjectToJsonString<DateTime>(LastDownloadDateTime);
                 writer.WriteLine(json);
             }
         }

@@ -49,7 +49,7 @@ namespace RabbitMQ
         public override void GenerateAndPublishMessage(IModel channel, List<Signal> obtainedSignals)
         {
             //serializujemy oraz przekształcamy w tablicę bajtów
-            var body = EncryptionHelper.StringToUtf8(JsonSerializer.CollectionOfSignalsToJsonString(obtainedSignals));
+            var body = EncryptionHelper.StringToUtf8(JsonSerializer.ConvertCollectionOfObjectsToJsonString<Signal>(obtainedSignals));
             channel.BasicPublish(exchange: _exchange,
                 routingKey: _queueSendTo,
                 basicProperties: null,
@@ -61,7 +61,7 @@ namespace RabbitMQ
 
         public override void HandleReceivedEvent(BasicDeliverEventArgs ea, IModel channel)
         {
-            var indicatorElements = JsonSerializer.JsonStringToCollectionOfQuotesWithParameters(EncryptionHelper.ByteArrayToUTF8String(ea.Body));
+            var indicatorElements = JsonSerializer.JsonStringToObjectType<IndicatorCalculationElements>(EncryptionHelper.ByteArrayToUTF8String(ea.Body));
 
             List<Signal> obtainedSignals = _indicator.GetSignals(indicatorElements.Quotes, indicatorElements.Parameters);
             Console.WriteLine("Obliczyłem wskaźnik"); 

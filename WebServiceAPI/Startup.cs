@@ -24,6 +24,7 @@ namespace WebServiceAPI
                 // Indented to make it easier to read during this demo.
                 options.SerializerSettings.Formatting = Newtonsoft.Json.Formatting.Indented; 
                 options.SerializerSettings.TypeNameHandling = Newtonsoft.Json.TypeNameHandling.Auto;
+                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
             });
 
             // Register the Swagger generator, defining 1 or more Swagger documents

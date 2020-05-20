@@ -39,7 +39,7 @@ namespace WebServiceAPI.Controllers
             try
             {
                 List<Signal> obtainedSignals = data.TechnicalIndicator.GetSignals(data.Quotes, data.Parameters);
-                string jsonString = JsonSerializer.CollectionOfSignalsToJsonString(obtainedSignals);
+                string jsonString = JsonSerializer.ConvertCollectionOfObjectsToJsonString<Signal>(obtainedSignals);
 
                 int filesCount = FileHelper.CountFilesInDirectory(GeneratedSignalsURL);
                 int newFileId = (filesCount == 0 ? 0 : filesCount);

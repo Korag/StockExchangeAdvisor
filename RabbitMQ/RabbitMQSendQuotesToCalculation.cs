@@ -37,7 +37,7 @@ namespace RabbitMQ
         public override void GenerateAndPublishMessage(IModel channel, IndicatorCalculationElements indicatorElements)
         {
             //serializujemy oraz przekształcamy w tablicę bajtów
-            var body = EncryptionHelper.StringToUtf8(JsonSerializer.CollectionOfQuotesWithParametersToJsonString(indicatorElements));
+            var body = EncryptionHelper.StringToUtf8(JsonSerializer.ConvertObjectToJsonString<IndicatorCalculationElements>(indicatorElements));
             channel.BasicPublish(exchange: _exchange,
                 routingKey: _queueSendTo,
                 basicProperties: null,
