@@ -13,7 +13,7 @@ namespace Utility
         {
             string fileText = "";
 
-            if (!File.Exists(url))
+            if (File.Exists(url))
             {
                 fileText = File.ReadAllText(url);
             }

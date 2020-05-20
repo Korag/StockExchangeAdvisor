@@ -19,8 +19,8 @@ namespace RabbitMQUniversalConsumer
             Parameters p = new Parameters();
 
             // kalkulacja wybranego wskaźnika
-            TechnicalIndicator ema = new TechnicalIndicatorEMA();
-            ema.GetSignals(quotes, p);
+            TechnicalIndicator roc = new TechnicalIndicatorROC();
+            roc.GetSignals(quotes, p);
 
             channel.BasicAck(ea.DeliveryTag, false);
         }

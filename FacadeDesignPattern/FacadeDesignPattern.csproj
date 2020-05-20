@@ -7,7 +7,7 @@
   <ItemGroup>
     <ProjectReference Include="..\BuilderDesignPattern\BuilderDesignPattern.csproj" />
     <ProjectReference Include="..\ChainOfResponsibilityDesignPattern\ChainOfResponsibilityDesignPattern.csproj" />
-    <ProjectReference Include="..\PrototypDesignPattern\PrototypeDesignPattern.csproj" />
+    <ProjectReference Include="..\PrototypeDesignPattern\PrototypeDesignPattern.csproj" />
     <ProjectReference Include="..\StateAndDecoratorDesignPatterns\StateAndDecoratorDesignPatterns.csproj" />
   </ItemGroup>
 

@@ -40,26 +40,26 @@ namespace Utility
             }
         }
 
-        public static void SaveCompanySignalsToCsvFile(List<QuoteWithSignal> quotesWithSignal, string nameOfCompany)
-        {
-            try
-            {
-                using (var writer = new StreamWriter(_generatedSignalsURL + DateTime.Now.ToShortDateString() + DateTime.Now.ToShortTimeString() + "_" + nameOfCompany + ".csv"))
-                {
-                    using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
-                    {
-                        csv.WriteComment(nameOfCompany);
-                        csv.WriteComment("___________");
-                        csv.WriteRecords(quotesWithSignal);
-                    }
-                }
-            }
-            catch (Exception)
-            {
-                Console.WriteLine("There was an error during creating signals file");
-                throw;
-            }
-        }
+        //public static void SaveCompanySignalsToCsvFile(List<QuoteWithSignal> quotesWithSignal, string nameOfCompany)
+        //{
+        //    try
+        //    {
+        //        using (var writer = new StreamWriter(_generatedSignalsURL + DateTime.Now.ToShortDateString() + DateTime.Now.ToShortTimeString() + "_" + nameOfCompany + ".csv"))
+        //        {
+        //            using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
+        //            {
+        //                csv.WriteComment(nameOfCompany);
+        //                csv.WriteComment("___________");
+        //                csv.WriteRecords(quotesWithSignal);
+        //            }
+        //        }
+        //    }
+        //    catch (Exception)
+        //    {
+        //        Console.WriteLine("There was an error during creating signals file");
+        //        throw;
+        //    }
+        //}
     }
 
 }

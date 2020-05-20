@@ -9,6 +9,11 @@ namespace TechnicalIndicators
         private const int BUY_SIGNAL = -1;
         private const int SELL_SIGNAL = 1;
 
+        public TechnicalIndicatorEMA()
+        {
+
+        }
+
         class IndicatorValueWithDate
         {
             public double IndicatorValue;

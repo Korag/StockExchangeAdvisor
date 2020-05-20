@@ -5,6 +5,11 @@ namespace TechnicalIndicators
 {
     public abstract class TechnicalIndicator
     {
+        public TechnicalIndicator()
+        {
+
+        }
+
         public abstract List<Signal> GetSignals(List<Quote> quote, Parameters parameters);
     }
 }

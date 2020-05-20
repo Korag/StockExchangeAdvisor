@@ -1,5 +1,6 @@
 ﻿using Models;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using StateAndDecoratorDesignPattern;
 using System;
 using System.Collections.Generic;
@@ -49,9 +50,15 @@ namespace Utility
             return JsonConvert.SerializeObject(dateTime);
         }
 
-        public static List<Signal> JsonStringToCollectionOfIndicatorCalculationElementsWIndicatorType(string jsonString)
+        public static List<T> JsonStringToCollectionOfTypes<T>(string jsonString)
         {
-            return JsonConvert.DeserializeObject<List<Signal>>(jsonString);
+            return JsonConvert.DeserializeObject<List<T>>(jsonString, new JsonSerializerSettings
+            {
+                PreserveReferencesHandling = PreserveReferencesHandling.None,
+                ContractResolver = new CamelCasePropertyNamesContractResolver(),
+                Formatting = Formatting.Indented,
+                TypeNameHandling = TypeNameHandling.Auto
+            });
         }
 
         public static int JsonStringToInt(string jsonString)
