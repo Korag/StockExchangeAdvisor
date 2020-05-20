@@ -9,8 +9,8 @@ namespace UtilityAzure
 {
     public static class AzureWebServiceHelper
     {
-        public static string StartVMScriptPath = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..\\..\\..\\UtilityAzure\\startVM.ps1"));
-        public static string StopVMScriptPath = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..\\..\\..\\UtilityAzure\\stopVM.ps1"));
+        public static string StartVMScriptPath = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..\\..\\..\\..\\UtilityAzure\\PowerShellScripts\\startVM.ps1"));
+        public static string StopVMScriptPath = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..\\..\\..\\..\\UtilityAzure\\PowerShellScripts\\stopVM.ps1"));
 
         /// <summary>
         /// Runs a PowerShell script with parameters and prints the resulting pipeline objects to the console output. 
@@ -31,7 +31,7 @@ namespace UtilityAzure
                 ps.AddParameters(scriptParameters);
 
                 // execute the script and await the result.
-                var pipelineObjects = await ps.InvokeAsync().ConfigureAwait(false);
+                var pipelineObjects = await ps.InvokeAsync().ConfigureAwait(false);           
 
                 // print the resulting pipeline objects to the console.
                 foreach (var item in pipelineObjects)
