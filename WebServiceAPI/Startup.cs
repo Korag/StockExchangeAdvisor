@@ -19,7 +19,12 @@ namespace WebServiceAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddControllers().AddNewtonsoftJson(options =>
+            {
+                // Indented to make it easier to read during this demo.
+                options.SerializerSettings.Formatting = Newtonsoft.Json.Formatting.Indented; 
+                options.SerializerSettings.TypeNameHandling = Newtonsoft.Json.TypeNameHandling.Auto;
+            });
 
             // Register the Swagger generator, defining 1 or more Swagger documents
             services.AddSwaggerGen(c =>

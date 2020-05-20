@@ -1,5 +1,8 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
+using System;
 using System.Net.Http;
+using System.Net.Http.Formatting;
 using Utility;
 using WebServicesModels;
 
@@ -8,8 +11,9 @@ namespace WebService
     public class WebServiceCalculateIndicator : IWebServiceCalculateIndicator
     {
         private HttpClient _client { get; set; }
-        private string _serverIpAddress = "40.115.121.134";
-
+        //private string _serverIpAddress = "40.115.121.134";
+        private string _serverIpAddress = "https://localhost:44361";
+        
         public WebServiceCalculateIndicator()
         {
             _client = new HttpClient();
@@ -21,17 +25,28 @@ namespace WebService
 
         public int CalculateTechnicalIndicator(IndicatorCalculationElementsWIndicatorType data)
         {
-            string jsonString = JsonSerializer.CollectionOfIndicatorCalculationElementsWIndicatorTypeToJsonString(data);
+            //string jsonString = JsonSerializer.CollectionOfIndicatorCalculationElementsWIndicatorTypeToJsonString(data);
+            string jsonString = JsonConvert.SerializeObject(data, new JsonSerializerSettings
+            {
+                PreserveReferencesHandling = PreserveReferencesHandling.None,
+                ContractResolver = new CamelCasePropertyNamesContractResolver(),
+                Formatting = Formatting.Indented,
+                TypeNameHandling = TypeNameHandling.Auto
+            });
+
+            //problem z apką na serwerze
+            //reszta OK
+
             int idOfCalculation = 0;
 
             try
             {
-                HttpResponseMessage response = _client.PostAsync("api/CalculateTechnicalIndicator", new StringContent(jsonString,
-                                         System.Text.Encoding.UTF8, "application/json")).Result;
+                HttpContent payload = new StringContent(jsonString, System.Text.Encoding.UTF8, "application/json");
+                HttpResponseMessage response = _client.PostAsync("api/CalculateTechnicalIndicator", payload).Result;
 
                 if (response.StatusCode == System.Net.HttpStatusCode.Created)
                 {
-                    idOfCalculation = JsonSerializer.JsonStringToInt(response.Content.ReadAsStringAsync().Result);
+                    idOfCalculation = Utility.JsonSerializer.JsonStringToInt(response.Content.ReadAsStringAsync().Result);
                 }
                 else
                 {
@@ -59,7 +74,7 @@ namespace WebService
                 if (response.StatusCode == System.Net.HttpStatusCode.OK)
                 {
                     responseString = response.Content.ReadAsStringAsync().Result;
-                    filesCount = JsonSerializer.JsonStringToInt(responseString);
+                    filesCount = Utility.JsonSerializer.JsonStringToInt(responseString);
                 }
                 else
                 {
@@ -81,7 +96,7 @@ namespace WebService
 
             try
             {
-                response = _client.GetAsync("api/GetAmountOfGeneratedSignalsFiles").Result;
+                response = _client.GetAsync($"api/GetObtainedSignals/{id}").Result;
 
                 if (response.StatusCode == System.Net.HttpStatusCode.OK)
                 {

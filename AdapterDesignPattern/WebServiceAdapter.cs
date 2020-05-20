@@ -44,7 +44,8 @@ namespace AdapterDesignPattern
             foreach (var id in _generatedId)
             {
                 string jsonString = _webService.GetObtainedSignals(id);
-                List<Signal> partialSignal = JsonSerializer.JsonStringToCollectionOfIndicatorCalculationElementsWIndicatorType(jsonString);
+                //deserialization problem
+                List<Signal> partialSignal = JsonSerializer.JsonStringToCollectionOfTypes<Signal>(jsonString);
                 obtainedSignals.Add(partialSignal);
             }
 

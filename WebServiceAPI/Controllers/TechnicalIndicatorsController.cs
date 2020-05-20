@@ -42,7 +42,7 @@ namespace WebServiceAPI.Controllers
                 string jsonString = JsonSerializer.CollectionOfSignalsToJsonString(obtainedSignals);
 
                 int filesCount = FileHelper.CountFilesInDirectory(GeneratedSignalsURL);
-                int newFileId = (filesCount == 0 ? 0 : filesCount + 1);
+                int newFileId = (filesCount == 0 ? 0 : filesCount);
                 string fileName = $"signals_{newFileId}.json";
                 FileHelper.SaveJsonFile(GeneratedSignalsURL + fileName, jsonString);
 
@@ -50,7 +50,7 @@ namespace WebServiceAPI.Controllers
             }
             catch (Exception e)
             {
-                return StatusCode(500, e);
+                return StatusCode(500);
             }
         }
 
