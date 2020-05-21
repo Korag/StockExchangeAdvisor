@@ -16,7 +16,6 @@ namespace StrategyDesignPattern
 
         public List<List<Signal>> ReceiveData(int countedTechnicalIndicatorsNumber)
         {
-            //some small problems with deserialization
             return _adapter.ReceiveObtainedSignalsFromWebService(countedTechnicalIndicatorsNumber);
         }
 

@@ -61,13 +61,14 @@ namespace WebServiceAPI.Controllers
             try
             {
                 string jsonString = FileHelper.ReadFile(GeneratedSignalsURL + $"signals_{id}.json");
+                List<Signal> obtainedSignals = JsonSerializer.JsonStringToCollectionOfObjectsTypes<Signal>(jsonString);
 
                 if (String.IsNullOrWhiteSpace(jsonString))
                 {
                     return StatusCode(404);
                 }
 
-                return StatusCode(200, jsonString);
+                return StatusCode(200, obtainedSignals);
             }
             catch (Exception e)
             {

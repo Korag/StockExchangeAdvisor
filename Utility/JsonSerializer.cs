@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System.Collections.Generic;
+using System.IO;
 
 namespace Utility
 {
@@ -20,7 +21,7 @@ namespace Utility
             return JsonConvert.SerializeObject(model, _settings);
         }
 
-        public static string ConvertCollectionOfObjectsToJsonString<T>(List<T> model)
+        public static string ConvertCollectionOfObjectsToJsonString<T>(IEnumerable<T> model)
         {
             return JsonConvert.SerializeObject(model, _settings);
         }
