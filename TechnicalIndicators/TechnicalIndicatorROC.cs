@@ -11,6 +11,11 @@ namespace TechnicalIndicators
             internal double Value;
         }
 
+        public ROC()
+        {
+
+        }
+
         public override List<Signal> GetSignals(List<Quote> quote, Parameters parameters)
         {
             var ROCList = new List<ROCList>();

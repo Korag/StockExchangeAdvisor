@@ -1,15 +1,18 @@
 ﻿using Models;
 using System;
 using System.Collections.Generic;
-using TechnicalIndicators;
 
-namespace Signals
+namespace TechnicalIndicators
 {
     public class CandleFormation : TechnicalIndicator
     {       
-
         private const int SELL = -1;
         private const int BUY = 1;
+
+        public CandleFormation()
+        {
+
+        }
 
         public override List<Signal> GetSignals(List<Quote> quote, Parameters parameters)
         {

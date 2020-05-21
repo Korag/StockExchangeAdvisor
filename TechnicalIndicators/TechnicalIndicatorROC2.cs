@@ -9,6 +9,11 @@ namespace TechnicalIndicators
 
     public class TechnicalIndicatorROC : TechnicalIndicator
     {
+        public TechnicalIndicatorROC()
+        {
+
+        }
+
         public override List<Signal> GetSignals(List<Quote> quote, Parameters parameters)
         {
             int p = parameters.Period, n = quote.Count;

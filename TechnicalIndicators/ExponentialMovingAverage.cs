@@ -3,8 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-//Autor: Łukasz Czepielik 051392
-
 namespace TechnicalIndicators
 {
     public class ExponentialMovingAverage : TechnicalIndicator
@@ -12,6 +10,11 @@ namespace TechnicalIndicators
         private const int BUY_SIGNAL = -1;
         private const int SELL_SIGNAL = 1;
         private const int NEUTRAL_SIGNAL = 0;
+
+        public ExponentialMovingAverage()
+        {
+
+        }
 
         class IndicatorValueWithDate
         {

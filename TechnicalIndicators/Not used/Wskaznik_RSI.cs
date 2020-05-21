@@ -1,11 +1,9 @@
 ﻿using Models;
-using System;
 using System.Collections.Generic;
-using TechnicalIndicators;
 
-namespace Signals
+namespace TechnicalIndicators
 {
-    public class RSI : TechnicalIndicator
+    public abstract class RSI : TechnicalIndicator
     {
 
         private const int SELL = -1;

@@ -6,10 +6,13 @@ namespace TechnicalIndicators
 {
     public class TechnicalIndicatorSMA: TechnicalIndicator
     {
-      
+        public TechnicalIndicatorSMA()
+        {
+
+        }
+
 		public override List<Signal> GetSignals(List<Quote> quote, Parameters parameters)
         {
-        
             List<Signal> SignalList = new List<Signal>();
             DateTime[] DateList = new DateTime[quote.Count];
             double[] averageArray = new double[quote.Count];

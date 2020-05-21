@@ -1,9 +1,9 @@
-﻿using TechnicalIndicators;
-using RabbitMQ;
+﻿using RabbitMQ;
+using TechnicalIndicators;
 
-namespace RabbitMQConsumerROC
+namespace RabbitMQConsumerSMA
 {
-    public class RabbitConsumerCalculateROC
+    public class RabbitConsumerCalculateSMA
     {
         private const string _exchange = "SignalsExchange";
         private const string _queueSendTo = "ObtainedSignals";
@@ -16,11 +16,11 @@ namespace RabbitMQConsumerROC
 
         static void Main()
         {
-            TechnicalIndicator _indicator = new ROC();
+            TechnicalIndicator _indicator = new TechnicalIndicatorSMA();
             InititalizeParameters(_indicator.GetType().ToString());
 
-            RabbitCalculateIndicator rabbitROC = new RabbitCalculateIndicator(_exchange, _queueReceiveFrom, _queueSendTo, _indicator);
-            rabbitROC.ConsumeData();
+            RabbitCalculateIndicator rabbitSMA = new RabbitCalculateIndicator(_exchange, _queueReceiveFrom, _queueSendTo, _indicator);
+            rabbitSMA.ConsumeData();
         }
     }
 }
