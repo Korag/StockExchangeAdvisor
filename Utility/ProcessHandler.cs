@@ -37,6 +37,7 @@ namespace Utility
             if (Process.GetProcessesByName(processName).Count() == 0)
             {
                 Process.Start(exeUrl);
+                Console.WriteLine(processName + " : opened");
             }
         }
 
@@ -46,6 +47,7 @@ namespace Utility
             {
                 Process process = Process.GetProcessesByName(processName).FirstOrDefault();
                 process.Kill();
+                Console.WriteLine(processName + " : closed");
             }
             catch (Exception e)
             {

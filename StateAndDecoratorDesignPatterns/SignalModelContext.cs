@@ -18,9 +18,8 @@ namespace StateAndDecoratorDesignPattern
         public double Close { get; set; }
         public int Volume { get; set; }
 
-        //public List<double> PartialSignals;
         public List<double> PartialSignals { get; set; }
-        public ASignalState CurrentState = null;
+        public ASignalState CurrentState { get; set; } = null;
 
         //Wykorzystanie decoratora do obliczenia
         public double FinalPrice { get; set; }

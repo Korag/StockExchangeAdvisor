@@ -1,11 +1,7 @@
 ﻿using System;
-using System.IO;
 using TechnicalIndicators;
 using FacadeDesignPattern;
 using BuilderDesignPattern.AlgorithmBuilder;
-using Models;
-using StrategyDesignPattern;
-using System.Collections.Generic;
 using UtilityAzure;
 
 namespace Signals

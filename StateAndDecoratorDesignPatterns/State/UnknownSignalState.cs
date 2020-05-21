@@ -7,7 +7,7 @@ namespace StateDesignPattern
     [Serializable]
     public class UnknownSignalState : ASignalState
     {
-        public string Factor
+        public override string Factor
         {
             get { return "brak proponowanej akcji"; }
         }

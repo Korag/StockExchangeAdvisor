@@ -7,7 +7,7 @@ namespace StateDesignPattern
     [Serializable]
     public class SellSignalState : ASignalState
     {
-        public string Factor
+        public override string Factor
         {
             get { return "proponowana akcja sprzedaży"; }
         }

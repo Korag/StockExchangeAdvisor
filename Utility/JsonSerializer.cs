@@ -35,14 +35,5 @@ namespace Utility
         {
             return JsonConvert.DeserializeObject<List<T>>(jsonString, _settings);
         }
-
-        //public static string SignalModelContextListToJsonString(List<SignalModelContext> signalContext)
-        //{
-        //    return JsonConvert.SerializeObject(signalContext, Formatting.Indented,
-        //                                      new JsonSerializerSettings
-        //                                      {
-        //                                          ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-        //                                      });
-        //}
     }
 }

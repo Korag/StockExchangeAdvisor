@@ -25,27 +25,6 @@ namespace FacadeDesignPattern
 
         public string PathToUnpackedQuotesDirectory { get; set; }
 
-        //public RabbitMQFacade()
-        //{
-        //    _algorithmBuilder = new RabbitMQBuilder();
-        //    _algorithmManufacter = new AlgorithmManufacturer();
-
-        //    _algorithmManufacter.Construct(_algorithmBuilder);
-        //    _calculateContext = _algorithmBuilder.StrategyContext;
-
-        //    PathToUnpackedQuotesDirectory = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..\\..\\..\\..\\QuotesDownloader\\DownloadedQuotes\\"));
-
-        //    _parameters = new Parameters
-        //    {
-        //        CalculatedIndicatorFirstDaysInterval = 10,
-        //        CalculatedIndicatorSecondDaysInterval = 5,
-        //        Period = 10
-        //    };
-
-        //    InitializeIndicatorsList();
-        //    AutoMapperHelper.GetInstance();
-        //}
-
         public Facade(IAlgorithmBuilder algorithmBuilder)
         {
             _algorithmBuilder = algorithmBuilder;
@@ -70,7 +49,11 @@ namespace FacadeDesignPattern
         public void Dispose()
         {
             ProcessHandler.KillQuotesDownloaderProcess();
-            ProcessHandler.KillRabbitMQConsumersProcesses();
+
+            if (_algorithmBuilder.GetType() == typeof(RabbitMQBuilder))
+            {
+                ProcessHandler.KillRabbitMQConsumersProcesses();
+            }
         }
 
         private void InitializeIndicatorsList()
@@ -100,6 +83,7 @@ namespace FacadeDesignPattern
             List<Signal> obtainedSignals = _calculateContext.ReceiveSignalsFromSingleCalculatedIndicator();
             List<SignalModelContext> obtainedSignalsWithQuotes = AutoMapperHelper.MapQuotesAndSignalsToSignalModelContext(companyQuotes, obtainedSignals);
 
+            //parallel
             foreach (var singleQuotePartialSignals in obtainedSignalsWithQuotes)
             {
                 ConcreteChainHandlerElement chain = new ConcreteChainHandlerElement();
@@ -131,6 +115,7 @@ namespace FacadeDesignPattern
 
             #endregion
 
+            //parallel
             foreach (var quoteWSignals in obtainedSignalsWithQuotes)
             {
                 double fee = 0;
@@ -161,38 +146,50 @@ namespace FacadeDesignPattern
                 //finalPrice = decorator.CalculateCost();
                 //fee += decorator.CalculateAdditionalFee();
 
-                quoteWSignals.AdditionalFee = fee;
-                quoteWSignals.FinalPrice = finalPrice;
+                double formattedFee;
+                double formattedFinalPrice;
+
+                double.TryParse(String.Format("{0:0.##}", fee), out formattedFee);
+                double.TryParse(String.Format("{0:0.##}", finalPrice), out formattedFinalPrice);
+
+                quoteWSignals.AdditionalFee = formattedFee;
+                quoteWSignals.FinalPrice = formattedFinalPrice;
             }
 
             //Deep Clone using JsonSerialization
             List<SignalModelContext> clonedSignalContextByJsonSerializer = new List<SignalModelContext>();
 
+            //parallel
             foreach (var signal in obtainedSignalsWithQuotes)
             {
                 SignalModelContext singleClonedSignalContext = signal.Clone() as SignalModelContext;
                 clonedSignalContextByJsonSerializer.Add(singleClonedSignalContext);
             }
+            //orderBy Date
 
             //Deep Clone using BinarySerialization
             obtainedSignalsWithQuotes.ForEach(z => z.JsonSerialization = false);
 
             List<SignalModelContext> clonedSignalContextByBinarySerializer = new List<SignalModelContext>();
 
+            //parallel
             foreach (var signal in obtainedSignalsWithQuotes)
             {
                 SignalModelContext singleClonedSignalContext = signal.Clone() as SignalModelContext;
                 clonedSignalContextByBinarySerializer.Add(singleClonedSignalContext);
             }
+            //orderBy Date
 
             //Deep Clone using Reflection
             List<SignalModelContext> clonedSignalContextByReflection = new List<SignalModelContext>();
 
+            //parallel
             foreach (var signal in obtainedSignalsWithQuotes)
             {
                 SignalModelContext singleClonedSignalContext = ReflectionDeepCopy.CloneObject(signal) as SignalModelContext;
                 clonedSignalContextByReflection.Add(singleClonedSignalContext);
             }
+            //orderBy Date
 
             //Saving JsonFile to PrototypeObjects directory
             string jsonString = JsonSerializer.ConvertCollectionOfObjectsToJsonString<SignalModelContext>(obtainedSignalsWithQuotes);
@@ -200,11 +197,15 @@ namespace FacadeDesignPattern
             string dateTimeFormat = "ddMMyyyy-HHmm";
             string fileName = nameOfCompany + "_" + currentDateTime.ToString(dateTimeFormat) + "-" +
                                 Convert.ToString((int)currentDateTime.Subtract(new DateTime(1970, 1, 1)).TotalSeconds) + "_prototypeObject";
-            
+
             FileHelper.SaveJsonFile(Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, $"..\\..\\..\\..\\StockExchangeAdvisor\\PrototypeObjects\\{fileName}.json")), jsonString);
 
-            //TODO:
-            //3. save to csv file with all proper properties and factor from state pattern 
+            //Saving CsvFile to GeneratedSignals directory
+            currentDateTime = DateTime.Now;
+            fileName = nameOfCompany + "_" + currentDateTime.ToString(dateTimeFormat) + "-" +
+                                Convert.ToString((int)currentDateTime.Subtract(new DateTime(1970, 1, 1)).TotalSeconds) + "_generatedSignals";
+
+            Utility.CsvHelper.SaveCompanySignalsToCsvFile(Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, $"..\\..\\..\\..\\StockExchangeAdvisor\\GeneratedSignals\\{fileName}.csv")), obtainedSignalsWithQuotes);
         }
 
         public void CountSingleIndicatorForAllCompaniesQuotes(TechnicalIndicator technicalIndicator)

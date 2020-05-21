@@ -26,16 +26,7 @@ namespace WebService
         public int CalculateTechnicalIndicator(IndicatorCalculationElementsWIndicatorType data)
         {
             string jsonString = Utility.JsonSerializer.ConvertObjectToJsonString<IndicatorCalculationElementsWIndicatorType>(data);
-            //string jsonString = JsonConvert.SerializeObject(data, new JsonSerializerSettings
-            //{
-            //    PreserveReferencesHandling = PreserveReferencesHandling.None,
-            //    ContractResolver = new CamelCasePropertyNamesContractResolver(),
-            //    Formatting = Formatting.Indented,
-            //    TypeNameHandling = TypeNameHandling.Auto
-            //});
-
             //problem z apką na serwerze
-            //reszta OK
 
             int idOfCalculation = 0;
 
