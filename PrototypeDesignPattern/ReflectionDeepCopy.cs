@@ -1,5 +1,7 @@
-﻿using System;
+﻿using StateDesignPattern;
+using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
@@ -33,12 +35,42 @@ namespace PrototypeDesignPattern
                         property.SetValue(objTarget, ((IEnumerable)property.GetValue(objSource, null)).Cast<object>().ToArray(), null);
                     }
 
+                    else if (property.PropertyType.Equals(typeof(List<double>)))
+                    {
+                        property.SetValue(objTarget, ((IEnumerable)property.GetValue(objSource, null)).Cast<double>().ToList(), null);
+                    }
+
                     //else property type is object/complex types, so need to recursively call this method until the end of the tree is reached
                     else
                     {
                         object objPropertyValue = property.GetValue(objSource, null);
+                        
+                        if (property.PropertyType.FullName == "StateDesignPattern.ASignalState")
+                        {
+                            //Type stateType = objPropertyValue.GetType();
+                            //object stateTarget = Activator.CreateInstance(stateType);
 
-                        if (objPropertyValue == null)
+                            //PropertyInfo[] statePropertyInfo = stateType.GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance).Where(p => p.GetIndexParameters().Length == 0).ToArray();
+
+                            //foreach (var stateProperty in statePropertyInfo)
+                            //{
+                            //    stateProperty.SetValue(stateTarget, stateProperty.GetValue(objPropertyValue, null), null);
+                            //}
+
+                            //property.SetValue(objTarget, stateTarget, null);
+
+                            ASignalState stateSource = (ASignalState)objPropertyValue;
+                            
+                            Type stateType = objPropertyValue.GetType();
+                            ASignalState stateTarget = (ASignalState)Activator.CreateInstance(stateType);
+
+                            stateTarget.Context = stateSource.Context;
+                            stateTarget.SignalValue = stateSource.SignalValue;
+
+                            property.SetValue(objTarget, stateTarget, null);
+                        }
+
+                        else if (objPropertyValue == null)
                         {
                             property.SetValue(objTarget, null, null);
                         }
@@ -48,39 +80,6 @@ namespace PrototypeDesignPattern
                         }
                     }
                 }
-            }
-
-            //Step : 5 Get all the fields of source object type
-            FieldInfo[] fieldInfo = typeSource.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-
-            //Step : 6 Assign all source field to taget object 's fields
-            foreach (FieldInfo field in fieldInfo)
-            {
-                //Step : 7 check whether field type is value type, enum or string type
-                if (field.FieldType.IsValueType || field.FieldType.IsEnum || field.FieldType.Equals(typeof(System.String)))
-                {
-                    field.SetValue(objTarget, field.GetValue(objSource));
-                }
-
-                else if (field.FieldType.IsArray)
-                {
-                    field.SetValue(objTarget, ((IEnumerable)field.GetValue(objSource)));
-                }
-
-                //else field type is object/complex types, so need to recursively call this method until the end of the tree is reached
-                //else if (field.FieldType is IEnumerable)
-                //{
-                //    object objFieldValue = field.GetValue(objSource);
-
-                //    if (objFieldValue == null)
-                //    {
-                //        field.SetValue(objTarget, null);
-                //    }
-                //    else
-                //    {
-                //        field.SetValue(objTarget, CloneObject(objFieldValue));
-                //    }
-                //}
             }
 
             return objTarget;

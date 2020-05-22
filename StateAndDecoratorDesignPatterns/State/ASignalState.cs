@@ -23,7 +23,7 @@ namespace StateDesignPattern
             set { _signalValue = value; }
         }
 
-        public abstract string Factor { get;}
+        public abstract string Factor { get; }
 
         public abstract void SetSignalValue(double signalValue);
     }
