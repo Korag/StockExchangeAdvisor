@@ -4,6 +4,7 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <LangVersion>8.0</LangVersion>
+    <ServerGarbageCollection>true</ServerGarbageCollection>
   </PropertyGroup>
 
   <ItemGroup>
@@ -19,5 +20,5 @@
     <Folder Include="GeneratedSignals\" />
     <Folder Include="PrototypeObjects\" />
   </ItemGroup>
-
+  
 </Project>

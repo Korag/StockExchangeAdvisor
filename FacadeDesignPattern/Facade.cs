@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime;
 using TechnicalIndicators;
 using Utility;
 
@@ -27,6 +28,9 @@ namespace FacadeDesignPattern
 
         public Facade(IAlgorithmBuilder algorithmBuilder)
         {
+            //GCSettings.LatencyMode = GCLatencyMode.LowLatency;
+            //GC.TryStartNoGCRegion(4000000000);
+
             _algorithmBuilder = algorithmBuilder;
             _algorithmManufacter = new AlgorithmManufacturer();
 
@@ -54,6 +58,8 @@ namespace FacadeDesignPattern
             {
                 ProcessHandler.KillRabbitMQConsumersProcesses();
             }
+
+            //GC.EndNoGCRegion();
         }
 
         private void InitializeIndicatorsList()

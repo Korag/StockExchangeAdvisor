@@ -3,14 +3,15 @@ using TechnicalIndicators;
 using FacadeDesignPattern;
 using BuilderDesignPattern.AlgorithmBuilder;
 using UtilityAzure;
+using System.Diagnostics;
 
 namespace Signals
 {
     class Program
     {
         //public static string QUOTES_SAVE_PATH = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..\\..\\..\\..\\QuotesDownloader\\DownloadedQuotes\\"));
-        //public static IAlgorithmBuilder builder = new RabbitMQBuilder();
-        public static IAlgorithmBuilder builder = new WebServicesBuilder();
+        public static IAlgorithmBuilder builder = new RabbitMQBuilder();
+        //public static IAlgorithmBuilder builder = new WebServicesBuilder();
         //public static IAlgorithmBuilder builder = new ActorModelBuilder();
 
         static void Main(string[] args)
@@ -36,9 +37,14 @@ namespace Signals
             //AzureWebServiceHelper.StopVM();
 
             Facade facade = new Facade(builder);
+
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
             facade.CountSingleIndicatorForSingleCompanyQuotes(new TechnicalIndicatorEMA(), "zywiec");
             facade.Dispose();
+            sw.Stop();
 
+            Console.WriteLine("Execution time: " + sw.Elapsed);
             Console.ReadLine();
 
         }
