@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime;
+using System.Threading.Tasks;
 using TechnicalIndicators;
 using Utility;
 
@@ -23,6 +24,7 @@ namespace FacadeDesignPattern
 
         private Parameters _parameters { get; set; }
         private List<TechnicalIndicator> _indicators { get; set; }
+        private Object _padlock { get; set; }
 
         public string PathToUnpackedQuotesDirectory { get; set; }
 
@@ -36,6 +38,8 @@ namespace FacadeDesignPattern
 
             _algorithmManufacter.Construct(_algorithmBuilder);
             _calculateContext = _algorithmBuilder.StrategyContext;
+
+            _padlock = new object();
 
             _parameters = new Parameters
             {
@@ -89,14 +93,15 @@ namespace FacadeDesignPattern
             List<Signal> obtainedSignals = _calculateContext.ReceiveSignalsFromSingleCalculatedIndicator();
             List<SignalModelContext> obtainedSignalsWithQuotes = AutoMapperHelper.MapQuotesAndSignalsToSignalModelContext(companyQuotes, obtainedSignals);
 
-            //parallel
-            foreach (var singleQuotePartialSignals in obtainedSignalsWithQuotes)
+            //foreach (var singleQuotePartialSignals in obtainedSignalsWithQuotes)
+            Parallel.ForEach(obtainedSignalsWithQuotes, (singleQuotePartialSignals) =>
             {
                 ConcreteChainHandlerElement chain = new ConcreteChainHandlerElement();
 
                 ComputeFinalSignalModel finalSignalModel = new ComputeFinalSignalModel(singleQuotePartialSignals.PartialSignals);
                 singleQuotePartialSignals.SetSignalValue(chain.DetermineFinalSignal(finalSignalModel));
             }
+            );
 
             #region DecoratorTests
 
@@ -121,8 +126,8 @@ namespace FacadeDesignPattern
 
             #endregion
 
-            //parallel
-            foreach (var quoteWSignals in obtainedSignalsWithQuotes)
+            //foreach (var quoteWSignals in obtainedSignalsWithQuotes)
+            Parallel.ForEach(obtainedSignalsWithQuotes, (quoteWSignals) =>
             {
                 double fee = 0;
                 double finalPrice = 0;
@@ -161,41 +166,58 @@ namespace FacadeDesignPattern
                 quoteWSignals.AdditionalFee = formattedFee;
                 quoteWSignals.FinalPrice = formattedFinalPrice;
             }
+            );
 
             //Deep Clone using JsonSerialization
             List<SignalModelContext> clonedSignalContextByJsonSerializer = new List<SignalModelContext>();
 
-            //parallel
-            foreach (var signal in obtainedSignalsWithQuotes)
+            //foreach (var signal in obtainedSignalsWithQuotes)
+            Parallel.ForEach(obtainedSignalsWithQuotes, (signal) =>
             {
                 SignalModelContext singleClonedSignalContext = signal.Clone() as SignalModelContext;
-                clonedSignalContextByJsonSerializer.Add(singleClonedSignalContext);
+
+                lock (_padlock)
+                {
+                    clonedSignalContextByJsonSerializer.Add(singleClonedSignalContext);
+                }
             }
-            //orderBy Date
+            );
+            clonedSignalContextByJsonSerializer = clonedSignalContextByJsonSerializer.OrderBy(z => z.Date).ToList();
 
             //Deep Clone using BinarySerialization
-            obtainedSignalsWithQuotes.ForEach(z => z.JsonSerialization = false);
+            //obtainedSignalsWithQuotes.ForEach(z => z.JsonSerialization = false);
+            obtainedSignalsWithQuotes.AsParallel().ForAll(z => z.JsonSerialization = false);
 
             List<SignalModelContext> clonedSignalContextByBinarySerializer = new List<SignalModelContext>();
 
-            //parallel
-            foreach (var signal in obtainedSignalsWithQuotes)
+            //foreach (var signal in obtainedSignalsWithQuotes)
+            Parallel.ForEach(obtainedSignalsWithQuotes, (signal) =>
             {
                 SignalModelContext singleClonedSignalContext = signal.Clone() as SignalModelContext;
-                clonedSignalContextByBinarySerializer.Add(singleClonedSignalContext);
+
+                lock (_padlock)
+                {
+                    clonedSignalContextByBinarySerializer.Add(singleClonedSignalContext);
+                }
             }
-            //orderBy Date
+            );
+            clonedSignalContextByBinarySerializer = clonedSignalContextByBinarySerializer.OrderBy(z => z.Date).ToList();
 
             //Deep Clone using Reflection
             List<SignalModelContext> clonedSignalContextByReflection = new List<SignalModelContext>();
 
-            //parallel
-            foreach (var signal in obtainedSignalsWithQuotes)
+            //foreach (var signal in obtainedSignalsWithQuotes)
+            Parallel.ForEach(obtainedSignalsWithQuotes, (signal) =>
             {
                 SignalModelContext singleClonedSignalContext = ReflectionDeepCopy.CloneObject(signal) as SignalModelContext;
-                clonedSignalContextByReflection.Add(singleClonedSignalContext);
+
+                lock (_padlock)
+                {
+                    clonedSignalContextByReflection.Add(singleClonedSignalContext);
+                }
             }
-            //orderBy Date
+            );
+            clonedSignalContextByReflection = clonedSignalContextByReflection.OrderBy(z => z.Date).ToList();
 
             //Saving JsonFile to PrototypeObjects directory
             string jsonString = JsonSerializer.ConvertCollectionOfObjectsToJsonString<SignalModelContext>(obtainedSignalsWithQuotes);
@@ -218,17 +240,42 @@ namespace FacadeDesignPattern
         {
             List<string> namesOfCompanies = FileHelper.GetFileNames(PathToUnpackedQuotesDirectory);
 
-            foreach (var companyName in namesOfCompanies)
+            List<List<Quote>> companiesQuotes = new List<List<Quote>>();
+
+            Parallel.ForEach(namesOfCompanies, (companyName) =>
             {
                 var companyQuotes = Utility.CsvHelper.ReadSingleCsvFileWithQuotes(companyName);
+
+                lock (_padlock)
+                {
+                    companiesQuotes.Add(companyQuotes);
+                }
+            });
+
+            int iterationNumber = 0;
+
+            // foreach (var companyName in namesOfCompanies)
+            foreach (var companyQuotes in companiesQuotes)
+            {
+                string nameOfCompany = namesOfCompanies[iterationNumber];
+                //var companyQuotes = Utility.CsvHelper.ReadSingleCsvFileWithQuotes(companyName);
 
                 _calculateContext.CalculateSingleIndicator(companyQuotes, _parameters, technicalIndicator);
                 List<Signal> obtainedSignals = _calculateContext.ReceiveSignalsFromSingleCalculatedIndicator();
                 List<SignalModelContext> obtainedSignalsWithQuotes = AutoMapperHelper.MapQuotesAndSignalsToSignalModelContext(companyQuotes, obtainedSignals);
 
-                //1. chain of responsibility
+                //foreach (var singleQuotePartialSignals in obtainedSignalsWithQuotes)
+                Parallel.ForEach(obtainedSignalsWithQuotes, (singleQuotePartialSignals) =>
+                {
+                    ConcreteChainHandlerElement chain = new ConcreteChainHandlerElement();
 
-                foreach (var quoteWSignals in obtainedSignalsWithQuotes)
+                    ComputeFinalSignalModel finalSignalModel = new ComputeFinalSignalModel(singleQuotePartialSignals.PartialSignals);
+                    singleQuotePartialSignals.SetSignalValue(chain.DetermineFinalSignal(finalSignalModel));
+                }
+                );
+
+                //foreach (var quoteWSignals in obtainedSignalsWithQuotes)
+                Parallel.ForEach(obtainedSignalsWithQuotes, (quoteWSignals) =>
                 {
                     double fee = 0;
                     double finalPrice = 0;
@@ -258,12 +305,85 @@ namespace FacadeDesignPattern
                     //finalPrice = decorator.CalculateCost();
                     //fee += decorator.CalculateAdditionalFee();
 
-                    quoteWSignals.AdditionalFee = fee;
-                    quoteWSignals.FinalPrice = finalPrice;
-                }
+                    double formattedFee;
+                    double formattedFinalPrice;
 
-                //2. deep clone and save to json
-                //3. save to file
+                    double.TryParse(String.Format("{0:0.##}", fee), out formattedFee);
+                    double.TryParse(String.Format("{0:0.##}", finalPrice), out formattedFinalPrice);
+
+                    quoteWSignals.AdditionalFee = formattedFee;
+                    quoteWSignals.FinalPrice = formattedFinalPrice;
+                }
+                );
+
+                //Deep Clone using JsonSerialization
+                List<SignalModelContext> clonedSignalContextByJsonSerializer = new List<SignalModelContext>();
+
+                //foreach (var signal in obtainedSignalsWithQuotes)
+                Parallel.ForEach(obtainedSignalsWithQuotes, (signal) =>
+                {
+                    SignalModelContext singleClonedSignalContext = signal.Clone() as SignalModelContext;
+
+                    lock (_padlock)
+                    {
+                        clonedSignalContextByJsonSerializer.Add(singleClonedSignalContext);
+                    }
+                }
+                );
+                clonedSignalContextByJsonSerializer = clonedSignalContextByJsonSerializer.OrderBy(z => z.Date).ToList();
+
+                //Deep Clone using BinarySerialization
+                //obtainedSignalsWithQuotes.ForEach(z => z.JsonSerialization = false);
+                obtainedSignalsWithQuotes.AsParallel().ForAll(z => z.JsonSerialization = false);
+
+                List<SignalModelContext> clonedSignalContextByBinarySerializer = new List<SignalModelContext>();
+
+                //foreach (var signal in obtainedSignalsWithQuotes)
+                Parallel.ForEach(obtainedSignalsWithQuotes, (signal) =>
+                {
+                    SignalModelContext singleClonedSignalContext = signal.Clone() as SignalModelContext;
+
+                    lock (_padlock)
+                    {
+                        clonedSignalContextByBinarySerializer.Add(singleClonedSignalContext);
+                    }
+                }
+                );
+                clonedSignalContextByBinarySerializer = clonedSignalContextByBinarySerializer.OrderBy(z => z.Date).ToList();
+
+                //Deep Clone using Reflection
+                List<SignalModelContext> clonedSignalContextByReflection = new List<SignalModelContext>();
+
+                //foreach (var signal in obtainedSignalsWithQuotes)
+                Parallel.ForEach(obtainedSignalsWithQuotes, (signal) =>
+                {
+                    SignalModelContext singleClonedSignalContext = ReflectionDeepCopy.CloneObject(signal) as SignalModelContext;
+
+                    lock (_padlock)
+                    {
+                        clonedSignalContextByReflection.Add(singleClonedSignalContext);
+                    }
+                }
+                );
+                clonedSignalContextByReflection = clonedSignalContextByReflection.OrderBy(z => z.Date).ToList();
+
+                //Saving JsonFile to PrototypeObjects directory
+                string jsonString = JsonSerializer.ConvertCollectionOfObjectsToJsonString<SignalModelContext>(obtainedSignalsWithQuotes);
+                DateTime currentDateTime = DateTime.Now;
+                string dateTimeFormat = "ddMMyyyy-HHmm";
+                string fileName = nameOfCompany + "_" + currentDateTime.ToString(dateTimeFormat) + "-" +
+                                    Convert.ToString((int)currentDateTime.Subtract(new DateTime(1970, 1, 1)).TotalSeconds) + "_prototypeObject";
+
+                FileHelper.SaveJsonFile(Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, $"..\\..\\..\\..\\StockExchangeAdvisor\\PrototypeObjects\\{fileName}.json")), jsonString);
+
+                //Saving CsvFile to GeneratedSignals directory
+                currentDateTime = DateTime.Now;
+                fileName = nameOfCompany + "_" + currentDateTime.ToString(dateTimeFormat) + "-" +
+                                    Convert.ToString((int)currentDateTime.Subtract(new DateTime(1970, 1, 1)).TotalSeconds) + "_generatedSignals";
+
+                Utility.CsvHelper.SaveCompanySignalsToCsvFile(Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, $"..\\..\\..\\..\\StockExchangeAdvisor\\GeneratedSignals\\{fileName}.csv")), obtainedSignalsWithQuotes);
+               
+                iterationNumber++;
             }
         }
 
@@ -279,9 +399,18 @@ namespace FacadeDesignPattern
             List<List<Signal>> obtainedSignals = _calculateContext.ReceiveSignalsFromCalculatedIndicators(_indicators.Count());
             List<SignalModelContext> obtainedSignalsWithQuotes = AutoMapperHelper.MapQuotesAndSignalsToSignalModelContext(companyQuotes, obtainedSignals);
 
-            //1. chain of responsibility and count FinalSignal
+            //foreach (var singleQuotePartialSignals in obtainedSignalsWithQuotes)
+            Parallel.ForEach(obtainedSignalsWithQuotes, (singleQuotePartialSignals) =>
+            {
+                ConcreteChainHandlerElement chain = new ConcreteChainHandlerElement();
 
-            foreach (var quoteWSignals in obtainedSignalsWithQuotes)
+                ComputeFinalSignalModel finalSignalModel = new ComputeFinalSignalModel(singleQuotePartialSignals.PartialSignals);
+                singleQuotePartialSignals.SetSignalValue(chain.DetermineFinalSignal(finalSignalModel));
+            }
+            );
+
+            //foreach (var quoteWSignals in obtainedSignalsWithQuotes)
+            Parallel.ForEach(obtainedSignalsWithQuotes, (quoteWSignals) =>
             {
                 double fee = 0;
                 double finalPrice = 0;
@@ -311,21 +440,109 @@ namespace FacadeDesignPattern
                 //finalPrice = decorator.CalculateCost();
                 //fee += decorator.CalculateAdditionalFee();
 
-                quoteWSignals.AdditionalFee = fee;
-                quoteWSignals.FinalPrice = finalPrice;
-            }
+                double formattedFee;
+                double formattedFinalPrice;
 
-            //2. deep clone and save to json
-            //3. save to file
+                double.TryParse(String.Format("{0:0.##}", fee), out formattedFee);
+                double.TryParse(String.Format("{0:0.##}", finalPrice), out formattedFinalPrice);
+
+                quoteWSignals.AdditionalFee = formattedFee;
+                quoteWSignals.FinalPrice = formattedFinalPrice;
+            }
+            );
+
+            //Deep Clone using JsonSerialization
+            List<SignalModelContext> clonedSignalContextByJsonSerializer = new List<SignalModelContext>();
+
+            //foreach (var signal in obtainedSignalsWithQuotes)
+            Parallel.ForEach(obtainedSignalsWithQuotes, (signal) =>
+            {
+                SignalModelContext singleClonedSignalContext = signal.Clone() as SignalModelContext;
+
+                lock (_padlock)
+                {
+                    clonedSignalContextByJsonSerializer.Add(singleClonedSignalContext);
+                }
+            }
+            );
+            clonedSignalContextByJsonSerializer = clonedSignalContextByJsonSerializer.OrderBy(z => z.Date).ToList();
+
+            //Deep Clone using BinarySerialization
+            //obtainedSignalsWithQuotes.ForEach(z => z.JsonSerialization = false);
+            obtainedSignalsWithQuotes.AsParallel().ForAll(z => z.JsonSerialization = false);
+
+            List<SignalModelContext> clonedSignalContextByBinarySerializer = new List<SignalModelContext>();
+
+            //foreach (var signal in obtainedSignalsWithQuotes)
+            Parallel.ForEach(obtainedSignalsWithQuotes, (signal) =>
+            {
+                SignalModelContext singleClonedSignalContext = signal.Clone() as SignalModelContext;
+
+                lock (_padlock)
+                {
+                    clonedSignalContextByBinarySerializer.Add(singleClonedSignalContext);
+                }
+            }
+            );
+            clonedSignalContextByBinarySerializer = clonedSignalContextByBinarySerializer.OrderBy(z => z.Date).ToList();
+
+            //Deep Clone using Reflection
+            List<SignalModelContext> clonedSignalContextByReflection = new List<SignalModelContext>();
+
+            //foreach (var signal in obtainedSignalsWithQuotes)
+            Parallel.ForEach(obtainedSignalsWithQuotes, (signal) =>
+            {
+                SignalModelContext singleClonedSignalContext = ReflectionDeepCopy.CloneObject(signal) as SignalModelContext;
+
+                lock (_padlock)
+                {
+                    clonedSignalContextByReflection.Add(singleClonedSignalContext);
+                }
+            }
+            );
+            clonedSignalContextByReflection = clonedSignalContextByReflection.OrderBy(z => z.Date).ToList();
+
+            //Saving JsonFile to PrototypeObjects directory
+            string jsonString = JsonSerializer.ConvertCollectionOfObjectsToJsonString<SignalModelContext>(obtainedSignalsWithQuotes);
+            DateTime currentDateTime = DateTime.Now;
+            string dateTimeFormat = "ddMMyyyy-HHmm";
+            string fileName = nameOfCompany + "_" + currentDateTime.ToString(dateTimeFormat) + "-" +
+                                Convert.ToString((int)currentDateTime.Subtract(new DateTime(1970, 1, 1)).TotalSeconds) + "_prototypeObject";
+
+            FileHelper.SaveJsonFile(Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, $"..\\..\\..\\..\\StockExchangeAdvisor\\PrototypeObjects\\{fileName}.json")), jsonString);
+
+            //Saving CsvFile to GeneratedSignals directory
+            currentDateTime = DateTime.Now;
+            fileName = nameOfCompany + "_" + currentDateTime.ToString(dateTimeFormat) + "-" +
+                                Convert.ToString((int)currentDateTime.Subtract(new DateTime(1970, 1, 1)).TotalSeconds) + "_generatedSignals";
+
+            Utility.CsvHelper.SaveCompanySignalsToCsvFile(Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, $"..\\..\\..\\..\\StockExchangeAdvisor\\GeneratedSignals\\{fileName}.csv")), obtainedSignalsWithQuotes);
+
         }
 
         public void CountIndicatorsSetForAllCompaniesQuotes()
         {
             List<string> namesOfCompanies = FileHelper.GetFileNames(PathToUnpackedQuotesDirectory);
 
-            foreach (var companyName in namesOfCompanies)
+            List<List<Quote>> companiesQuotes = new List<List<Quote>>();
+
+            Parallel.ForEach(namesOfCompanies, (companyName) =>
             {
                 var companyQuotes = Utility.CsvHelper.ReadSingleCsvFileWithQuotes(companyName);
+
+                lock (_padlock)
+                {
+                    companiesQuotes.Add(companyQuotes);
+                }
+            });
+
+            int iterationNumber = 0;
+
+            // foreach (var companyName in namesOfCompanies)
+            foreach (var companyQuotes in companiesQuotes)
+            {
+                string nameOfCompany = namesOfCompanies[iterationNumber];
+                //var companyQuotes = Utility.CsvHelper.ReadSingleCsvFileWithQuotes(companyName);
 
                 foreach (var indicator in _indicators)
                 {
@@ -335,9 +552,18 @@ namespace FacadeDesignPattern
                 List<List<Signal>> obtainedSignals = _calculateContext.ReceiveSignalsFromCalculatedIndicators(_indicators.Count());
                 List<SignalModelContext> obtainedSignalsWithQuotes = AutoMapperHelper.MapQuotesAndSignalsToSignalModelContext(companyQuotes, obtainedSignals);
 
-                //1. chain of responsibility and count FinalSignal
+                //foreach (var singleQuotePartialSignals in obtainedSignalsWithQuotes)
+                Parallel.ForEach(obtainedSignalsWithQuotes, (singleQuotePartialSignals) =>
+                {
+                    ConcreteChainHandlerElement chain = new ConcreteChainHandlerElement();
 
-                foreach (var quoteWSignals in obtainedSignalsWithQuotes)
+                    ComputeFinalSignalModel finalSignalModel = new ComputeFinalSignalModel(singleQuotePartialSignals.PartialSignals);
+                    singleQuotePartialSignals.SetSignalValue(chain.DetermineFinalSignal(finalSignalModel));
+                }
+                );
+
+                //foreach (var quoteWSignals in obtainedSignalsWithQuotes)
+                Parallel.ForEach(obtainedSignalsWithQuotes, (quoteWSignals) =>
                 {
                     double fee = 0;
                     double finalPrice = 0;
@@ -367,13 +593,85 @@ namespace FacadeDesignPattern
                     //finalPrice = decorator.CalculateCost();
                     //fee += decorator.CalculateAdditionalFee();
 
-                    quoteWSignals.AdditionalFee = fee;
-                    quoteWSignals.FinalPrice = finalPrice;
+                    double formattedFee;
+                    double formattedFinalPrice;
+
+                    double.TryParse(String.Format("{0:0.##}", fee), out formattedFee);
+                    double.TryParse(String.Format("{0:0.##}", finalPrice), out formattedFinalPrice);
+
+                    quoteWSignals.AdditionalFee = formattedFee;
+                    quoteWSignals.FinalPrice = formattedFinalPrice;
                 }
+                );
 
-                //2. deep clone and save to json
+                //Deep Clone using JsonSerialization
+                List<SignalModelContext> clonedSignalContextByJsonSerializer = new List<SignalModelContext>();
 
-                //3. save to file
+                //foreach (var signal in obtainedSignalsWithQuotes)
+                Parallel.ForEach(obtainedSignalsWithQuotes, (signal) =>
+                {
+                    SignalModelContext singleClonedSignalContext = signal.Clone() as SignalModelContext;
+
+                    lock (_padlock)
+                    {
+                        clonedSignalContextByJsonSerializer.Add(singleClonedSignalContext);
+                    }
+                }
+                );
+                clonedSignalContextByJsonSerializer = clonedSignalContextByJsonSerializer.OrderBy(z => z.Date).ToList();
+
+                //Deep Clone using BinarySerialization
+                //obtainedSignalsWithQuotes.ForEach(z => z.JsonSerialization = false);
+                obtainedSignalsWithQuotes.AsParallel().ForAll(z => z.JsonSerialization = false);
+
+                List<SignalModelContext> clonedSignalContextByBinarySerializer = new List<SignalModelContext>();
+
+                //foreach (var signal in obtainedSignalsWithQuotes)
+                Parallel.ForEach(obtainedSignalsWithQuotes, (signal) =>
+                {
+                    SignalModelContext singleClonedSignalContext = signal.Clone() as SignalModelContext;
+
+                    lock (_padlock)
+                    {
+                        clonedSignalContextByBinarySerializer.Add(singleClonedSignalContext);
+                    }
+                }
+                );
+                clonedSignalContextByBinarySerializer = clonedSignalContextByBinarySerializer.OrderBy(z => z.Date).ToList();
+
+                //Deep Clone using Reflection
+                List<SignalModelContext> clonedSignalContextByReflection = new List<SignalModelContext>();
+
+                //foreach (var signal in obtainedSignalsWithQuotes)
+                Parallel.ForEach(obtainedSignalsWithQuotes, (signal) =>
+                {
+                    SignalModelContext singleClonedSignalContext = ReflectionDeepCopy.CloneObject(signal) as SignalModelContext;
+
+                    lock (_padlock)
+                    {
+                        clonedSignalContextByReflection.Add(singleClonedSignalContext);
+                    }
+                }
+                );
+                clonedSignalContextByReflection = clonedSignalContextByReflection.OrderBy(z => z.Date).ToList();
+
+                //Saving JsonFile to PrototypeObjects directory
+                string jsonString = JsonSerializer.ConvertCollectionOfObjectsToJsonString<SignalModelContext>(obtainedSignalsWithQuotes);
+                DateTime currentDateTime = DateTime.Now;
+                string dateTimeFormat = "ddMMyyyy-HHmm";
+                string fileName = nameOfCompany + "_" + currentDateTime.ToString(dateTimeFormat) + "-" +
+                                    Convert.ToString((int)currentDateTime.Subtract(new DateTime(1970, 1, 1)).TotalSeconds) + "_prototypeObject";
+
+                FileHelper.SaveJsonFile(Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, $"..\\..\\..\\..\\StockExchangeAdvisor\\PrototypeObjects\\{fileName}.json")), jsonString);
+
+                //Saving CsvFile to GeneratedSignals directory
+                currentDateTime = DateTime.Now;
+                fileName = nameOfCompany + "_" + currentDateTime.ToString(dateTimeFormat) + "-" +
+                                    Convert.ToString((int)currentDateTime.Subtract(new DateTime(1970, 1, 1)).TotalSeconds) + "_generatedSignals";
+
+                Utility.CsvHelper.SaveCompanySignalsToCsvFile(Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, $"..\\..\\..\\..\\StockExchangeAdvisor\\GeneratedSignals\\{fileName}.csv")), obtainedSignalsWithQuotes);
+
+                iterationNumber++;
             }
         }
     }
