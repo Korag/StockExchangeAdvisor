@@ -54,7 +54,7 @@ namespace WebServiceAPI
                 c.DefaultModelsExpandDepth(-1);
             });
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
 
             app.UseRouting();
 

@@ -1,8 +1,11 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Formatting;
+using System.Net.Security;
+using System.Security.Cryptography.X509Certificates;
 using Utility;
 using WebServicesModels;
 
@@ -11,12 +14,22 @@ namespace WebService
     public class WebServiceCalculateIndicator : IWebServiceCalculateIndicator
     {
         private HttpClient _client { get; set; }
-        //private string _serverIpAddress = "40.115.121.134";
-        private string _serverIpAddress = "https://localhost:44361";
-        
+        private string _serverIpAddress = "http://40.115.121.134";
+        //private string _serverIpAddress = "https://localhost:44361";
+        //private string _serverIpAddress = "http://localhost:5000";
+
         public WebServiceCalculateIndicator()
         {
             _client = new HttpClient();
+
+            //Accept all server certificate
+            ServicePointManager.ServerCertificateValidationCallback =
+                delegate (object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
+                {
+                    return true;
+                };
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
+
             _client.BaseAddress = new Uri(_serverIpAddress);
             _client.DefaultRequestHeaders.Accept.Clear();
             _client.DefaultRequestHeaders.Accept.Add(new
@@ -26,7 +39,6 @@ namespace WebService
         public int CalculateTechnicalIndicator(IndicatorCalculationElementsWIndicatorType data)
         {
             string jsonString = Utility.JsonSerializer.ConvertObjectToJsonString<IndicatorCalculationElementsWIndicatorType>(data);
-            //problem z apką na serwerze
 
             int idOfCalculation = 0;
 

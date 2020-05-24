@@ -15,7 +15,11 @@ namespace WebServiceAPI.Controllers
 
         public TechnicalIndicatorsController()
         {
-            GeneratedSignalsURL = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..\\..\\..\\..\\WebServiceAPI\\GeneratedSignals\\"));
+            //Local URL
+            //GeneratedSignalsURL = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..\\..\\..\\..\\WebServiceAPI\\GeneratedSignals\\"));
+            
+            //Azure URL
+            GeneratedSignalsURL = "/var/www/html/StockExchangeAdvisorAPI/GeneratedSignals/";
         }
 
         [Route("api/Hello")]
@@ -30,6 +34,13 @@ namespace WebServiceAPI.Controllers
         public IActionResult GetAmountOfGeneratedSignalsFiles()
         {
             return StatusCode(200, FileHelper.CountFilesInDirectory(GeneratedSignalsURL));
+        }
+
+        [Route("api/GetSignalsURL")]
+        [HttpGet]
+        public IActionResult GetSignalsURL()
+        {
+            return StatusCode(200, GeneratedSignalsURL);
         }
 
         [Route("api/CalculateTechnicalIndicator")]
@@ -50,7 +61,7 @@ namespace WebServiceAPI.Controllers
             }
             catch (Exception e)
             {
-                return StatusCode(500);
+                return StatusCode(500, e);
             }
         }
 
