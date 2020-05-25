@@ -1,6 +1,7 @@
 ﻿using Models;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 
 namespace TechnicalIndicators
 {
@@ -18,11 +19,11 @@ namespace TechnicalIndicators
             double[] averageArray = new double[quote.Count];
             for (int w = 0; w < quote.Count; w++)
             {
-                DateList[w] = DateTime.Parse(quote[w].Date);
+                DateList[w] = DateTime.ParseExact(quote[w].Date, "yyyyMMdd", CultureInfo.InvariantCulture);
             }
             for (int i = 0; i < quote.Count; i++)
             {
-                DateTime getDate = DateTime.Parse(quote[i].Date);
+                DateTime getDate = DateTime.ParseExact(quote[i].Date, "yyyyMMdd", CultureInfo.InvariantCulture);
                 DateTime getStartPeriod = getDate.AddDays(-parameters.Period);
                 DateTime getEndPeriod = getDate.AddDays(parameters.Period);
                 double sumForGivenIteration = 0;
