@@ -33,8 +33,12 @@ namespace Signals
             //List<Signal> obtainedSignals = calculateIndicator.ReceiveSignalsFromSingleCalculatedIndicator();
             #endregion
 
-            AzureWebServiceHelper.StartVM().Wait(-1);
+            //AzureWebServiceHelper.StartVM().Wait(-1);
             //AzureWebServiceHelper.StopVM();
+
+            AzureWebServiceHelper2 aws = new AzureWebServiceHelper2();
+            aws.StartVM();
+
 
             Facade facade = new Facade(builder);
 

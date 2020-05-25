@@ -4,6 +4,8 @@ using System.Management.Automation;
 using System.Threading.Tasks;
 using Utility;
 using System.IO;
+using System.Diagnostics;
+using System.Management.Automation.Runspaces;
 
 namespace UtilityAzure
 {
@@ -22,23 +24,42 @@ namespace UtilityAzure
             // create a new hosted PowerShell instance using the default runspace.
             // wrap in a using statement to ensure resources are cleaned up.
 
-            using (PowerShell ps = PowerShell.Create())
-            {
-                // specify the script code to run.
-                ps.AddScript(scriptContents);
+            // var process = new Process {
+            // StartInfo = new ProcessStartInfo(@"C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe", scriptContents)
+            // {
+            //     WorkingDirectory = Environment.CurrentDirectory,
+            //     RedirectStandardOutput = true,
+            //     CreateNoWindow = false,
+            // }};
+            //process.Start();
 
-                // specify the parameters to pass into the script.
-                ps.AddParameters(scriptParameters);
+            InitialSessionState initial = InitialSessionState.CreateDefault();
+            initial.ImportPSModule(new string[] { @"C:\Program Files\WindowsPowerShell\Modules\AzureRM\5.7.0\AzureRM.psd1" });
+            Runspace runspace = RunspaceFactory.CreateRunspace(initial);
+            runspace.Open();
+            PowerShell ps = PowerShell.Create();
+            ps.Runspace = runspace;
+            ps.AddScript(scriptContents);
+            var azureVMList = ps.Invoke();
 
-                // execute the script and await the result.
-                var pipelineObjects = await ps.InvokeAsync().ConfigureAwait(false);           
 
-                // print the resulting pipeline objects to the console.
-                foreach (var item in pipelineObjects)
-                {
-                    Console.WriteLine(item.BaseObject.ToString());
-                }
-            }
+            //using (PowerShell ps = PowerShell.Create())
+            //{
+            //    // specify the script code to run.
+            //    ps.AddScript(scriptContents);
+
+            //    // specify the parameters to pass into the script.
+            //    ps.AddParameters(scriptParameters);
+
+            //    // execute the script and await the result.
+            //    var pipelineObjects = await ps.InvokeAsync().ConfigureAwait(false);           
+
+            //    // print the resulting pipeline objects to the console.
+            //    foreach (var item in pipelineObjects)
+            //    {
+            //        Console.WriteLine(item.BaseObject.ToString());
+            //    }
+            //}
         }
 
         public static async Task StartVM()
