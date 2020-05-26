@@ -11,14 +11,14 @@ namespace UtilityAzure
 {
     public class AzureWebServiceHelper2
     {
-        public static string StartVMScriptPath = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..\\..\\..\\..\\UtilityAzure\\PowerShellScripts\\startVM.ps1"));
-        public static string StopVMScriptPath = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..\\..\\..\\..\\UtilityAzure\\PowerShellScripts\\stopVM.ps1"));
+        public static string StartVMScriptPath = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..\\..\\..\\..\\UtilityAzure\\PowerShellScripts\\startVM_az.ps1"));
+        public static string StopVMScriptPath = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..\\..\\..\\..\\UtilityAzure\\PowerShellScripts\\stopVM_az.ps1"));
         public static HostedRunspace hr;
 
         public AzureWebServiceHelper2()
         {
             hr = new HostedRunspace();
-            hr.InitializeRunspaces(1, 5, new string[2] { @"C:\Program Files\WindowsPowerShell\Modules\AzureRM\5.7.0\AzureRM.psd1", @"C:\Program Files\WindowsPowerShell\Modules\AzureRM\5.7.0\AzureRM.psm1" });
+            hr.InitializeRunspaces(1, 5, new string[0] {});
         }
 
         public void StartVM()

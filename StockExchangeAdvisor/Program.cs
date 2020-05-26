@@ -54,9 +54,9 @@ namespace Signals
             facade.Dispose();
             sw.Stop();
 
+            aws.StopVM();
             Console.WriteLine("Execution time: " + sw.Elapsed);
             Console.ReadLine();
-
         }
     }
 }
