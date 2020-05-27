@@ -2,6 +2,11 @@
 {
     public class TaxDecorator : Decorator
     {
+        public TaxDecorator()
+        {
+
+        }
+
         public TaxDecorator(DecoratorComponent baseComponent) : base(baseComponent)
         {
            

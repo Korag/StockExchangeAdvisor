@@ -2,6 +2,11 @@
 {
     public class ConversionFromPLNtoEURDecorator : Decorator
     {
+        public ConversionFromPLNtoEURDecorator() : base()
+        {
+
+        }
+
         public ConversionFromPLNtoEURDecorator(DecoratorComponent baseComponent) : base(baseComponent)
         {
             

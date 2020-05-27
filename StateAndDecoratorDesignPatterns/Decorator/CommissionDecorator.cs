@@ -2,6 +2,11 @@
 {
     public class CommissionDecorator : Decorator
     {
+        public CommissionDecorator() : base()
+        {
+
+        }
+
         public CommissionDecorator(DecoratorComponent baseComponent) : base(baseComponent)
         {
 

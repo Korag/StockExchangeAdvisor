@@ -47,7 +47,7 @@ namespace WebService
                 HttpContent payload = new StringContent(jsonString, System.Text.Encoding.UTF8, "application/json");
                 HttpResponseMessage response = _client.PostAsync("api/CalculateTechnicalIndicator", payload).Result;
 
-                if (response.StatusCode == System.Net.HttpStatusCode.Created)
+                if (response.StatusCode == HttpStatusCode.Created)
                 {
                     idOfCalculation = Utility.JsonSerializer.JsonStringToObjectType<int>(response.Content.ReadAsStringAsync().Result);
                 }

@@ -1,15 +1,11 @@
 ﻿using BuilderDesignPattern.AlgorithmBuilder;
-using ChainOfResponsibilityDesignPattern;
-using DecoratorDesignPattern;
 using Models;
-using PrototypeDesignPattern;
 using StateAndDecoratorDesignPattern;
 using StrategyDesignPattern;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
+using System.Runtime;
 using TechnicalIndicators;
 using Utility;
 
@@ -18,7 +14,6 @@ namespace FacadeDesignPattern
     public class CoreFacade
     {
         //todo: URL
-        //todo: facade to property
 
         private AlgorithmManufacturer _algorithmManufacter { get; set; }
         private IAlgorithmBuilder _algorithmBuilder { get; set; }
@@ -27,12 +22,20 @@ namespace FacadeDesignPattern
         private Parameters _parameters { get; set; }
         private List<TechnicalIndicator> _indicators { get; set; }
 
+        private bool _gcLowLatency { get; set; }
+        private bool _noGCRegion { get; set; }
+
         public string PathToUnpackedQuotesDirectory { get; set; } // todo
 
-        public CoreFacade(IAlgorithmBuilder algorithmBuilder)
+        public CoreFacade(IAlgorithmBuilder algorithmBuilder, bool gcLowLatency = false, bool noGCRegion = false)
         {
-            //GCSettings.LatencyMode = GCLatencyMode.LowLatency;
-            //GC.TryStartNoGCRegion(4000000000);
+            _gcLowLatency = gcLowLatency;
+            _noGCRegion = noGCRegion;
+
+            if (_gcLowLatency == true)
+                GCSettings.LatencyMode = GCLatencyMode.LowLatency;
+            if (_noGCRegion == true)
+                GC.TryStartNoGCRegion(4000000000);
 
             _algorithmBuilder = algorithmBuilder;
             _algorithmManufacter = new AlgorithmManufacturer();
@@ -44,7 +47,10 @@ namespace FacadeDesignPattern
             {
                 CalculatedIndicatorFirstDaysInterval = 10,
                 CalculatedIndicatorSecondDaysInterval = 5,
-                Period = 10
+                Period = 10,
+                BuyTrigger = 50,
+                SellTrigger = 10,
+                NQuotesBackwards = 3
             };
 
             ProcessHandler.RunQuotesDownloaderProcess();
@@ -62,7 +68,8 @@ namespace FacadeDesignPattern
                 ProcessHandler.KillRabbitMQConsumersProcesses();
             }
 
-            //GC.EndNoGCRegion();
+            if (_noGCRegion == true)
+                GC.EndNoGCRegion();
         }
 
         private void InitializeIndicatorsList()
@@ -120,49 +127,58 @@ namespace FacadeDesignPattern
 
             //obtainedSignalsWithQuotes[0].FinalPrice = abc.CalculateCost();
 
+            ////foreach (var quoteWSignals in obtainedSignalsWithQuotes)
+            //Parallel.ForEach(obtainedSignalsWithQuotes, (quoteWSignals) =>
+            //{
+            //    double fee = 0;
+            //    double finalPrice = 0;
+
+            //    DecoratorComponent decorator = new DecoratorConcreteComponent();
+            //    decorator = AutoMapperHelper.MapQuotesAndSignalsToDecoratorObject(quoteWSignals);
+
+            //    finalPrice = decorator.CalculateCost();
+
+            //    //Dekorator prowizji
+            //    decorator = new CommissionDecorator(decorator);
+            //    finalPrice = decorator.CalculateCost();
+            //    fee += decorator.CalculateAdditionalFee();
+
+            //    //Dekorator podatku
+            //    decorator = new TaxDecorator(decorator);
+            //    finalPrice = decorator.CalculateCost();
+            //    fee += decorator.CalculateAdditionalFee();
+
+            //    //Dekorator konwersji PLN to USD
+            //    //decorator = new ConversionFromPLNtoUSDDecorator(decorator);
+            //    //finalPrice = decorator.CalculateCost();
+            //    //fee += decorator.CalculateAdditionalFee();
+
+            //    //Dekorator konwersji PLN to EUR
+            //    //decorator = new ConversionFromPLNtoEURDecorator(decorator);
+            //    //finalPrice = decorator.CalculateCost();
+            //    //fee += decorator.CalculateAdditionalFee();
+
+            //    double formattedFee;
+            //    double formattedFinalPrice;
+
+            //    double.TryParse(String.Format("{0:0.##}", fee), out formattedFee);
+            //    double.TryParse(String.Format("{0:0.##}", finalPrice), out formattedFinalPrice);
+
+            //    quoteWSignals.AdditionalFee = formattedFee;
+            //    quoteWSignals.FinalPrice = formattedFinalPrice;
+            //}
+            //);
+
             #endregion
 
-            //foreach (var quoteWSignals in obtainedSignalsWithQuotes)
-            Parallel.ForEach(obtainedSignalsWithQuotes, (quoteWSignals) =>
-            {
-                double fee = 0;
-                double finalPrice = 0;
+            #region Decorator
 
-                DecoratorComponent decorator = new DecoratorConcreteComponent();
-                decorator = AutoMapperHelper.MapQuotesAndSignalsToDecoratorObject(quoteWSignals);
+            DecoratorFacade decorator = new DecoratorFacade();
 
-                finalPrice = decorator.CalculateCost();
+            decorator.CalculateAdditionalFeeAndFinalPrice(ref obtainedSignalsWithQuotes);
+            //decorator2.CalculateAdditionalFeeAndFinalPrice(ref obtainedSignalsWithQuotes, new List<DecoratorComponent> { new CommissionDecorator(), new TaxDecorator() });
 
-                //Dekorator prowizji
-                decorator = new CommissionDecorator(decorator);
-                finalPrice = decorator.CalculateCost();
-                fee += decorator.CalculateAdditionalFee();
-
-                //Dekorator podatku
-                decorator = new TaxDecorator(decorator);
-                finalPrice = decorator.CalculateCost();
-                fee += decorator.CalculateAdditionalFee();
-
-                //Dekorator konwersji PLN to USD
-                //decorator = new ConversionFromPLNtoUSDDecorator(decorator);
-                //finalPrice = decorator.CalculateCost();
-                //fee += decorator.CalculateAdditionalFee();
-
-                //Dekorator konwersji PLN to EUR
-                //decorator = new ConversionFromPLNtoEURDecorator(decorator);
-                //finalPrice = decorator.CalculateCost();
-                //fee += decorator.CalculateAdditionalFee();
-
-                double formattedFee;
-                double formattedFinalPrice;
-
-                double.TryParse(String.Format("{0:0.##}", fee), out formattedFee);
-                double.TryParse(String.Format("{0:0.##}", finalPrice), out formattedFinalPrice);
-
-                quoteWSignals.AdditionalFee = formattedFee;
-                quoteWSignals.FinalPrice = formattedFinalPrice;
-            }
-            );
+            #endregion
 
             #region DeepClone
 
@@ -217,47 +233,14 @@ namespace FacadeDesignPattern
 
                 #endregion
 
-                //foreach (var quoteWSignals in obtainedSignalsWithQuotes)
-                Parallel.ForEach(obtainedSignalsWithQuotes, (quoteWSignals) =>
-                {
-                    double fee = 0;
-                    double finalPrice = 0;
+                #region Decorator
 
-                    DecoratorComponent decorator = new DecoratorConcreteComponent();
-                    decorator = AutoMapperHelper.MapQuotesAndSignalsToDecoratorObject(quoteWSignals);
+                DecoratorFacade decorator = new DecoratorFacade();
 
-                    finalPrice = decorator.CalculateCost();
+                decorator.CalculateAdditionalFeeAndFinalPrice(ref obtainedSignalsWithQuotes);
+                //decorator2.CalculateAdditionalFeeAndFinalPrice(ref obtainedSignalsWithQuotes, new List<DecoratorComponent> { new CommissionDecorator(), new TaxDecorator() });
 
-                    //Dekorator prowizji
-                    decorator = new CommissionDecorator(decorator);
-                    finalPrice = decorator.CalculateCost();
-                    fee += decorator.CalculateAdditionalFee();
-
-                    //Dekorator podatku
-                    decorator = new TaxDecorator(decorator);
-                    finalPrice = decorator.CalculateCost();
-                    fee += decorator.CalculateAdditionalFee();
-
-                    //Dekorator konwersji PLN to USD
-                    //decorator = new ConversionFromPLNtoUSDDecorator(decorator);
-                    //finalPrice = decorator.CalculateCost();
-                    //fee += decorator.CalculateAdditionalFee();
-
-                    //Dekorator konwersji PLN to EUR
-                    //decorator = new ConversionFromPLNtoEURDecorator(decorator);
-                    //finalPrice = decorator.CalculateCost();
-                    //fee += decorator.CalculateAdditionalFee();
-
-                    double formattedFee;
-                    double formattedFinalPrice;
-
-                    double.TryParse(String.Format("{0:0.##}", fee), out formattedFee);
-                    double.TryParse(String.Format("{0:0.##}", finalPrice), out formattedFinalPrice);
-
-                    quoteWSignals.AdditionalFee = formattedFee;
-                    quoteWSignals.FinalPrice = formattedFinalPrice;
-                }
-                );
+                #endregion
 
                 #region DeepClone
 
@@ -307,47 +290,14 @@ namespace FacadeDesignPattern
 
             #endregion
 
-            //foreach (var quoteWSignals in obtainedSignalsWithQuotes)
-            Parallel.ForEach(obtainedSignalsWithQuotes, (quoteWSignals) =>
-            {
-                double fee = 0;
-                double finalPrice = 0;
+            #region Decorator
 
-                DecoratorComponent decorator = new DecoratorConcreteComponent();
-                decorator = AutoMapperHelper.MapQuotesAndSignalsToDecoratorObject(quoteWSignals);
+            DecoratorFacade decorator = new DecoratorFacade();
 
-                finalPrice = decorator.CalculateCost();
+            decorator.CalculateAdditionalFeeAndFinalPrice(ref obtainedSignalsWithQuotes);
+            //decorator2.CalculateAdditionalFeeAndFinalPrice(ref obtainedSignalsWithQuotes, new List<DecoratorComponent> { new CommissionDecorator(), new TaxDecorator() });
 
-                //Dekorator prowizji
-                decorator = new CommissionDecorator(decorator);
-                finalPrice = decorator.CalculateCost();
-                fee += decorator.CalculateAdditionalFee();
-
-                //Dekorator podatku
-                decorator = new TaxDecorator(decorator);
-                finalPrice = decorator.CalculateCost();
-                fee += decorator.CalculateAdditionalFee();
-
-                //Dekorator konwersji PLN to USD
-                //decorator = new ConversionFromPLNtoUSDDecorator(decorator);
-                //finalPrice = decorator.CalculateCost();
-                //fee += decorator.CalculateAdditionalFee();
-
-                //Dekorator konwersji PLN to EUR
-                //decorator = new ConversionFromPLNtoEURDecorator(decorator);
-                //finalPrice = decorator.CalculateCost();
-                //fee += decorator.CalculateAdditionalFee();
-
-                double formattedFee;
-                double formattedFinalPrice;
-
-                double.TryParse(String.Format("{0:0.##}", fee), out formattedFee);
-                double.TryParse(String.Format("{0:0.##}", finalPrice), out formattedFinalPrice);
-
-                quoteWSignals.AdditionalFee = formattedFee;
-                quoteWSignals.FinalPrice = formattedFinalPrice;
-            }
-            );
+            #endregion
 
             #region DeepClone
 
@@ -406,47 +356,14 @@ namespace FacadeDesignPattern
 
                 #endregion
 
-                //foreach (var quoteWSignals in obtainedSignalsWithQuotes)
-                Parallel.ForEach(obtainedSignalsWithQuotes, (quoteWSignals) =>
-                {
-                    double fee = 0;
-                    double finalPrice = 0;
+                #region Decorator
 
-                    DecoratorComponent decorator = new DecoratorConcreteComponent();
-                    decorator = AutoMapperHelper.MapQuotesAndSignalsToDecoratorObject(quoteWSignals);
+                DecoratorFacade decorator = new DecoratorFacade();
 
-                    finalPrice = decorator.CalculateCost();
+                decorator.CalculateAdditionalFeeAndFinalPrice(ref obtainedSignalsWithQuotes);
+                //decorator2.CalculateAdditionalFeeAndFinalPrice(ref obtainedSignalsWithQuotes, new List<DecoratorComponent> { new CommissionDecorator(), new TaxDecorator() });
 
-                    //Dekorator prowizji
-                    decorator = new CommissionDecorator(decorator);
-                    finalPrice = decorator.CalculateCost();
-                    fee += decorator.CalculateAdditionalFee();
-
-                    //Dekorator podatku
-                    decorator = new TaxDecorator(decorator);
-                    finalPrice = decorator.CalculateCost();
-                    fee += decorator.CalculateAdditionalFee();
-
-                    //Dekorator konwersji PLN to USD
-                    //decorator = new ConversionFromPLNtoUSDDecorator(decorator);
-                    //finalPrice = decorator.CalculateCost();
-                    //fee += decorator.CalculateAdditionalFee();
-
-                    //Dekorator konwersji PLN to EUR
-                    //decorator = new ConversionFromPLNtoEURDecorator(decorator);
-                    //finalPrice = decorator.CalculateCost();
-                    //fee += decorator.CalculateAdditionalFee();
-
-                    double formattedFee;
-                    double formattedFinalPrice;
-
-                    double.TryParse(String.Format("{0:0.##}", fee), out formattedFee);
-                    double.TryParse(String.Format("{0:0.##}", finalPrice), out formattedFinalPrice);
-
-                    quoteWSignals.AdditionalFee = formattedFee;
-                    quoteWSignals.FinalPrice = formattedFinalPrice;
-                }
-                );
+                #endregion
 
                 #region DeepClone
 

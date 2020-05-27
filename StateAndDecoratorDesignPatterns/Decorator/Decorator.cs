@@ -7,6 +7,11 @@ namespace DecoratorDesignPattern
     {
         protected DecoratorComponent _baseComponent = null;
 
+        protected Decorator()
+        {
+
+        }
+
         protected Decorator(DecoratorComponent baseComponent)
         {
             _baseComponent = baseComponent;

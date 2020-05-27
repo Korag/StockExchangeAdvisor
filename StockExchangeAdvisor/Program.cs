@@ -10,14 +10,14 @@ namespace Signals
     class Program
     {
         //public static string QUOTES_SAVE_PATH = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..\\..\\..\\..\\QuotesDownloader\\DownloadedQuotes\\"));
-        //public static IAlgorithmBuilder builder = new RabbitMQBuilder();
-        public static IAlgorithmBuilder builder = new WebServicesBuilder();
+        public static IAlgorithmBuilder builder = new RabbitMQBuilder();
+        //public static IAlgorithmBuilder builder = new WebServicesBuilder();
         //public static IAlgorithmBuilder builder = new ActorModelBuilder();
 
         static void Main(string[] args)
         {
             AzureWebServiceHelper aws = new AzureWebServiceHelper();
-            aws.StartVM();
+            //aws.StartVM();
 
 
             CoreFacade facade = new CoreFacade(builder);
