@@ -17,6 +17,9 @@ namespace FacadeDesignPattern
 {
     public class CoreFacade
     {
+        //todo: URL
+        //todo: facade to property
+
         private AlgorithmManufacturer _algorithmManufacter { get; set; }
         private IAlgorithmBuilder _algorithmBuilder { get; set; }
         private CalculateTechnicalIndicatorContext _calculateContext { get; set; }
@@ -24,7 +27,7 @@ namespace FacadeDesignPattern
         private Parameters _parameters { get; set; }
         private List<TechnicalIndicator> _indicators { get; set; }
 
-        public string PathToUnpackedQuotesDirectory { get; set; }
+        public string PathToUnpackedQuotesDirectory { get; set; } // todo
 
         public CoreFacade(IAlgorithmBuilder algorithmBuilder)
         {
@@ -89,15 +92,12 @@ namespace FacadeDesignPattern
             List<Signal> obtainedSignals = _calculateContext.ReceiveSignalsFromSingleCalculatedIndicator();
             List<SignalModelContext> obtainedSignalsWithQuotes = AutoMapperHelper.MapQuotesAndSignalsToSignalModelContext(companyQuotes, obtainedSignals);
 
-            //foreach (var singleQuotePartialSignals in obtainedSignalsWithQuotes)
-            Parallel.ForEach(obtainedSignalsWithQuotes, (singleQuotePartialSignals) =>
-            {
-                ConcreteChainHandlerElement chain = new ConcreteChainHandlerElement();
+            #region ChainOfResponsibility
 
-                ComputeFinalSignalModel finalSignalModel = new ComputeFinalSignalModel(singleQuotePartialSignals.PartialSignals);
-                singleQuotePartialSignals.SetSignalValue(chain.DetermineFinalSignal(finalSignalModel));
-            }
-            );
+            ChainOfResponsibilityFacade chainOfResponsibility = new ChainOfResponsibilityFacade();
+            chainOfResponsibility.ExecuteChainOfPartialSignalToDeterminFinalSignal(ref obtainedSignalsWithQuotes);
+
+            #endregion
 
             #region DecoratorTests
 
@@ -210,15 +210,12 @@ namespace FacadeDesignPattern
                 List<Signal> obtainedSignals = _calculateContext.ReceiveSignalsFromSingleCalculatedIndicator();
                 List<SignalModelContext> obtainedSignalsWithQuotes = AutoMapperHelper.MapQuotesAndSignalsToSignalModelContext(companyQuotes, obtainedSignals);
 
-                //foreach (var singleQuotePartialSignals in obtainedSignalsWithQuotes)
-                Parallel.ForEach(obtainedSignalsWithQuotes, (singleQuotePartialSignals) =>
-                {
-                    ConcreteChainHandlerElement chain = new ConcreteChainHandlerElement();
+                #region ChainOfResponsibility
 
-                    ComputeFinalSignalModel finalSignalModel = new ComputeFinalSignalModel(singleQuotePartialSignals.PartialSignals);
-                    singleQuotePartialSignals.SetSignalValue(chain.DetermineFinalSignal(finalSignalModel));
-                }
-                );
+                ChainOfResponsibilityFacade chainOfResponsibility = new ChainOfResponsibilityFacade();
+                chainOfResponsibility.ExecuteChainOfPartialSignalToDeterminFinalSignal(ref obtainedSignalsWithQuotes);
+
+                #endregion
 
                 //foreach (var quoteWSignals in obtainedSignalsWithQuotes)
                 Parallel.ForEach(obtainedSignalsWithQuotes, (quoteWSignals) =>
@@ -303,15 +300,12 @@ namespace FacadeDesignPattern
             List<List<Signal>> obtainedSignals = _calculateContext.ReceiveSignalsFromCalculatedIndicators(_indicators.Count());
             List<SignalModelContext> obtainedSignalsWithQuotes = AutoMapperHelper.MapQuotesAndSignalsToSignalModelContext(companyQuotes, obtainedSignals);
 
-            //foreach (var singleQuotePartialSignals in obtainedSignalsWithQuotes)
-            Parallel.ForEach(obtainedSignalsWithQuotes, (singleQuotePartialSignals) =>
-            {
-                ConcreteChainHandlerElement chain = new ConcreteChainHandlerElement();
+            #region ChainOfResponsibility
 
-                ComputeFinalSignalModel finalSignalModel = new ComputeFinalSignalModel(singleQuotePartialSignals.PartialSignals);
-                singleQuotePartialSignals.SetSignalValue(chain.DetermineFinalSignal(finalSignalModel));
-            }
-            );
+            ChainOfResponsibilityFacade chainOfResponsibility = new ChainOfResponsibilityFacade();
+            chainOfResponsibility.ExecuteChainOfPartialSignalToDeterminFinalSignal(ref obtainedSignalsWithQuotes);
+
+            #endregion
 
             //foreach (var quoteWSignals in obtainedSignalsWithQuotes)
             Parallel.ForEach(obtainedSignalsWithQuotes, (quoteWSignals) =>
@@ -405,15 +399,12 @@ namespace FacadeDesignPattern
                 List<List<Signal>> obtainedSignals = _calculateContext.ReceiveSignalsFromCalculatedIndicators(_indicators.Count());
                 List<SignalModelContext> obtainedSignalsWithQuotes = AutoMapperHelper.MapQuotesAndSignalsToSignalModelContext(companyQuotes, obtainedSignals);
 
-                //foreach (var singleQuotePartialSignals in obtainedSignalsWithQuotes)
-                Parallel.ForEach(obtainedSignalsWithQuotes, (singleQuotePartialSignals) =>
-                {
-                    ConcreteChainHandlerElement chain = new ConcreteChainHandlerElement();
+                #region ChainOfResponsibility
 
-                    ComputeFinalSignalModel finalSignalModel = new ComputeFinalSignalModel(singleQuotePartialSignals.PartialSignals);
-                    singleQuotePartialSignals.SetSignalValue(chain.DetermineFinalSignal(finalSignalModel));
-                }
-                );
+                ChainOfResponsibilityFacade chainOfResponsibility = new ChainOfResponsibilityFacade();
+                chainOfResponsibility.ExecuteChainOfPartialSignalToDeterminFinalSignal(ref obtainedSignalsWithQuotes);
+
+                #endregion
 
                 //foreach (var quoteWSignals in obtainedSignalsWithQuotes)
                 Parallel.ForEach(obtainedSignalsWithQuotes, (quoteWSignals) =>
