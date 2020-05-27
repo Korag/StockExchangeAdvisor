@@ -3,10 +3,6 @@ using System.Collections.Generic;
 
 namespace TechnicalIndicators
 {
-    // https://tradersarea.pl/wskaznik-zmiany-rate-of-change-roc/
-    // https://atskaner.pl/baza/oscylatory-techniczne-momentum-roc-i-macd-1
-    // https://www.edukacjagieldowa.pl/gieldowe-abc/analiza-techniczna/narzedzia-analizy-technicznej/roc/
-
     public class TechnicalIndicatorROC : TechnicalIndicator
     {
         public TechnicalIndicatorROC()

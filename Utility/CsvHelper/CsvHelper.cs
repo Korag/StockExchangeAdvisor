@@ -12,7 +12,6 @@ namespace Utility
     public static class CsvHelper
     {
         private static string _quotesURL { get => Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..\\..\\..\\..\\QuotesDownloader\\DownloadedQuotes\\"));}
-        private static string _generatedSignalsURL { get => Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..\\..\\..\\..\\StockExchangeAdvisor\\GeneratedSignals\\")); }
 
         public static List<Quote> ReadSingleCsvFileWithQuotes(string nameOfCompany)
         {
@@ -59,7 +58,7 @@ namespace Utility
             }
             catch (Exception e)
             {
-                Console.WriteLine("There was an error during creating signals file");
+                Console.WriteLine("There was an error during creation of signals file");
                 throw e;
             }
         }

@@ -1,6 +1,4 @@
 ﻿using Models;
-using RabbitMQ.Client;
-using RabbitMQ.Client.Events;
 using System.Collections.Generic;
 
 namespace RabbitMQ
@@ -17,6 +15,5 @@ namespace RabbitMQ
         }
 
         public abstract List<List<Signal>> ReceiveObtainedSignals(int countedTechnicalIndicatorsNumber);
-        //public abstract void HandleReceivedEvent(BasicDeliverEventArgs ea, IModel channel, IConnection connection);
     }
 }

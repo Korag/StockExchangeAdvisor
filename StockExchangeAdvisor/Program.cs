@@ -16,27 +16,7 @@ namespace Signals
 
         static void Main(string[] args)
         {
-            #region LegacyCode
-            //var zywiecQuotes = Utility.CsvHelper.ReadSingleCsvFileWithQuotes("zywiec");
-
-            //var EAM = new ExponentialMovingAverage();
-            //var parameters = new Parameters
-            //{
-            //    CalculatedIndicatorFirstDaysInterval = 10,
-            //    CalculatedIndicatorSecondDaysInterval = 5,
-
-            //    Period = 10
-            //};
-
-            //CalculateTechnicalIndicatorContext calculateIndicator = CalculateTechnicalIndicatorContext.GetInstance(new RabbitMQStrategy());
-            //calculateIndicator.CalculateSingleIndicator(zywiecQuotes, parameters, new TechnicalIndicatorEMA());
-            //List<Signal> obtainedSignals = calculateIndicator.ReceiveSignalsFromSingleCalculatedIndicator();
-            #endregion
-
-            //AzureWebServiceHelper.StartVM().Wait(-1);
-            //AzureWebServiceHelper.StopVM();
-
-            AzureWebServiceHelper2 aws = new AzureWebServiceHelper2();
+            AzureWebServiceHelper aws = new AzureWebServiceHelper();
             aws.StartVM();
 
 

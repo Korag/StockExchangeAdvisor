@@ -18,12 +18,6 @@ namespace TechnicalIndicators
         {
             List<Signal> SignalList = new List<Signal>();
 
-            /*Quote first = new Quote();
-            first.Open = 13.70;
-            first.Close = 14.00;
-            first.Low = 14.00;
-            first.High = 16.00;*/
-
             for (int i = parameters.NQuotesBackwards; i < quote.Count; i++)
             {
                 Signal test = new Signal

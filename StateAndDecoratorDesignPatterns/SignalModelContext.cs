@@ -25,10 +25,6 @@ namespace StateAndDecoratorDesignPattern
         public double FinalPrice { get; set; }
         public double AdditionalFee { get; set; }
 
-        //Przeniesione do określonych stanów
-        //public string Factor;
-        //public int FinalSignal; -> SignalValue
-
         public SignalModelContext()
         {
             CurrentState = new UnknownSignalState(0, this);

@@ -1,8 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.IO.Compression;
-using System.Net.Http;
-using System.Text;
 
 namespace Utility
 {
@@ -25,16 +23,24 @@ namespace Utility
 
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 Console.WriteLine("There was an error during extracting zip content.");
-                throw;
+                throw e;
             }
         }
 
         public static void SaveZipArchiveFromByteArray(byte[] content, string url)
         {
+            try
+            {
             File.WriteAllBytes(url, content);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("There was an error during saving .zip file.");
+                throw e;
+            }
         }
     }
 }

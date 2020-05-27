@@ -47,18 +47,6 @@ namespace PrototypeDesignPattern
                         
                         if (property.PropertyType.FullName == "StateDesignPattern.ASignalState")
                         {
-                            //Type stateType = objPropertyValue.GetType();
-                            //object stateTarget = Activator.CreateInstance(stateType);
-
-                            //PropertyInfo[] statePropertyInfo = stateType.GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance).Where(p => p.GetIndexParameters().Length == 0).ToArray();
-
-                            //foreach (var stateProperty in statePropertyInfo)
-                            //{
-                            //    stateProperty.SetValue(stateTarget, stateProperty.GetValue(objPropertyValue, null), null);
-                            //}
-
-                            //property.SetValue(objTarget, stateTarget, null);
-
                             ASignalState stateSource = (ASignalState)objPropertyValue;
                             
                             Type stateType = objPropertyValue.GetType();

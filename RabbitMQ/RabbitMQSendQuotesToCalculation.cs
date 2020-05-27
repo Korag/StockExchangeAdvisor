@@ -9,6 +9,7 @@ namespace RabbitMQ
     {
         public RabbitMQSendQuotesToCalculation(string exchange, string queueSendTo) : base(exchange, queueSendTo)
         {
+
         }
 
         public override void Process(IndicatorCalculationElements elements)
@@ -22,7 +23,7 @@ namespace RabbitMQ
                         //umożliwia potwierdzanie, że przesyłkę dostarczono do Exchange
                         channel.ConfirmSelect();
 
-                        //generujemy nowe konto
+                        //generujemy nową wiadomość
                         GenerateAndPublishMessage(channel, elements);
                     }
                 }
@@ -30,7 +31,7 @@ namespace RabbitMQ
             catch (Exception e)
             {
                 Console.WriteLine(e);
-                throw;
+                throw e;
             }
         }
 

@@ -22,7 +22,7 @@ namespace AdapterDesignPattern
             _producer.Process(elements);
         }
 
-        private void InitializeProducer(string exchange, string queueSendTo)
+        public void InitializeProducer(string exchange, string queueSendTo)
         {
             _producer = new RabbitMQSendQuotesToCalculation(exchange, queueSendTo);
         }
