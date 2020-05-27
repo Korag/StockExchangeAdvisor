@@ -20,7 +20,7 @@ namespace Signals
             aws.StartVM();
 
 
-            Facade facade = new Facade(builder);
+            CoreFacade facade = new CoreFacade(builder);
 
             Stopwatch sw = new Stopwatch();
             sw.Start();

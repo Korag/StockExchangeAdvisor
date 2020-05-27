@@ -1,10 +1,74 @@
-﻿using System;
+﻿using PrototypeDesignPattern;
+using StateAndDecoratorDesignPattern;
+using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace FacadeDesignPattern
 {
-    class DeepCloneFacade
+    public class DeepCloneFacade
     {
+        private List<SignalModelContext> _collectionOfSignalsToBeCloned { get; set; }
+        private Object _padlock { get; set; }
+
+        public DeepCloneFacade(List<SignalModelContext> collectionOfSignalsToBeCloned)
+        {
+            ChangeClonnedCollection(collectionOfSignalsToBeCloned);
+            _padlock = new object();
+        }
+
+        public void ChangeClonnedCollection(List<SignalModelContext> collectionOfSignalsToBeCloned)
+        {
+            _collectionOfSignalsToBeCloned = collectionOfSignalsToBeCloned;
+        }
+
+        private List<SignalModelContext> CloneCollectionUsingJsonOrBinarySerialization()
+        {
+            List<SignalModelContext> clonedSignalContextCollection = new List<SignalModelContext>();
+
+            Parallel.ForEach(_collectionOfSignalsToBeCloned, (signal) =>
+            {
+                SignalModelContext singleClonedSignalContext = signal.Clone() as SignalModelContext;
+
+                lock (_padlock)
+                {
+                    clonedSignalContextCollection.Add(singleClonedSignalContext);
+                }
+            });
+
+            clonedSignalContextCollection = clonedSignalContextCollection.OrderBy(z => z.Date).ToList();
+            return clonedSignalContextCollection;
+        }
+
+        public List<SignalModelContext> DeepCloneUsingJsonSerialization()
+        {
+            _collectionOfSignalsToBeCloned.AsParallel().ForAll(z => z.JsonSerialization = true);
+            return CloneCollectionUsingJsonOrBinarySerialization();
+        }
+
+        public List<SignalModelContext> DeepCloneUsingBinarySerialization()
+        {
+            _collectionOfSignalsToBeCloned.AsParallel().ForAll(z => z.JsonSerialization = false);
+            return CloneCollectionUsingJsonOrBinarySerialization();
+        }
+
+        public List<SignalModelContext> DeepCloneUsingReflection()
+        {
+            List<SignalModelContext> clonedSignalContextCollection = new List<SignalModelContext>();
+
+            Parallel.ForEach(_collectionOfSignalsToBeCloned, (signal) =>
+            {
+                SignalModelContext singleClonedSignalContext = ReflectionDeepCopy.CloneObject(signal) as SignalModelContext;
+
+                lock (_padlock)
+                {
+                    clonedSignalContextCollection.Add(singleClonedSignalContext);
+                }
+            });
+
+            clonedSignalContextCollection = clonedSignalContextCollection.OrderBy(z => z.Date).ToList();
+            return clonedSignalContextCollection;
+        }
     }
 }
