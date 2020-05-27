@@ -179,38 +179,25 @@ namespace FacadeDesignPattern
 
             #endregion
 
-            //Saving JsonFile to PrototypeObjects directory
-            string jsonString = JsonSerializer.ConvertCollectionOfObjectsToJsonString<SignalModelContext>(obtainedSignalsWithQuotes);
-            DateTime currentDateTime = DateTime.Now;
-            string dateTimeFormat = "ddMMyyyy-HHmm";
-            string fileName = nameOfCompany + "_" + currentDateTime.ToString(dateTimeFormat) + "-" +
-                                Convert.ToString((int)currentDateTime.Subtract(new DateTime(1970, 1, 1)).TotalSeconds) + "_prototypeObject";
+            #region SavingResults
 
-            FileHelper.SaveJsonFile(Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, $"..\\..\\..\\..\\StockExchangeAdvisor\\PrototypeObjects\\{fileName}.json")), jsonString);
+            FileHandlerFacade fileHandler = new FileHandlerFacade();
+
+            //Saving JsonFile to PrototypeObjects directory
+            fileHandler.SaveJsonFileWithSignalModelContextObjects(obtainedSignalsWithQuotes, nameOfCompany);
 
             //Saving CsvFile to GeneratedSignals directory
-            currentDateTime = DateTime.Now;
-            fileName = nameOfCompany + "_" + currentDateTime.ToString(dateTimeFormat) + "-" +
-                                Convert.ToString((int)currentDateTime.Subtract(new DateTime(1970, 1, 1)).TotalSeconds) + "_generatedSignals";
+            fileHandler.SaveCsvFileWithSignalModelContextObjects(obtainedSignalsWithQuotes, nameOfCompany);
 
-            Utility.CsvHelper.SaveCompanySignalsToCsvFile(Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, $"..\\..\\..\\..\\StockExchangeAdvisor\\GeneratedSignals\\{fileName}.csv")), obtainedSignalsWithQuotes);
+            #endregion
         }
 
         public void CountSingleIndicatorForAllCompaniesQuotes(TechnicalIndicator technicalIndicator)
         {
             List<string> namesOfCompanies = FileHelper.GetFileNames(PathToUnpackedQuotesDirectory);
 
-            List<List<Quote>> companiesQuotes = new List<List<Quote>>();
-
-            Parallel.ForEach(namesOfCompanies, (companyName) =>
-            {
-                var companyQuotes = Utility.CsvHelper.ReadSingleCsvFileWithQuotes(companyName);
-
-                lock (_padlock)
-                {
-                    companiesQuotes.Add(companyQuotes);
-                }
-            });
+            FileHandlerFacade fileHandler = new FileHandlerFacade();
+            List<List<Quote>> companiesQuotes = fileHandler.ReadMultipleCsvFiles(namesOfCompanies);
 
             int iterationNumber = 0;
 
@@ -218,7 +205,6 @@ namespace FacadeDesignPattern
             foreach (var companyQuotes in companiesQuotes)
             {
                 string nameOfCompany = namesOfCompanies[iterationNumber];
-                //var companyQuotes = Utility.CsvHelper.ReadSingleCsvFileWithQuotes(companyName);
 
                 _calculateContext.CalculateSingleIndicator(companyQuotes, _parameters, technicalIndicator);
                 List<Signal> obtainedSignals = _calculateContext.ReceiveSignalsFromSingleCalculatedIndicator();
@@ -291,22 +277,16 @@ namespace FacadeDesignPattern
 
                 #endregion
 
-                //Saving JsonFile to PrototypeObjects directory
-                string jsonString = JsonSerializer.ConvertCollectionOfObjectsToJsonString<SignalModelContext>(obtainedSignalsWithQuotes);
-                DateTime currentDateTime = DateTime.Now;
-                string dateTimeFormat = "ddMMyyyy-HHmm";
-                string fileName = nameOfCompany + "_" + currentDateTime.ToString(dateTimeFormat) + "-" +
-                                    Convert.ToString((int)currentDateTime.Subtract(new DateTime(1970, 1, 1)).TotalSeconds) + "_prototypeObject";
+                #region SavingResults
 
-                FileHelper.SaveJsonFile(Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, $"..\\..\\..\\..\\StockExchangeAdvisor\\PrototypeObjects\\{fileName}.json")), jsonString);
+                //Saving JsonFile to PrototypeObjects directory
+                fileHandler.SaveJsonFileWithSignalModelContextObjects(obtainedSignalsWithQuotes, nameOfCompany);
 
                 //Saving CsvFile to GeneratedSignals directory
-                currentDateTime = DateTime.Now;
-                fileName = nameOfCompany + "_" + currentDateTime.ToString(dateTimeFormat) + "-" +
-                                    Convert.ToString((int)currentDateTime.Subtract(new DateTime(1970, 1, 1)).TotalSeconds) + "_generatedSignals";
+                fileHandler.SaveCsvFileWithSignalModelContextObjects(obtainedSignalsWithQuotes, nameOfCompany);
 
-                Utility.CsvHelper.SaveCompanySignalsToCsvFile(Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, $"..\\..\\..\\..\\StockExchangeAdvisor\\GeneratedSignals\\{fileName}.csv")), obtainedSignalsWithQuotes);
-               
+                #endregion
+
                 iterationNumber++;
             }
         }
@@ -390,39 +370,25 @@ namespace FacadeDesignPattern
 
             #endregion
 
-            //Saving JsonFile to PrototypeObjects directory
-            string jsonString = JsonSerializer.ConvertCollectionOfObjectsToJsonString<SignalModelContext>(obtainedSignalsWithQuotes);
-            DateTime currentDateTime = DateTime.Now;
-            string dateTimeFormat = "ddMMyyyy-HHmm";
-            string fileName = nameOfCompany + "_" + currentDateTime.ToString(dateTimeFormat) + "-" +
-                                Convert.ToString((int)currentDateTime.Subtract(new DateTime(1970, 1, 1)).TotalSeconds) + "_prototypeObject";
+            #region SavingResults
 
-            FileHelper.SaveJsonFile(Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, $"..\\..\\..\\..\\StockExchangeAdvisor\\PrototypeObjects\\{fileName}.json")), jsonString);
+            FileHandlerFacade fileHandler = new FileHandlerFacade();
+
+            //Saving JsonFile to PrototypeObjects directory
+            fileHandler.SaveJsonFileWithSignalModelContextObjects(obtainedSignalsWithQuotes, nameOfCompany);
 
             //Saving CsvFile to GeneratedSignals directory
-            currentDateTime = DateTime.Now;
-            fileName = nameOfCompany + "_" + currentDateTime.ToString(dateTimeFormat) + "-" +
-                                Convert.ToString((int)currentDateTime.Subtract(new DateTime(1970, 1, 1)).TotalSeconds) + "_generatedSignals";
+            fileHandler.SaveCsvFileWithSignalModelContextObjects(obtainedSignalsWithQuotes, nameOfCompany);
 
-            Utility.CsvHelper.SaveCompanySignalsToCsvFile(Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, $"..\\..\\..\\..\\StockExchangeAdvisor\\GeneratedSignals\\{fileName}.csv")), obtainedSignalsWithQuotes);
-
+            #endregion
         }
 
         public void CountIndicatorsSetForAllCompaniesQuotes()
         {
             List<string> namesOfCompanies = FileHelper.GetFileNames(PathToUnpackedQuotesDirectory);
 
-            List<List<Quote>> companiesQuotes = new List<List<Quote>>();
-
-            Parallel.ForEach(namesOfCompanies, (companyName) =>
-            {
-                var companyQuotes = Utility.CsvHelper.ReadSingleCsvFileWithQuotes(companyName);
-
-                lock (_padlock)
-                {
-                    companiesQuotes.Add(companyQuotes);
-                }
-            });
+            FileHandlerFacade fileHandler = new FileHandlerFacade();
+            List<List<Quote>> companiesQuotes = fileHandler.ReadMultipleCsvFiles(namesOfCompanies);
 
             int iterationNumber = 0;
 
@@ -430,7 +396,6 @@ namespace FacadeDesignPattern
             foreach (var companyQuotes in companiesQuotes)
             {
                 string nameOfCompany = namesOfCompanies[iterationNumber];
-                //var companyQuotes = Utility.CsvHelper.ReadSingleCsvFileWithQuotes(companyName);
 
                 foreach (var indicator in _indicators)
                 {
@@ -507,21 +472,15 @@ namespace FacadeDesignPattern
 
                 #endregion
 
-                //Saving JsonFile to PrototypeObjects directory
-                string jsonString = JsonSerializer.ConvertCollectionOfObjectsToJsonString<SignalModelContext>(obtainedSignalsWithQuotes);
-                DateTime currentDateTime = DateTime.Now;
-                string dateTimeFormat = "ddMMyyyy-HHmm";
-                string fileName = nameOfCompany + "_" + currentDateTime.ToString(dateTimeFormat) + "-" +
-                                    Convert.ToString((int)currentDateTime.Subtract(new DateTime(1970, 1, 1)).TotalSeconds) + "_prototypeObject";
+                #region SavingResults
 
-                FileHelper.SaveJsonFile(Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, $"..\\..\\..\\..\\StockExchangeAdvisor\\PrototypeObjects\\{fileName}.json")), jsonString);
+                //Saving JsonFile to PrototypeObjects directory
+                fileHandler.SaveJsonFileWithSignalModelContextObjects(obtainedSignalsWithQuotes, nameOfCompany);
 
                 //Saving CsvFile to GeneratedSignals directory
-                currentDateTime = DateTime.Now;
-                fileName = nameOfCompany + "_" + currentDateTime.ToString(dateTimeFormat) + "-" +
-                                    Convert.ToString((int)currentDateTime.Subtract(new DateTime(1970, 1, 1)).TotalSeconds) + "_generatedSignals";
+                fileHandler.SaveCsvFileWithSignalModelContextObjects(obtainedSignalsWithQuotes, nameOfCompany);
 
-                Utility.CsvHelper.SaveCompanySignalsToCsvFile(Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, $"..\\..\\..\\..\\StockExchangeAdvisor\\GeneratedSignals\\{fileName}.csv")), obtainedSignalsWithQuotes);
+                #endregion
 
                 iterationNumber++;
             }
