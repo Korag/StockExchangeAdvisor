@@ -4,23 +4,21 @@ using FacadeDesignPattern;
 using BuilderDesignPattern.AlgorithmBuilder;
 using UtilityAzure;
 using System.Diagnostics;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Signals
 {
     class Program
     {
-        //public static string QUOTES_SAVE_PATH = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..\\..\\..\\..\\QuotesDownloader\\DownloadedQuotes\\"));
-        public static IAlgorithmBuilder builder = new RabbitMQBuilder();
-        //public static IAlgorithmBuilder builder = new WebServicesBuilder();
-        //public static IAlgorithmBuilder builder = new ActorModelBuilder();
+        private static IServiceProvider _serviceProvider;
 
         static void Main(string[] args)
         {
+            RegisterServices();
             AzureWebServiceHelper aws = new AzureWebServiceHelper();
             //aws.StartVM();
 
-
-            CoreFacade facade = new CoreFacade(builder);
+            CoreFacade facade = new CoreFacade(_serviceProvider.GetService<IAlgorithmBuilder>());
 
             Stopwatch sw = new Stopwatch();
             sw.Start();
@@ -35,8 +33,33 @@ namespace Signals
             sw.Stop();
 
             aws.StopVM();
+            DisposeServices();
+
             Console.WriteLine("Execution time: " + sw.Elapsed);
             Console.ReadLine();
+        }
+
+        private static void RegisterServices()
+        {
+            var collection = new ServiceCollection();
+          
+            collection.AddSingleton<IAlgorithmBuilder, RabbitMQBuilder>();
+            //collection.AddSingleton<IAlgorithmBuilder, WebServicesBuilder>();
+            //collection.AddSingleton<IAlgorithmBuilder, ActorModelBuilder>();
+
+            _serviceProvider = collection.BuildServiceProvider();
+        }
+
+        private static void DisposeServices()
+        {
+            if (_serviceProvider == null)
+            {
+                return;
+            }
+            if (_serviceProvider is IDisposable)
+            {
+                ((IDisposable)_serviceProvider).Dispose();
+            }
         }
     }
 }
