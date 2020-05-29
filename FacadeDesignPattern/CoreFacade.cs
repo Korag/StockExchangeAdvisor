@@ -22,6 +22,11 @@ namespace FacadeDesignPattern
         private Parameters _parameters { get; set; }
         private List<TechnicalIndicator> _indicators { get; set; }
 
+        private DecoratorFacade _decorator { get; set; }
+        private DeepCloneFacade _deepClone { get; set; }
+        private FileHandlerFacade _fileHandler { get; set; }
+        private ChainOfResponsibilityFacade _chainOfResponsibility { get; set; }
+
         private bool _gcLowLatency { get; set; }
         private bool _noGCRegion { get; set; }
 
@@ -52,6 +57,11 @@ namespace FacadeDesignPattern
                 SellTrigger = 10,
                 NQuotesBackwards = 3
             };
+
+            _decorator = new DecoratorFacade();
+            _deepClone = new DeepCloneFacade();
+            _fileHandler = new FileHandlerFacade();
+            _chainOfResponsibility = new ChainOfResponsibilityFacade();
 
             ProcessHandler.RunQuotesDownloaderProcess();
 
@@ -101,8 +111,7 @@ namespace FacadeDesignPattern
 
             #region ChainOfResponsibility
 
-            ChainOfResponsibilityFacade chainOfResponsibility = new ChainOfResponsibilityFacade();
-            chainOfResponsibility.ExecuteChainOfPartialSignalToDeterminFinalSignal(ref obtainedSignalsWithQuotes);
+            _chainOfResponsibility.ExecuteChainOfPartialSignalToDeterminFinalSignal(ref obtainedSignalsWithQuotes);
 
             #endregion
 
@@ -173,37 +182,33 @@ namespace FacadeDesignPattern
 
             #region Decorator
 
-            DecoratorFacade decorator = new DecoratorFacade();
-
-            decorator.CalculateAdditionalFeeAndFinalPrice(ref obtainedSignalsWithQuotes);
-            //decorator2.CalculateAdditionalFeeAndFinalPrice(ref obtainedSignalsWithQuotes, new List<DecoratorComponent> { new CommissionDecorator(), new TaxDecorator() });
+            _decorator.CalculateAdditionalFeeAndFinalPrice(ref obtainedSignalsWithQuotes);
+            //_decorator.CalculateAdditionalFeeAndFinalPrice(ref obtainedSignalsWithQuotes, new List<DecoratorComponent> { new CommissionDecorator(), new TaxDecorator() });
 
             #endregion
 
             #region DeepClone
 
-            DeepCloneFacade deepClone = new DeepCloneFacade(obtainedSignalsWithQuotes);
+            _deepClone.ChangeClonnedCollection(obtainedSignalsWithQuotes);
 
             //Deep Clone using JsonSerialization
-            List<SignalModelContext> clonedSignalContextByJsonSerializer = deepClone.DeepCloneUsingJsonSerialization();
+            List<SignalModelContext> clonedSignalContextByJsonSerializer = _deepClone.DeepCloneUsingJsonSerialization();
            
             //Deep Clone using BinarySerialization
-            List<SignalModelContext> clonedSignalContextByBinarySerializer = deepClone.DeepCloneUsingBinarySerialization();
+            List<SignalModelContext> clonedSignalContextByBinarySerializer = _deepClone.DeepCloneUsingBinarySerialization();
 
             //Deep Clone using Reflection
-            List<SignalModelContext> clonedSignalContextByReflection = deepClone.DeepCloneUsingReflection();
+            List<SignalModelContext> clonedSignalContextByReflection = _deepClone.DeepCloneUsingReflection();
 
             #endregion
 
             #region SavingResults
 
-            FileHandlerFacade fileHandler = new FileHandlerFacade();
-
             //Saving JsonFile to PrototypeObjects directory
-            fileHandler.SaveJsonFileWithSignalModelContextObjects(obtainedSignalsWithQuotes, nameOfCompany);
+            _fileHandler.SaveJsonFileWithSignalModelContextObjects(obtainedSignalsWithQuotes, nameOfCompany);
 
             //Saving CsvFile to GeneratedSignals directory
-            fileHandler.SaveCsvFileWithSignalModelContextObjects(obtainedSignalsWithQuotes, nameOfCompany);
+            _fileHandler.SaveCsvFileWithSignalModelContextObjects(obtainedSignalsWithQuotes, nameOfCompany);
 
             #endregion
         }
@@ -211,9 +216,7 @@ namespace FacadeDesignPattern
         public void CountSingleIndicatorForAllCompaniesQuotes(TechnicalIndicator technicalIndicator)
         {
             List<string> namesOfCompanies = FileHelper.GetFileNames(PathToUnpackedQuotesDirectory);
-
-            FileHandlerFacade fileHandler = new FileHandlerFacade();
-            List<List<Quote>> companiesQuotes = fileHandler.ReadMultipleCsvFiles(namesOfCompanies);
+            List<List<Quote>> companiesQuotes = _fileHandler.ReadMultipleCsvFiles(namesOfCompanies);
 
             int iterationNumber = 0;
 
@@ -228,42 +231,39 @@ namespace FacadeDesignPattern
 
                 #region ChainOfResponsibility
 
-                ChainOfResponsibilityFacade chainOfResponsibility = new ChainOfResponsibilityFacade();
-                chainOfResponsibility.ExecuteChainOfPartialSignalToDeterminFinalSignal(ref obtainedSignalsWithQuotes);
+                _chainOfResponsibility.ExecuteChainOfPartialSignalToDeterminFinalSignal(ref obtainedSignalsWithQuotes);
 
                 #endregion
 
                 #region Decorator
 
-                DecoratorFacade decorator = new DecoratorFacade();
-
-                decorator.CalculateAdditionalFeeAndFinalPrice(ref obtainedSignalsWithQuotes);
-                //decorator2.CalculateAdditionalFeeAndFinalPrice(ref obtainedSignalsWithQuotes, new List<DecoratorComponent> { new CommissionDecorator(), new TaxDecorator() });
+                _decorator.CalculateAdditionalFeeAndFinalPrice(ref obtainedSignalsWithQuotes);
+                //_decorator.CalculateAdditionalFeeAndFinalPrice(ref obtainedSignalsWithQuotes, new List<DecoratorComponent> { new CommissionDecorator(), new TaxDecorator() });
 
                 #endregion
 
                 #region DeepClone
 
-                DeepCloneFacade deepClone = new DeepCloneFacade(obtainedSignalsWithQuotes);
+                _deepClone.ChangeClonnedCollection(obtainedSignalsWithQuotes);
 
                 //Deep Clone using JsonSerialization
-                List<SignalModelContext> clonedSignalContextByJsonSerializer = deepClone.DeepCloneUsingJsonSerialization();
+                List<SignalModelContext> clonedSignalContextByJsonSerializer = _deepClone.DeepCloneUsingJsonSerialization();
 
                 //Deep Clone using BinarySerialization
-                List<SignalModelContext> clonedSignalContextByBinarySerializer = deepClone.DeepCloneUsingBinarySerialization();
+                List<SignalModelContext> clonedSignalContextByBinarySerializer = _deepClone.DeepCloneUsingBinarySerialization();
 
                 //Deep Clone using Reflection
-                List<SignalModelContext> clonedSignalContextByReflection = deepClone.DeepCloneUsingReflection();
+                List<SignalModelContext> clonedSignalContextByReflection = _deepClone.DeepCloneUsingReflection();
 
                 #endregion
 
                 #region SavingResults
 
                 //Saving JsonFile to PrototypeObjects directory
-                fileHandler.SaveJsonFileWithSignalModelContextObjects(obtainedSignalsWithQuotes, nameOfCompany);
+                _fileHandler.SaveJsonFileWithSignalModelContextObjects(obtainedSignalsWithQuotes, nameOfCompany);
 
                 //Saving CsvFile to GeneratedSignals directory
-                fileHandler.SaveCsvFileWithSignalModelContextObjects(obtainedSignalsWithQuotes, nameOfCompany);
+                _fileHandler.SaveCsvFileWithSignalModelContextObjects(obtainedSignalsWithQuotes, nameOfCompany);
 
                 #endregion
 
@@ -285,44 +285,39 @@ namespace FacadeDesignPattern
 
             #region ChainOfResponsibility
 
-            ChainOfResponsibilityFacade chainOfResponsibility = new ChainOfResponsibilityFacade();
-            chainOfResponsibility.ExecuteChainOfPartialSignalToDeterminFinalSignal(ref obtainedSignalsWithQuotes);
+            _chainOfResponsibility.ExecuteChainOfPartialSignalToDeterminFinalSignal(ref obtainedSignalsWithQuotes);
 
             #endregion
 
             #region Decorator
 
-            DecoratorFacade decorator = new DecoratorFacade();
-
-            decorator.CalculateAdditionalFeeAndFinalPrice(ref obtainedSignalsWithQuotes);
-            //decorator2.CalculateAdditionalFeeAndFinalPrice(ref obtainedSignalsWithQuotes, new List<DecoratorComponent> { new CommissionDecorator(), new TaxDecorator() });
+            _decorator.CalculateAdditionalFeeAndFinalPrice(ref obtainedSignalsWithQuotes);
+            //_decorator.CalculateAdditionalFeeAndFinalPrice(ref obtainedSignalsWithQuotes, new List<DecoratorComponent> { new CommissionDecorator(), new TaxDecorator() });
 
             #endregion
 
             #region DeepClone
 
-            DeepCloneFacade deepClone = new DeepCloneFacade(obtainedSignalsWithQuotes);
+            _deepClone.ChangeClonnedCollection(obtainedSignalsWithQuotes);
 
             //Deep Clone using JsonSerialization
-            List<SignalModelContext> clonedSignalContextByJsonSerializer = deepClone.DeepCloneUsingJsonSerialization();
+            List<SignalModelContext> clonedSignalContextByJsonSerializer = _deepClone.DeepCloneUsingJsonSerialization();
 
             //Deep Clone using BinarySerialization
-            List<SignalModelContext> clonedSignalContextByBinarySerializer = deepClone.DeepCloneUsingBinarySerialization();
+            List<SignalModelContext> clonedSignalContextByBinarySerializer = _deepClone.DeepCloneUsingBinarySerialization();
 
             //Deep Clone using Reflection
-            List<SignalModelContext> clonedSignalContextByReflection = deepClone.DeepCloneUsingReflection();
+            List<SignalModelContext> clonedSignalContextByReflection = _deepClone.DeepCloneUsingReflection();
 
             #endregion
 
             #region SavingResults
 
-            FileHandlerFacade fileHandler = new FileHandlerFacade();
-
             //Saving JsonFile to PrototypeObjects directory
-            fileHandler.SaveJsonFileWithSignalModelContextObjects(obtainedSignalsWithQuotes, nameOfCompany);
+            _fileHandler.SaveJsonFileWithSignalModelContextObjects(obtainedSignalsWithQuotes, nameOfCompany);
 
             //Saving CsvFile to GeneratedSignals directory
-            fileHandler.SaveCsvFileWithSignalModelContextObjects(obtainedSignalsWithQuotes, nameOfCompany);
+            _fileHandler.SaveCsvFileWithSignalModelContextObjects(obtainedSignalsWithQuotes, nameOfCompany);
 
             #endregion
         }
@@ -330,9 +325,7 @@ namespace FacadeDesignPattern
         public void CountIndicatorsSetForAllCompaniesQuotes()
         {
             List<string> namesOfCompanies = FileHelper.GetFileNames(PathToUnpackedQuotesDirectory);
-
-            FileHandlerFacade fileHandler = new FileHandlerFacade();
-            List<List<Quote>> companiesQuotes = fileHandler.ReadMultipleCsvFiles(namesOfCompanies);
+            List<List<Quote>> companiesQuotes = _fileHandler.ReadMultipleCsvFiles(namesOfCompanies);
 
             int iterationNumber = 0;
 
@@ -351,42 +344,39 @@ namespace FacadeDesignPattern
 
                 #region ChainOfResponsibility
 
-                ChainOfResponsibilityFacade chainOfResponsibility = new ChainOfResponsibilityFacade();
-                chainOfResponsibility.ExecuteChainOfPartialSignalToDeterminFinalSignal(ref obtainedSignalsWithQuotes);
+                _chainOfResponsibility.ExecuteChainOfPartialSignalToDeterminFinalSignal(ref obtainedSignalsWithQuotes);
 
                 #endregion
 
                 #region Decorator
 
-                DecoratorFacade decorator = new DecoratorFacade();
-
-                decorator.CalculateAdditionalFeeAndFinalPrice(ref obtainedSignalsWithQuotes);
-                //decorator2.CalculateAdditionalFeeAndFinalPrice(ref obtainedSignalsWithQuotes, new List<DecoratorComponent> { new CommissionDecorator(), new TaxDecorator() });
+                _decorator.CalculateAdditionalFeeAndFinalPrice(ref obtainedSignalsWithQuotes);
+                //_decorator.CalculateAdditionalFeeAndFinalPrice(ref obtainedSignalsWithQuotes, new List<DecoratorComponent> { new CommissionDecorator(), new TaxDecorator() });
 
                 #endregion
 
                 #region DeepClone
 
-                DeepCloneFacade deepClone = new DeepCloneFacade(obtainedSignalsWithQuotes);
+                _deepClone.ChangeClonnedCollection(obtainedSignalsWithQuotes);
 
                 //Deep Clone using JsonSerialization
-                List<SignalModelContext> clonedSignalContextByJsonSerializer = deepClone.DeepCloneUsingJsonSerialization();
+                List<SignalModelContext> clonedSignalContextByJsonSerializer = _deepClone.DeepCloneUsingJsonSerialization();
 
                 //Deep Clone using BinarySerialization
-                List<SignalModelContext> clonedSignalContextByBinarySerializer = deepClone.DeepCloneUsingBinarySerialization();
+                List<SignalModelContext> clonedSignalContextByBinarySerializer = _deepClone.DeepCloneUsingBinarySerialization();
 
                 //Deep Clone using Reflection
-                List<SignalModelContext> clonedSignalContextByReflection = deepClone.DeepCloneUsingReflection();
+                List<SignalModelContext> clonedSignalContextByReflection = _deepClone.DeepCloneUsingReflection();
 
                 #endregion
 
                 #region SavingResults
 
                 //Saving JsonFile to PrototypeObjects directory
-                fileHandler.SaveJsonFileWithSignalModelContextObjects(obtainedSignalsWithQuotes, nameOfCompany);
+                _fileHandler.SaveJsonFileWithSignalModelContextObjects(obtainedSignalsWithQuotes, nameOfCompany);
 
                 //Saving CsvFile to GeneratedSignals directory
-                fileHandler.SaveCsvFileWithSignalModelContextObjects(obtainedSignalsWithQuotes, nameOfCompany);
+                _fileHandler.SaveCsvFileWithSignalModelContextObjects(obtainedSignalsWithQuotes, nameOfCompany);
 
                 #endregion
 

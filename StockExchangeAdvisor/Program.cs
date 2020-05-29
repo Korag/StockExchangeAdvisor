@@ -32,7 +32,7 @@ namespace Signals
             facade.Dispose();
             sw.Stop();
 
-            aws.StopVM();
+            //aws.StopVM();
             DisposeServices();
 
             Console.WriteLine("Execution time: " + sw.Elapsed);
@@ -43,8 +43,8 @@ namespace Signals
         {
             var collection = new ServiceCollection();
           
-            collection.AddSingleton<IAlgorithmBuilder, RabbitMQBuilder>();
-            //collection.AddSingleton<IAlgorithmBuilder, WebServicesBuilder>();
+            //collection.AddSingleton<IAlgorithmBuilder, RabbitMQBuilder>();
+            collection.AddSingleton<IAlgorithmBuilder, WebServicesBuilder>();
             //collection.AddSingleton<IAlgorithmBuilder, ActorModelBuilder>();
 
             _serviceProvider = collection.BuildServiceProvider();

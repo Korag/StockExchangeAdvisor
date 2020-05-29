@@ -12,9 +12,8 @@ namespace FacadeDesignPattern
         private List<SignalModelContext> _collectionOfSignalsToBeCloned { get; set; }
         private Object _padlock { get; set; }
 
-        public DeepCloneFacade(List<SignalModelContext> collectionOfSignalsToBeCloned)
+        public DeepCloneFacade()
         {
-            ChangeClonnedCollection(collectionOfSignalsToBeCloned);
             _padlock = new object();
         }
 

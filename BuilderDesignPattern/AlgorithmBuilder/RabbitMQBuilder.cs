@@ -13,8 +13,8 @@ namespace BuilderDesignPattern.AlgorithmBuilder
 
         public void BuildStrategyPatternParameters()
         {
-            ProcessHandler.RunRabbitMQConsumersProcesses();
             _strategy = new RabbitMQStrategy(_exchange, _queueReceiveFrom);
+            ProcessHandler.RunRabbitMQConsumersProcesses();
         }
 
         public void BuildStrategyPattern()
