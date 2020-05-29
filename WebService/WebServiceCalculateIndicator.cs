@@ -58,6 +58,7 @@ namespace WebService
             }
             catch (Exception e)
             {
+                Console.WriteLine("There was an error during process of technical indicator calculation.");
                 throw e;
             }
 
@@ -86,6 +87,7 @@ namespace WebService
             }
             catch (Exception e)
             {
+                Console.WriteLine("There was an error during process of obtaining information on the number of files collected.");
                 throw e;
             }
 
@@ -112,6 +114,7 @@ namespace WebService
             }
             catch (Exception e)
             {
+                Console.WriteLine("There was an error during process of signals recovery.");
                 throw e;
             }
 

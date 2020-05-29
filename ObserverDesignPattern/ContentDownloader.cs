@@ -36,6 +36,7 @@ namespace ObserverDesignPattern
             }
             catch (Exception)
             {
+                Console.WriteLine("There was an error during process of downloading Quotes from external source.");
                 throw;
             }
         }

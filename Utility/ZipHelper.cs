@@ -25,7 +25,7 @@ namespace Utility
             }
             catch (Exception e)
             {
-                Console.WriteLine("There was an error during extracting zip content.");
+                Console.WriteLine("There was an error during content extraction of .zip file.");
                 throw e;
             }
         }

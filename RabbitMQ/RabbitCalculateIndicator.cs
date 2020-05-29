@@ -55,7 +55,7 @@ namespace RabbitMQ
                 basicProperties: null,
                 body: body);
             //oczekujemy na potwierdzenie, że przesyłka dotarła do exchange
-            Console.WriteLine($"Przesłałem obliczone sygnały do exchanga");
+            Console.WriteLine($"RabbitMQ Consumer sent obtained signals to Exchange.");
             channel.WaitForConfirmsOrDie();
         }
 
@@ -64,7 +64,7 @@ namespace RabbitMQ
             var indicatorElements = JsonSerializer.JsonStringToObjectType<IndicatorCalculationElements>(EncryptionHelper.ByteArrayToUTF8String(ea.Body));
 
             List<Signal> obtainedSignals = _indicator.GetSignals(indicatorElements.Quotes, indicatorElements.Parameters);
-            Console.WriteLine("Obliczyłem wskaźnik"); 
+            Console.WriteLine("RabbitMQ Consumer calculated Technical Indicator."); 
 
             channel.BasicAck(ea.DeliveryTag, false);
             GenerateAndPublishMessage(channel, obtainedSignals);

@@ -37,7 +37,7 @@ namespace Utility
             if (Process.GetProcessesByName(processName).Count() == 0)
             {
                 Process.Start(exeUrl);
-                Console.WriteLine(processName + " : opened");
+                Console.WriteLine(processName + " : process opened.");
             }
         }
 
@@ -47,11 +47,11 @@ namespace Utility
             {
                 Process process = Process.GetProcessesByName(processName).FirstOrDefault();
                 process.Kill();
-                Console.WriteLine(processName + " : closed");
+                Console.WriteLine(processName + " : process closed");
             }
             catch (Exception e)
             {
-                Console.WriteLine("Process not found");
+                Console.WriteLine("Process not found.");
                 throw e;
             }
         }

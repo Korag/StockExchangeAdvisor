@@ -50,7 +50,7 @@ namespace Utility
             }
             catch (Exception e)
             {
-                Console.WriteLine("There was an error creating a file");
+                Console.WriteLine("There was an error creating a json file.");
                 throw e;
             }
         }

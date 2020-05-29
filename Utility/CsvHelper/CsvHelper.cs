@@ -58,7 +58,7 @@ namespace Utility
             }
             catch (Exception e)
             {
-                Console.WriteLine("There was an error during creation of signals file");
+                Console.WriteLine("There was an error during creation of .csv signals file.");
                 throw e;
             }
         }

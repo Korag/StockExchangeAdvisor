@@ -111,15 +111,18 @@ namespace UtilityAzure
                 try
                 {
                     var pipelineObjects = ps.InvokeAsync().ConfigureAwait(false).GetAwaiter().GetResult();
+
                     // print the resulting pipeline objects to the console.
-                    Console.WriteLine("----- Pipeline Output below this point -----");
-                    foreach (var item in pipelineObjects)
-                    {
-                        Console.WriteLine(item.BaseObject.ToString());
-                    }
+                    //Console.WriteLine("----- Pipeline Output below this point -----");
+                    //foreach (var item in pipelineObjects)
+                    //{
+                    //    Console.WriteLine(item.BaseObject.ToString());
+                    //}
+                    Console.WriteLine("Executed Powershell script.");
                 }
                 catch (Exception e)
                 {
+                    Console.WriteLine("There was an error during execution of Powershell script.");
                     throw e;
                 }
             }

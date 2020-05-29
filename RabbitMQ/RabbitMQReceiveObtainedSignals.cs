@@ -46,7 +46,7 @@ namespace RabbitMQ
                             List<Signal> currentReceivedSignals = JsonSerializer.JsonStringToCollectionOfObjectsTypes<Signal>(EncryptionHelper.ByteArrayToUTF8String(data.Body));
                             _obtainedSignals.Add(currentReceivedSignals);
 
-                            Console.WriteLine("Odebrałem otrzymane sygnały z kolejki");
+                            Console.WriteLine("RabbitMQ Producer received signals from Consumers.");
                             channel.BasicAck(data.DeliveryTag, false);
                         }
                     }

@@ -34,7 +34,7 @@ namespace ObserverDesignPattern
                     LastDownloadDateTime = JsonSerializer.JsonStringToObjectType<DateTime>(json);
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 RequestDownloadNewContent();
             }

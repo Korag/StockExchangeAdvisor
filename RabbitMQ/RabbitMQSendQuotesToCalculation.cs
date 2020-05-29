@@ -45,7 +45,7 @@ namespace RabbitMQ
                 body: body);
             //oczekujemy na potwierdzenie, że przesyłka dotarła do exchange
             channel.WaitForConfirmsOrDie();
-            Console.WriteLine($"Przesłałem wskaźnik do obliczenia");
+            Console.WriteLine($"RabbitMQ Producer sent quotes to Consumers.");
         }
     }
 }
