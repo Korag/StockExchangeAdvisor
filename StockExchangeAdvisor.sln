@@ -51,13 +51,19 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Consumers", "Consumers", "{
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PrototypeDesignPattern", "PrototypeDesignPattern\PrototypeDesignPattern.csproj", "{10565044-DD6B-4FB9-8DE7-7CEC39502D74}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RabbitMQConsumerSMA", "RabbitMQConsumerSMA\RabbitMQConsumerSMA.csproj", "{247CFFE0-C18A-4AC3-B1C8-BADABF426046}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RabbitMQConsumerSMA", "RabbitMQConsumerSMA\RabbitMQConsumerSMA.csproj", "{247CFFE0-C18A-4AC3-B1C8-BADABF426046}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RabbitMQConsumerEMAExtended", "RabbitMQConsumerEMAExtended\RabbitMQConsumerEMAExtended.csproj", "{CBEDDA98-B444-40C7-85BE-2198646E89C0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RabbitMQConsumerEMAExtended", "RabbitMQConsumerEMAExtended\RabbitMQConsumerEMAExtended.csproj", "{CBEDDA98-B444-40C7-85BE-2198646E89C0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RabbitMQConsumerROC2", "RabbitMQConsumerROC2\RabbitMQConsumerROC2.csproj", "{8C072126-2C7E-4432-9AC4-4FBE287B05EE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RabbitMQConsumerROC2", "RabbitMQConsumerROC2\RabbitMQConsumerROC2.csproj", "{8C072126-2C7E-4432-9AC4-4FBE287B05EE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RabbitMQConsumerCandleFormation", "RabbitMQConsumerCandleFormation\RabbitMQConsumerCandleFormation.csproj", "{7C3BEF93-1B07-4B3C-9E43-0D802D8AAC28}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RabbitMQConsumerCandleFormation", "RabbitMQConsumerCandleFormation\RabbitMQConsumerCandleFormation.csproj", "{7C3BEF93-1B07-4B3C-9E43-0D802D8AAC28}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Akka.net", "Akka.net", "{B557B67D-901F-4E1F-9377-8144CB704142}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Actors", "Actors\Actors.csproj", "{5FBE9A93-CDDF-46FA-9A70-982252B3B8C0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MessageModels", "MessageModels\MessageModels.csproj", "{BD489396-BD09-4F0C-B29A-1C3866CBE038}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -161,6 +167,14 @@ Global
 		{7C3BEF93-1B07-4B3C-9E43-0D802D8AAC28}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7C3BEF93-1B07-4B3C-9E43-0D802D8AAC28}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7C3BEF93-1B07-4B3C-9E43-0D802D8AAC28}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5FBE9A93-CDDF-46FA-9A70-982252B3B8C0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5FBE9A93-CDDF-46FA-9A70-982252B3B8C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5FBE9A93-CDDF-46FA-9A70-982252B3B8C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5FBE9A93-CDDF-46FA-9A70-982252B3B8C0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BD489396-BD09-4F0C-B29A-1C3866CBE038}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BD489396-BD09-4F0C-B29A-1C3866CBE038}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BD489396-BD09-4F0C-B29A-1C3866CBE038}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BD489396-BD09-4F0C-B29A-1C3866CBE038}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -186,6 +200,8 @@ Global
 		{CBEDDA98-B444-40C7-85BE-2198646E89C0} = {A53278D6-F937-41FF-B3DE-AD237D271D2A}
 		{8C072126-2C7E-4432-9AC4-4FBE287B05EE} = {A53278D6-F937-41FF-B3DE-AD237D271D2A}
 		{7C3BEF93-1B07-4B3C-9E43-0D802D8AAC28} = {A53278D6-F937-41FF-B3DE-AD237D271D2A}
+		{5FBE9A93-CDDF-46FA-9A70-982252B3B8C0} = {B557B67D-901F-4E1F-9377-8144CB704142}
+		{BD489396-BD09-4F0C-B29A-1C3866CBE038} = {B557B67D-901F-4E1F-9377-8144CB704142}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {75059A56-B063-444A-B538-3CAD069C92A9}
