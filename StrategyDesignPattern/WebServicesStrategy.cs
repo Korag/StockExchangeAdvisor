@@ -7,7 +7,7 @@ namespace StrategyDesignPattern
 {
     public class WebServicesStrategy : ICalculateTechnicalIndicatorStrategy
     {
-        private WebServiceAdapter _adapter { get; set; }
+        private IWebServiceAdapter _adapter { get; set; }
 
         public WebServicesStrategy()
         {

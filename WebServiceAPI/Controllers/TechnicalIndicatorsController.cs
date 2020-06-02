@@ -11,12 +11,13 @@ namespace WebServiceAPI.Controllers
     public class TechnicalIndicatorsController : ControllerBase
     {
         public string GeneratedSignalsURL { get; set; }
+        public static Object _padlock = new object();
 
         public TechnicalIndicatorsController()
         {
             //Local URL
             //GeneratedSignalsURL = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..\\..\\..\\..\\WebServiceAPI\\GeneratedSignals\\"));
-            
+
             //Azure URL
             GeneratedSignalsURL = "/var/www/html/StockExchangeAdvisorAPI/GeneratedSignals/";
         }
@@ -51,10 +52,15 @@ namespace WebServiceAPI.Controllers
                 List<Signal> obtainedSignals = data.TechnicalIndicator.GetSignals(data.Quotes, data.Parameters);
                 string jsonString = JsonSerializer.ConvertCollectionOfObjectsToJsonString<Signal>(obtainedSignals);
 
-                int filesCount = FileHelper.CountFilesInDirectory(GeneratedSignalsURL);
-                int newFileId = (filesCount == 0 ? 0 : filesCount);
-                string fileName = $"signals_{newFileId}.json";
-                FileHelper.SaveJsonFile(GeneratedSignalsURL + fileName, jsonString);
+                int newFileId;
+
+                lock (_padlock)
+                {
+                    int filesCount = FileHelper.CountFilesInDirectory(GeneratedSignalsURL);
+                    newFileId = (filesCount == 0 ? 0 : filesCount);
+                    string fileName = $"signals_{newFileId}.json";
+                    FileHelper.SaveJsonFile(GeneratedSignalsURL + fileName, jsonString);
+                }
 
                 return StatusCode(201, newFileId);
             }

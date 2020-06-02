@@ -30,7 +30,7 @@ namespace StrategyDesignPattern
                                                                   
         public void SendData(List<Quote> quotes, Parameters parameters, TechnicalIndicator indicator)
         {
-            RabbitMQSendQuotesAdapter adapter = new RabbitMQSendQuotesAdapter();
+            RabbitMQAdapter adapter = new RabbitMQAdapter();
 
             adapter.SendQuotesToCalculationInConsumer(quotes, parameters, _exchange, indicator.GetType().ToString());
         }

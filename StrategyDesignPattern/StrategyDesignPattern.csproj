@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Akka" Version="1.4.7" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\AdapterDesignPattern\AdapterDesignPattern.csproj" />
     <ProjectReference Include="..\Models\Models.csproj" />
     <ProjectReference Include="..\TechnicalIndicators\TechnicalIndicators.csproj" />
