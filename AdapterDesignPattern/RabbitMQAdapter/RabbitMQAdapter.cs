@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace AdapterDesignPattern
 {
-    public class RabbitMQSendQuotesAdapter : IRabbitMQSendQuotesAdapter
+    public class RabbitMQAdapter : IRabbitMQAdapter
     {
         private IRabbitMQSendQuotesToCalculation _producer { get; set; }
 
