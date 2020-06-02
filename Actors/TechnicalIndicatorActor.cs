@@ -24,20 +24,18 @@ namespace Actors
 
         protected override void PostStop()
         {
-            {
-                Console.WriteLine(_indicator.GetType() + "Actor stopped.");
-            }
+            Console.WriteLine(_indicator.GetType() + "Actor stopped.");
         }
 
         protected override void OnReceive(object message)
         {
             switch (message)
             {
-                case CalculateSingleTechnicalIndicator req:
+                case CalculateSingleTechnicalIndicatorRequest req:
 
                     try
                     {
-                    _obtainedSignals = _indicator.GetSignals(req.Quotes, req.Parameters);
+                        _obtainedSignals = _indicator.GetSignals(req.Quotes, req.Parameters);
                     }
                     catch (Exception e)
                     {
