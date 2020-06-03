@@ -23,8 +23,8 @@ namespace Signals
             Stopwatch sw = new Stopwatch();
             sw.Start();
            
-            facade.CountSingleIndicatorForSingleCompanyQuotes(new TechnicalIndicatorEMA(), "zywiec");
-            //facade.CountIndicatorsSetForSingleCompanyQuotes("zywiec");
+            //facade.CountSingleIndicatorForSingleCompanyQuotes(new TechnicalIndicatorEMA(), "zywiec");
+            facade.CountIndicatorsSetForSingleCompanyQuotes("zywiec");
 
             //facade.CountSingleIndicatorForAllCompaniesQuotes(new TechnicalIndicatorEMA());
             //facade.CountIndicatorsSetForAllCompaniesQuotes();
@@ -44,8 +44,8 @@ namespace Signals
             var collection = new ServiceCollection();
           
             //collection.AddSingleton<IAlgorithmBuilder, RabbitMQBuilder>();
-            collection.AddSingleton<IAlgorithmBuilder, WebServicesBuilder>();
-            //collection.AddSingleton<IAlgorithmBuilder, ActorModelBuilder>();
+            //collection.AddSingleton<IAlgorithmBuilder, WebServicesBuilder>();
+            collection.AddSingleton<IAlgorithmBuilder, ActorModelBuilder>();
 
             _serviceProvider = collection.BuildServiceProvider();
         }

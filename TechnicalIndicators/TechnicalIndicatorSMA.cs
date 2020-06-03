@@ -5,7 +5,7 @@ using System.Globalization;
 
 namespace TechnicalIndicators
 {
-    public class TechnicalIndicatorSMA: TechnicalIndicator
+    public abstract class TechnicalIndicatorSMA: TechnicalIndicator
     {
         public TechnicalIndicatorSMA()
         {

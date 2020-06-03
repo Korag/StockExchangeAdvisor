@@ -33,7 +33,10 @@ namespace AdapterDesignPattern.AkkaNetAdapter
                          }");
 
             _system = ActorSystem.Create("my-actor-server", config);
+
             _queryActorsByQuotesSet = new Dictionary<List<Quote>, IActorRef>();
+            _quotesByQueryActors = new Dictionary<IActorRef, List<Quote>>();
+            _queryActorsByThreadsIds = new Dictionary<int, IActorRef>();
         }
 
         public void SendQuotesToCalculationOnCertainActor(List<Quote> quotes, Parameters parameters, TechnicalIndicator indicator)
@@ -46,24 +49,20 @@ namespace AdapterDesignPattern.AkkaNetAdapter
                 if (query == null)
                 {
                     query = _system.ActorOf<QueryActor>("query" + _queryActorsByQuotesSet.Count);
-                  
+
                     _queryActorsByQuotesSet.Add(quotes, query);
                     _quotesByQueryActors.Add(query, quotes);
 
                     Thread thread = Thread.CurrentThread;
                     _queryActorsByThreadsIds.Add(thread.ManagedThreadId, query);
+                }
 
-                    message = new CalculateSingleTechnicalIndicatorRequest()
-                    {
-                        TechnicalIndicator = indicator,
-                        Quotes = quotes,
-                        Parameters = parameters,
-                    };
-                }
-                else
+                message = new CalculateSingleTechnicalIndicatorRequest()
                 {
-                    message = indicator;
-                }
+                    TechnicalIndicator = indicator,
+                    Quotes = quotes,
+                    Parameters = parameters,
+                };
 
                 query.Tell(message);
             }
