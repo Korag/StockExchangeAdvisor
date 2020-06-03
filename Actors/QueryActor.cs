@@ -61,10 +61,16 @@ namespace Actors
                     break;
 
                 case "GetSignals":
-                  
+
+                    if (_obtainedSignals.Count + _actorErrorsCount == _reqAmount)
+                    {
+                        _jobFinished = true;
+                    }
+
                     if (!_jobFinished)
                     {
-                        Sender.Tell(new List<List<Signal>>());
+                        Sender.Tell(null);
+                        break;
                     }
 
                     Sender.Tell(_obtainedSignals);

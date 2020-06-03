@@ -10,26 +10,21 @@ namespace FacadeDesignPattern
 {
     public class FileHandlerFacade
     {
-        private Object _padlock { get; set; }
-
         public FileHandlerFacade()
         {
-            _padlock = new object();
+
         }
 
         public List<List<Quote>> ReadMultipleCsvFiles(List<string> namesOfCompanies)
         {
             List<List<Quote>> companiesQuotes = new List<List<Quote>>();
 
-            Parallel.ForEach(namesOfCompanies, (companyName) =>
+            foreach (var companyName in namesOfCompanies)
             {
                 var companyQuotes = Utility.CsvHelper.ReadSingleCsvFileWithQuotes(companyName);
 
-                lock (_padlock)
-                {
-                    companiesQuotes.Add(companyQuotes);
-                }
-            });
+                companiesQuotes.Add(companyQuotes);
+            };
 
             return companiesQuotes;
         }

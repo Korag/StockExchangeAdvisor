@@ -48,7 +48,7 @@ namespace AdapterDesignPattern.AkkaNetAdapter
 
                 if (query == null)
                 {
-                    query = _system.ActorOf<QueryActor>("query" + _queryActorsByQuotesSet.Count);
+                    query = _system.ActorOf<QueryActor>("query" + Guid.NewGuid());
 
                     _queryActorsByQuotesSet.Add(quotes, query);
                     _quotesByQueryActors.Add(query, quotes);
@@ -86,7 +86,7 @@ namespace AdapterDesignPattern.AkkaNetAdapter
                 {
                     obtainedSignals = query.Ask<List<List<Signal>>>("GetSignals").GetAwaiter().GetResult();
 
-                } while (obtainedSignals.Count == 0);
+                } while (obtainedSignals == null);
 
                 query.Tell("TerminateActorsRequest");
 

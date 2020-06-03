@@ -43,6 +43,7 @@ namespace Actors
 
                         Sender.Tell("ErrorDuringCalculation");
                         Context.Stop(Self);
+                        break;
                     }
 
                     Sender.Tell(new SaveObtainedSignalsRequest(_obtainedSignals));

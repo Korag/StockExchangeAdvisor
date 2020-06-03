@@ -39,6 +39,8 @@ namespace FacadeDesignPattern
             _gcLowLatency = gcLowLatency;
             _noGCRegion = noGCRegion;
 
+            _padlock = new object();
+
             if (_gcLowLatency == true)
                 GCSettings.LatencyMode = GCLatencyMode.LowLatency;
             if (_noGCRegion == true)
@@ -273,7 +275,6 @@ namespace FacadeDesignPattern
 
             int iterationNumber = 0;
 
-            // foreach (var companyName in namesOfCompanies)
             foreach (var companyQuotes in companiesQuotes)
             {
                 string nameOfCompany = namesOfCompanies[iterationNumber];
