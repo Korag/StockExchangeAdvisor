@@ -18,16 +18,19 @@ namespace Signals
             AzureWebServiceHelper aws = new AzureWebServiceHelper();
             //aws.StartVM();
 
-            CoreFacade facade = new CoreFacade(_serviceProvider.GetService<IAlgorithmBuilder>());
+           CoreFacade facade = new CoreFacade(_serviceProvider.GetService<IAlgorithmBuilder>());
 
             Stopwatch sw = new Stopwatch();
             sw.Start();
            
             //facade.CountSingleIndicatorForSingleCompanyQuotes(new TechnicalIndicatorEMA(), "zywiec");
-            facade.CountIndicatorsSetForSingleCompanyQuotes("zywiec");
+            //facade.CountIndicatorsSetForSingleCompanyQuotes("zywiec");
 
-            //facade.CountSingleIndicatorForAllCompaniesQuotes(new TechnicalIndicatorEMA());
+            facade.CountSingleIndicatorForAllCompaniesQuotes(new TechnicalIndicatorEMA());
             //facade.CountIndicatorsSetForAllCompaniesQuotes();
+
+            //facade.CountSingleIndicatorForAllCompaniesQuotesFullParallelVersion(new TechnicalIndicatorEMA());
+            //facade.CountIndicatorsSetForAllCompaniesQuotesFullParallelVersion();
 
             facade.Dispose();
             sw.Stop();
