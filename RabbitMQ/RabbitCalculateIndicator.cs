@@ -63,8 +63,18 @@ namespace RabbitMQ
         {
             var indicatorElements = JsonSerializer.JsonStringToObjectType<IndicatorCalculationElements>(EncryptionHelper.ByteArrayToUTF8String(ea.Body));
 
-            List<Signal> obtainedSignals = _indicator.GetSignals(indicatorElements.Quotes, indicatorElements.Parameters);
-            Console.WriteLine("RabbitMQ Consumer calculated Technical Indicator."); 
+            List<Signal> obtainedSignals = null;
+
+            try
+            {
+                obtainedSignals = _indicator.GetSignals(indicatorElements.Quotes, indicatorElements.Parameters);
+                Console.WriteLine("RabbitMQ Consumer calculated Technical Indicator.");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("RabbitMQ Consumer got an Exception during indicator calculation.");
+                obtainedSignals = new List<Signal>();
+            }
 
             channel.BasicAck(ea.DeliveryTag, false);
             GenerateAndPublishMessage(channel, obtainedSignals);

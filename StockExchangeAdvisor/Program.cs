@@ -27,10 +27,10 @@ namespace Signals
             //facade.CountIndicatorsSetForSingleCompanyQuotes("zywiec");
 
             //facade.CountSingleIndicatorForAllCompaniesQuotes(new TechnicalIndicatorEMA());
-            //facade.CountIndicatorsSetForAllCompaniesQuotes();
+            facade.CountIndicatorsSetForAllCompaniesQuotes();
 
             //facade.CountSingleIndicatorForAllCompaniesQuotesFullParallelVersion(new TechnicalIndicatorEMA());
-            facade.CountIndicatorsSetForAllCompaniesQuotesFullParallelVersion();
+            //facade.CountIndicatorsSetForAllCompaniesQuotesFullParallelVersion();
 
             facade.Dispose();
             sw.Stop();

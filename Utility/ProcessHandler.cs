@@ -52,7 +52,6 @@ namespace Utility
             catch (Exception e)
             {
                 Console.WriteLine("Process not found.");
-                throw e;
             }
         }
 

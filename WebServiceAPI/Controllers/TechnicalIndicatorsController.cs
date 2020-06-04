@@ -2,6 +2,7 @@
 using Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using Utility;
 using WebServicesModels;
 
@@ -12,14 +13,15 @@ namespace WebServiceAPI.Controllers
     {
         public string GeneratedSignalsURL { get; set; }
         public static Object _padlock = new object();
+        private static int ERROR_OCCURED_DURING_CALCULATION = -1;
 
         public TechnicalIndicatorsController()
         {
             //Local URL
-            //GeneratedSignalsURL = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..\\..\\..\\..\\WebServiceAPI\\GeneratedSignals\\"));
+            GeneratedSignalsURL = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..\\..\\..\\..\\WebServiceAPI\\GeneratedSignals\\"));
 
             //Azure URL
-            GeneratedSignalsURL = "/var/www/html/StockExchangeAdvisorAPI/GeneratedSignals/";
+            //GeneratedSignalsURL = "/var/www/html/StockExchangeAdvisorAPI/GeneratedSignals/";
         }
 
         [Route("api/Hello")]
@@ -76,12 +78,17 @@ namespace WebServiceAPI.Controllers
         {
             try
             {
-                string jsonString = FileHelper.ReadFile(GeneratedSignalsURL + $"signals_{id}.json");
-                List<Signal> obtainedSignals = JsonSerializer.JsonStringToCollectionOfObjectsTypes<Signal>(jsonString);
+                List<Signal> obtainedSignals = new List<Signal>();
 
-                if (String.IsNullOrWhiteSpace(jsonString))
+                if (id != ERROR_OCCURED_DURING_CALCULATION)
                 {
-                    return StatusCode(404);
+                    string jsonString = FileHelper.ReadFile(GeneratedSignalsURL + $"signals_{id}.json");
+                    obtainedSignals = JsonSerializer.JsonStringToCollectionOfObjectsTypes<Signal>(jsonString);
+
+                    if (String.IsNullOrWhiteSpace(jsonString))
+                    {
+                        return StatusCode(404);
+                    }
                 }
 
                 return StatusCode(200, obtainedSignals);

@@ -53,6 +53,12 @@ namespace Utility
                 for (int j = 0; j < signals[i].Count(); j++)
                 {
                     Quote matchingQuote = quotes.Where(z => z.Date == signals[i][j].Date).FirstOrDefault();
+
+                    if (matchingQuote == null)
+                    {
+                        continue;
+                    }
+
                     SignalModelContext signalContext = signalsContext.Where(z => z.Date == matchingQuote.Date).FirstOrDefault();
 
                     if (signalContext == null)

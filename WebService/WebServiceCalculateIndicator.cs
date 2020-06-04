@@ -14,8 +14,8 @@ namespace WebService
     public class WebServiceCalculateIndicator : IWebServiceCalculateIndicator
     {
         private HttpClient _client { get; set; }
-        private string _serverIpAddress = "http://40.115.121.134";
-        //private string _serverIpAddress = "https://localhost:44361";
+        //private string _serverIpAddress = "http://40.115.121.134";
+        private string _serverIpAddress = "https://localhost:44361";
         //private string _serverIpAddress = "http://localhost:5000";
 
         public WebServiceCalculateIndicator()
@@ -59,7 +59,8 @@ namespace WebService
             catch (Exception e)
             {
                 Console.WriteLine("There was an error during process of technical indicator calculation.");
-                throw e;
+                idOfCalculation = -1;
+                //throw e;
             }
 
             return idOfCalculation;
