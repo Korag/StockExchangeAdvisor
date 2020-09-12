@@ -70,6 +70,5 @@ namespace ObserverDesignPattern
             SetLastDownloadedTime(DateTime.Now);
             Notify();
         }
-
     }
 }
