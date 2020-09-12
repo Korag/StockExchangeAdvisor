@@ -339,3 +339,4 @@ ASALocalRun/
 # BeatPulse healthcheck temp database
 healthchecksdb
 /QuotesDownloader/DownloadedQuotes
+/UtilityAzure/PowerShellScripts/azureprofile.json
