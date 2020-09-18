@@ -21,6 +21,11 @@ Available technologies of distributed processing:
 
 Benchmark - 3630 companies and 5 technical indicators calculated (i7 4790K, tested on localhost(focusing on the direct delay of certain technology)):
 
+| First Header  | Second Header |
+| ------------- | ------------- |
+| Content Cell  | Content Cell  |
+| Content Cell  | Content Cell  |
+
 | Technology   | Total time (minutes)   | Time per one company (milliseconds)  |
 | ---- ------- |:----------------------:| ------------------------------------:|
 | RabbitMQ     | 23.21                  | 385                                  |
