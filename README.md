@@ -22,12 +22,12 @@ Available technologies of distributed processing:
 Benchmark - 3630 companies and 5 technical indicators calculated (i7 4790K, tested on localhost(focusing on the direct delay of certain technology)):
 
 | Technology   | Total time (minutes)   | Time per one company (milliseconds)  |
-| :---         | :--------------------: | -----------------------------------: |
+| :---         | :--------------------: | :---                                 |
 | RabbitMQ     | 23.21                  | 385                                  |
 | WebServices  | 45.37                  | 753                                  |
 | ActorModel   | 10.40                  | 176                                  |
 
-The design code was designed for easy expansion, therefore a number of design patterns were used:
+The code was designed for easy expansion, therefore a number of design patterns were used:
 
 * Adapter
 * Builder
